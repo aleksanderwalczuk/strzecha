@@ -1,16 +1,15 @@
 <template>
   <div>
-    <header class="relative text-black md:h-44" :style="headerHeight">
+    <header class="relative text-black md:h-44">
       <div
         class="fixed min-w-full defaultHeaderHeight border-b z-10 bg-gray-50"
-        :style="headerHeight"
       >
         <div class="container">
           <div class="flex justify-between items-center py-4 md:py-10">
             <div class="search-container relative z-20 w-3/12">
               <form class="relative">
                 <label for="search" class="cursor-pointer">
-                  <img src="../static/icons/icon-search.svg" alt="">
+                  <nuxt-img src="/icons/icon-search.svg" />
                 </label>
                 <div class="absolute top-0 left-9">
                   <input
@@ -24,35 +23,33 @@
             </div>
             <div
               class="floating-logo hidden md:block"
-              :style="`transform: translateY(${logoHeight}px)`"
-              @scroll="handleScroll"
             >
-              <g-link
+              <nuxt-link
                 to="/"
                 class="nav-site-title font-title"
                 @click.native="closeNav"
               >
                 {{ title }}
-              </g-link>
+              </nuxt-link>
             </div>
             <div class="relative top-0 z-20 hidden md:block w-3/12">
               <nav class="flex gap-x-4 items-center justify-end">
-                <g-link class="nav-link" to="/contact">
+                <nuxt-link class="nav-link" to="/contact">
                   Kontakt
-                </g-link>
-                <g-link class="nav-link" to="/blog/">
+                </nuxt-link>
+                <nuxt-link class="nav-link" to="/blog/">
                   <img src="../static/icons/icon-lang.svg" alt="">
-                </g-link>
+                </nuxt-link>
               </nav>
             </div>
-            <g-link to="/" class="nav-site-title font-title md:hidden">
+            <nuxt-link to="/" class="nav-site-title font-title md:hidden">
               <h2 class="nav-site-title font-light font-title uppercase">
                 Strzecha
               </h2>
-            </g-link>
+            </nuxt-link>
             <hamburger />
           </div>
-          <!-- <header-nav :nav-height="categoryNavHeight" /> -->
+          <header-nav />
         </div>
       </div>
     </header>
@@ -62,9 +59,8 @@
 
 <script>
 import Hamburger from './Hamburger.vue';
-// import HeaderNav from './HeaderNav.vue'
+
 // import HeaderOpen from './HeaderOpen.vue'
-// import { mutations } from './store'
 
 export default {
   name: 'PageHeader',
@@ -80,102 +76,13 @@ export default {
       default: 'Strzecha',
     },
   },
-  data() {
-    return {
-      clientY: 0,
-      headerHeight: 'height:176px',
-      categoryNavHeight: 0,
-      logoHeight: 0,
-      isMobile: false,
-    };
-  },
   computed: {
-    clientYAsNumber() {
-      const clientYArr = Array.from(this.clientY);
-      clientYArr.splice(this.clientY.length - 2);
-      const clientYToNumber = parseInt(clientYArr.join(''), 10);
-      return clientYToNumber;
-    },
-  },
-  watch: {
-    clientY() {
-      if (!this.isMobile && process.isClient) {
-        window.requestAnimationFrame(this.handleHeight);
-        window.requestAnimationFrame(this.handleNavPosition);
-      }
-    },
-  },
-  mounted() {
-    if (process.isClient) {
-      this.handleViewportChange();
-      window.addEventListener('scroll', this.handleScroll);
-      window.addEventListener('resize', this.handleViewportChange);
-    }
-  },
-  beforeDestroy() {
-    if (process.isClient) {
-      window.removeEventListener('scroll', this.handleScroll);
-      window.removeEventListener('resize', this.handleViewportChange);
-    }
+
   },
 
   methods: {
-    // TODO: maybe all scroll methods should be computed props
     closeNav() {
-      mutations.closeNav();
-    },
-    handleViewportChange() {
-      if (this.windowWidth < 767) {
-        this.isMobile = true;
-        this.headerHeight = 'auto';
-      } else {
-        this.isMobile = false;
-        if (this.headerHeight === 'auto') {
-          this.headerHeight = 'height:176px';
-        }
-      }
-    },
-    handleScroll() {
-      if (process.isClient) {
-        const val = window.scrollY * -1;
-        this.clientY = `${val}px`;
-      }
-    },
-
-    handleHeight() {
-      if (typeof this.clientY === 'string') {
-        const clientYToNumber = this.clientYAsNumber;
-        const navHeight = 176;
-        const diff = navHeight + clientYToNumber;
-
-        const boundary = 100;
-        const negativeBoundary = boundary * -1;
-
-        // header height
-        this.headerHeight = diff > boundary ? `height:${diff}px` : this.headerHeight;
-        if (diff >= boundary) {
-          this.headerHeight = `height:${diff}px`;
-        } else if (clientYToNumber * -1 > boundary) {
-          this.headerHeight = `height: ${boundary}px`;
-        }
-        // logo height
-        if (clientYToNumber > negativeBoundary) {
-          this.logoHeight = clientYToNumber;
-        } else if (clientYToNumber < negativeBoundary) {
-          this.logoHeight = negativeBoundary;
-        }
-      }
-    },
-    handleNavPosition() {
-      if (typeof this.clientY === 'string') {
-        const clientYToNumber = this.clientYAsNumber;
-        const diffCategory = 0 - clientYToNumber;
-        if (diffCategory <= 70) {
-          this.categoryNavHeight = diffCategory * -1;
-        } else if (clientYToNumber * -1 > 70) {
-          this.categoryNavHeight = -70;
-        }
-      }
+      // mutations.closeNav();
     },
   },
 };

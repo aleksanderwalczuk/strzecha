@@ -16,9 +16,9 @@
       <div class="container h-full flex flex-col justify-between">
         <ul class="navigation__list flex-1">
           <li class="navigation__item">
-            <g-link to="/categories">
+            <nuxt-link to="/categories">
               Wszystkie produkty
-            </g-link>
+            </nuxt-link>
           </li>
           <li class="navigation__item">
             <a href="">Na zamówienie</a>

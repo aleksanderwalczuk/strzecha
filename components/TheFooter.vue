@@ -2,9 +2,9 @@
   <footer class="bg-black-500 text-white pt-14 pb-6">
     <div class="container">
       <h2 class="mb-10">
-        <g-link to="/" class="nav-site-title font-title font-normal uppercase">
+        <nuxt-link to="/" class="nav-site-title font-title font-normal uppercase">
           {{ title }}
-        </g-link>
+        </nuxt-link>
       </h2>
       <div class="flex flex-row flex-wrap">
         <div class="footer-item">
@@ -78,7 +78,7 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'PageFooter',
   props: {
     title: {
       type: String,

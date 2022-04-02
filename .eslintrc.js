@@ -5,7 +5,11 @@ module.exports = {
     node: true,
   },
   extends: ['@nuxtjs/eslint-config-typescript', '@vue/airbnb'],
-  plugins: [],
+  plugins: ['vue'],
+  globals: {
+    $this: 'readable',
+  },
   // add your custom rules here
   rules: {},
+
 };
