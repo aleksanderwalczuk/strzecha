@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div>
     <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
       <div class="container pt-10 md:pt-20 md:h-full">
         <div class="mb-8 md:mb-30">
@@ -30,7 +30,7 @@
     <new-products />
     <section-on-demand />
     <section-instagram />
-  </main>
+  </div>
 </template>
 
 <script lang="ts">
