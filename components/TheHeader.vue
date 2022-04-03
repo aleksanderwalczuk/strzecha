@@ -27,7 +27,7 @@
               <nuxt-link
                 to="/"
                 class="nav-site-title font-title"
-                @click.native="closeNav"
+                @click.native="isNavOpen = false"
               >
                 {{ title }}
               </nuxt-link>
@@ -38,7 +38,7 @@
                   Kontakt
                 </nuxt-link>
                 <nuxt-link class="nav-link" to="/blog/">
-                  <img src="../static/icons/icon-lang.svg" alt="">
+                  <nuxt-img src="/icons/icon-lang.svg" />
                 </nuxt-link>
               </nav>
             </div>
@@ -49,26 +49,33 @@
             </nuxt-link>
             <hamburger />
           </div>
-          <header-nav />
+          <nav
+            class="hidden md:flex justify-center mb-[1.5rem]"
+          >
+            <button
+              class="px-2 text-lg cursor-pointer hover:text-gray-650"
+              @click="isNavOpen = !isNavOpen"
+            >
+              Wszystkie produkty
+            </button>
+            <button class="px-2 text-lg cursor-pointer hover:text-gray-650">
+              Na zamówienie
+            </button>
+          </nav>
         </div>
       </div>
     </header>
-    <header-open />
+    <header-open
+      v-show="isNavOpen"
+      v-scroll-lock="isNavOpen"
+      @toggleNav="isNavOpen = !isNavOpen"
+    />
   </div>
 </template>
 
-<script>
-import Hamburger from './Hamburger.vue';
-
-// import HeaderOpen from './HeaderOpen.vue'
-
+<script lang="ts">
 export default {
   name: 'PageHeader',
-  components: {
-    // HeaderNav,
-    // HeaderOpen,
-    Hamburger,
-  },
   props: {
     title: {
       type: String,
@@ -76,21 +83,15 @@ export default {
       default: 'Strzecha',
     },
   },
-  computed: {
-
-  },
-
-  methods: {
-    closeNav() {
-      // mutations.closeNav();
-    },
+  data() {
+    return {
+      isNavOpen: false,
+    };
   },
 };
 </script>
 <style lang="scss" scoped>
-header {
-  height: 60px;
-}
+
 .container {
   @apply px-8;
 }

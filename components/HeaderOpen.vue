@@ -1,8 +1,6 @@
 <template>
   <transition name="fade">
-    <!-- v-scroll-lock="isOpen" -->
     <div
-      v-if="isOpen"
       class="hidden nav-open fixed w-full z-30 md:block"
     >
       <nav class="nav-open-wrapper relative bg-gray-50 py-20">
@@ -23,34 +21,37 @@
                 </h3>
                 <ul>
                   <li>
-                    <nuxt-link to="/categories/furniture">
+                    <nuxt-link
+                      to="/category/furniture"
+                      @click.native="close"
+                    >
                       Meble
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/ceramics">
+                    <nuxt-link to="/category/ceramics">
                       Ceramika i porcelana
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/ceramics">
+                    <nuxt-link to="/category/ceramics">
                       Zegary
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/ceramics">
+                    <nuxt-link to="/category/ceramics">
                       Srebro i platery
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/ceramics">
+                    <nuxt-link to="/category/ceramics">
                       Inne
                     </nuxt-link>
                   </li>
                 </ul>
                 <nuxt-link
                   class="btn"
-                  to="/categories/"
+                  to="/category/"
                 >
                   Zobacz wszystkie
                 </nuxt-link>
@@ -61,22 +62,22 @@
                 </h3>
                 <ul>
                   <li>
-                    <nuxt-link to="/categories/paintings">
+                    <nuxt-link to="/category/paintings">
                       Malarstwo
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/paintings">
+                    <nuxt-link to="/category/paintings">
                       Grafika
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/paintings">
+                    <nuxt-link to="/category/paintings">
                       Rzeźba
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/categories/paintings">
+                    <nuxt-link to="/category/paintings">
                       Fotografia
                     </nuxt-link>
                   </li>
@@ -84,7 +85,7 @@
               </div>
             </div>
             <div class="category-thumbnail">
-              <g-image src="../assets/images/nav-cat-thumbnail-1.jpg" />
+              <nuxt-img src="/images/nav-cat-thumbnail-1.jpg" />
             </div>
           </div>
         </div>
@@ -95,39 +96,23 @@
 <script>
 
 export default {
-  name: 'HeaderOpen',
-  props: {
-    open: {
-      type: Boolean,
-      default: false,
-    },
+  name: 'MainNavigation',
+  mounted() {
+    window.addEventListener('keydown', this.keyClose);
   },
-  computed: {
-    isOpen() {
-      return this.props;
-    },
-  },
-  created() {
-    if (process.isClient) {
-      window.addEventListener('keydown', this.keyClose);
-    }
-  },
-  destroyed() {
-    if (process.isClient) {
-      window.removeEventListener('keydown', this.keyClose);
-    }
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.keyClose);
   },
   methods: {
     close() {
-      // return mutations.toggleNav();
+      this.$emit('toggleNav');
     },
     keyClose(e) {
       if (e.key === 'Escape') {
-        // closeNav();
+        this.close();
       }
     },
   },
-
 };
 </script>
 <style lang="scss" scoped>
