@@ -16,7 +16,7 @@
           <figure class="new-product-item">
             <div class="relative">
               <div class="absolute w-full h-full" />
-              <nuxt-img
+              <nuxt-picture
                 :src="item.imgLg"
                 alt=""
                 class="news-img object-cover h-full mix-blend-multiply"
@@ -57,7 +57,7 @@
               <figure class="new-product-item">
                 <div class="relative">
                   <div class="absolute w-full h-full" />
-                  <nuxt-img
+                  <nuxt-picture
                     :src="item.imgLg"
                     alt=""
                     class="news-img object-cover h-full mix-blend-multiply"

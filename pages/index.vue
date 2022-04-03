@@ -40,6 +40,32 @@ export default Vue.extend({
   name: 'IndexPage',
 });
 </script>
+<style lang="scss">
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+}
+.container {
+    @apply px-8 mx-auto;
+    max-width: 100%;
+}
+
+.h2 {
+    @apply text-lg mb-10 text-center;
+    letter-spacing: 0.035em;
+}
+
+@screen lg {
+    .container {
+        max-width: 70.5rem;
+    }
+    .h2 {
+        @apply text-2xl mb-10 text-center;
+        letter-spacing: 0.035em;
+    }
+}
+</style>
 <style lang="scss" scoped>
 .hero-img {
   max-height: 528px;
