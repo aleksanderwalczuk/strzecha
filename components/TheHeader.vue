@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="relative text-black md:h-44">
+    <header class="relative text-black h-[3.75rem] md:h-[10.5rem]">
       <div
         class="fixed min-w-full defaultHeaderHeight border-b z-10 bg-gray-50"
       >
