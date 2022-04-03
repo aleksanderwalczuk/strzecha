@@ -16,18 +16,24 @@
       <div class="container h-full flex flex-col justify-between">
         <ul class="navigation__list flex-1">
           <li class="navigation__item">
-            <nuxt-link to="/categories">
+            <nuxt-link to="/categories" @click.native="open = false">
               Wszystkie produkty
             </nuxt-link>
           </li>
           <li class="navigation__item">
-            <a href="">Na zamówienie</a>
+            <nuxt-link to="/on-demand" @click.native="open = false">
+              Na zamówienie
+            </nuxt-link>
           </li>
           <li class="navigation__item">
-            <a href="">O nas</a>
+            <nuxt-link to="/about" @click.native="open = false">
+              O nas
+            </nuxt-link>
           </li>
           <li class="navigation__item">
-            <a href="">Kontakt</a>
+            <nuxt-link to="/contact" @click.native="open = false">
+              Kontakt
+            </nuxt-link>
           </li>
         </ul>
         <div class="flex justify-center">
