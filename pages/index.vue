@@ -3,9 +3,10 @@
     <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
       <div class="container pt-10 md:pt-20 md:h-full">
         <div class="mb-8 md:mb-30">
-          <nuxt-img
+          <nuxt-picture
             class="w-full hero-img"
             src="/images/hero-bg@2x.jpg"
+            preload
           />
         </div>
         <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
@@ -27,6 +28,8 @@
       </div>
     </section>
     <new-products />
+    <section-on-demand />
+    <section-instagram />
   </main>
 </template>
 
@@ -39,17 +42,16 @@ export default Vue.extend({
 </script>
 <style lang="scss" scoped>
 .hero-img {
-    max-height: 528px;
+  max-height: 528px;
 }
 .hero-text {
-    letter-spacing: 0.035em;
+  letter-spacing: 0.035em;
 }
 @screen lg {
-    .hero-bg {
-        width: 100%;
-        min-height: 100vh;
-        background-size: cover;
-        /* background: url("~@/assets/hero-bg.jpg") no-repeat; */
-    }
+  .hero-bg {
+      width: 100%;
+      min-height: 100vh;
+      background-size: cover;
+  }
 }
 </style>
