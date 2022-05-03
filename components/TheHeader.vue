@@ -2,12 +2,13 @@
   <div>
     <header class="relative text-black h-[3.75rem] md:h-[10.5rem]">
       <div
-        class="fixed min-w-full defaultHeaderHeight border-b z-10 bg-gray-50"
+        class="fixed min-w-full border-b z-10 bg-gray-50"
       >
         <div class="container">
           <div class="flex justify-between items-center py-4 md:py-10">
             <div class="search-container relative z-20 w-3/12">
               <form class="relative">
+                <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                 <label for="search" class="cursor-pointer">
                   <nuxt-img src="/icons/icon-search.svg" />
                 </label>
@@ -53,12 +54,15 @@
             class="hidden md:flex justify-center mb-[1.5rem]"
           >
             <button
-              class="px-2 text-lg cursor-pointer hover:text-gray-650"
+              class="nav-btn"
+              :class="isNavOpen ? 'nav-btn-active': 'hover:text-gray-650'"
               @click="isNavOpen = !isNavOpen"
             >
               Wszystkie produkty
             </button>
-            <button class="px-2 text-lg cursor-pointer hover:text-gray-650">
+            <button
+              class="nav-btn hover:text-gray-650"
+            >
               Na zamówienie
             </button>
           </nav>
@@ -68,6 +72,7 @@
     <header-open
       v-show="isNavOpen"
       v-scroll-lock="isNavOpen"
+      :is-visible="isNavOpen"
       @toggleNav="isNavOpen = !isNavOpen"
     />
   </div>
@@ -112,6 +117,13 @@ export default {
   font-weight: 300;
   letter-spacing: 0.09em;
 }
+.nav-btn {
+  @apply px-2 text-lg cursor-pointer focus:ring-transparent focus:outline-none;
+}
+
+.nav-btn-active {
+  @apply underline underline-offset-8 outline-none;
+}
 
 .search-input {
   @apply bg-gray-50 border-b px-1 ring-0 focus:outline-none focus-within:ring-0;
@@ -120,10 +132,5 @@ export default {
 
 .active--exact {
   /* Active Nav Link */
-}
-@screen md {
-  .defaultHeaderHeight {
-    height: 10.5rem;
-  }
 }
 </style>

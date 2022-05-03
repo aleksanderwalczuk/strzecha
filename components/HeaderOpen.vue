@@ -1,19 +1,25 @@
 <template>
   <transition name="fade">
     <div
+      ref="navOpenedWrapper"
       class="hidden nav-open fixed w-full z-30 md:block"
     >
       <nav class="nav-open-wrapper relative bg-gray-50 py-20">
-        <div class="nav-container">
+        <div
+          class="nav-container"
+        >
           <button
             class="nav-close w-5 h-5"
-            @click="close"
+            @click.self="close"
           >
             <div class="sr-only">
               Close
             </div>
           </button>
-          <div class="flex items-start">
+          <div
+            ref="navOpenedContainer"
+            class="flex items-start"
+          >
             <div class="flex justify-between w-1/2">
               <div class="w-4/12">
                 <h3 class="text-gray-250 mb-8">
@@ -97,11 +103,38 @@
 
 export default {
   name: 'MainNavigation',
+  props: {
+    isVisible: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  watch: {
+    isVisible(value) {
+      if (value === false) {
+        this.remove();
+      }
+      if (value === true) {
+        window.addEventListener('keydown', this.keyClose);
+      }
+    },
+  },
   mounted() {
-    window.addEventListener('keydown', this.keyClose);
+    window.addEventListener('click', (e) => {
+      // hide navigation on click outside the container
+      if (this.$refs.navOpenedWrapper == null) {
+        return;
+      }
+      if (
+        this.$refs.navOpenedWrapper.contains(e.target)
+        && !this.$refs.navOpenedContainer.contains(e.target)
+      ) {
+        this.close();
+      }
+    });
   },
   beforeDestroy() {
-    window.removeEventListener('keydown', this.keyClose);
+    this.remove();
   },
   methods: {
     close() {
@@ -111,6 +144,9 @@ export default {
       if (e.key === 'Escape') {
         this.close();
       }
+    },
+    remove() {
+      window.removeEventListener('keydown', this.keyClose);
     },
   },
 };
@@ -156,4 +192,14 @@ li {
     @apply px-5;
   }
 }
+// component transition
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
 </style>
