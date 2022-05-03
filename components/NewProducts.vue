@@ -6,89 +6,91 @@
       </h2>
       <div class="hidden md:flex">
         <!-- START FETCHED CONTENT -->
-        <a
-          v-for="(item, index, arr) in fetchedData"
-          :key="item.id"
-          :href="item.link || '#'"
-          :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'"
-          class="product-item-link"
-        >
-          <figure class="new-product-item">
-            <div class="relative">
-              <div class="absolute w-full h-full" />
-              <nuxt-picture
-                :src="item.imgLg"
-                alt=""
-                class="news-img object-cover h-full mix-blend-multiply"
-              />
-            </div>
-            <figcaption>
-              <a
-                href="#"
-                class="flex mt-4 justify-center md:justify-start"
-              >
-                <span>{{ item.title }}</span>
-                <nuxt-img
-                  src="/icons/icon-arrow.svg"
-                  class="ml-2 hidden md:block"
+        <client-only>
+          <a
+            v-for="(item, index, arr) in fetchedData"
+            :key="item.id"
+            :href="item.link || '#'"
+            :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'"
+            class="product-item-link"
+          >
+            <figure class="new-product-item">
+              <div class="relative">
+                <div class="absolute w-full h-full" />
+                <nuxt-picture
+                  :src="item.imgLg"
+                  alt=""
+                  class="news-img object-cover h-full mix-blend-multiply"
                 />
-              </a>
-            </figcaption>
-          </figure>
-        </a>
+              </div>
+              <figcaption>
+                <a
+                  href="#"
+                  class="flex mt-4 justify-center md:justify-start"
+                >
+                  <span>{{ item.title }}</span>
+                  <nuxt-img
+                    src="/icons/icon-arrow.svg"
+                    class="ml-2 hidden md:block"
+                  />
+                </a>
+              </figcaption>
+            </figure>
+          </a>
+        </client-only>
+
         <!-- END FETCHED CONTENT -->
       </div>
       <div class="carousel md:hidden">
-        <carousel
-          :per-page="1"
-          :pagination-padding="4"
-          :pagination-color="twColorGray"
-        >
-          <slide
-            v-for="(item, index, arr) in fetchedData"
-            :key="item.id"
+        <client-only>
+          <carousel
+            :per-page="1"
+            :pagination-padding="4"
+            :pagination-color="'gray-450'"
           >
-            <!-- START FETCHED CONTENT -->
-            <a
-              :href="item.link || '#'"
-              :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'"
-              class="product-item-link"
+            <slide
+              v-for="(item, index, arr) in fetchedData"
+              :key="item.id"
             >
-              <figure class="new-product-item">
-                <div class="relative">
-                  <div class="absolute w-full h-full" />
-                  <nuxt-picture
-                    :src="item.imgLg"
-                    alt=""
-                    class="news-img object-cover h-full mix-blend-multiply"
-                  />
-                </div>
-                <figcaption>
-                  <a
-                    href="#"
-                    class="flex mt-4 justify-center md:justify-start"
-                  >
-                    <span>{{ item.title }}</span>
-                    <nuxt-img
-                      src="/icons/icon-arrow.svg"
-                      class="ml-2 hidden md:block"
+              <!-- START FETCHED CONTENT -->
+              <a
+                :href="item.link || '#'"
+                :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'"
+                class="product-item-link"
+              >
+                <figure class="new-product-item">
+                  <div class="relative">
+                    <div class="absolute w-full h-full" />
+                    <nuxt-picture
+                      :src="item.imgLg"
+                      alt=""
+                      class="news-img object-cover h-full mix-blend-multiply"
                     />
-                  </a>
-                </figcaption>
-              </figure>
-            </a>
-            <!-- END FETCHED CONTENT -->
-          </slide>
-        </carousel>
+                  </div>
+                  <figcaption>
+                    <a
+                      href="#"
+                      class="flex mt-4 justify-center md:justify-start"
+                    >
+                      <span>{{ item.title }}</span>
+                      <nuxt-img
+                        src="/icons/icon-arrow.svg"
+                        class="ml-2 hidden md:block"
+                      />
+                    </a>
+                  </figcaption>
+                </figure>
+              </a>
+              <!-- END FETCHED CONTENT -->
+            </slide>
+          </carousel>
+        </client-only>
       </div>
     </div>
   </section>
 </template>
-<script>
-// eslint-disable-next-line import/no-extraneous-dependencies
-import resolveConfig from 'tailwindcss/resolveConfig';
-import ExampleData from '~/static/exampleData';
-import tailwindConfig from '~/tailwind.config';
+<script lang="ts">
+import ExampleData from '../static/exampleData';
 
 export default {
   name: 'NewProducts',
@@ -100,13 +102,6 @@ export default {
   computed: {
     getImages() {
       return this.fetchedData.map((el) => el.img);
-    },
-    twColorGray() {
-      const config = resolveConfig(tailwindConfig);
-      if (config) {
-        return config.theme.colors.gray['450'];
-      }
-      return null;
     },
   },
   methods: {
