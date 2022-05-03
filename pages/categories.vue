@@ -57,17 +57,17 @@
           Inne
         </nuxt-link>
       </div>
-      <div v-if="products">
+      <!-- <div v-if="true">
         <div
           v-for="product in products"
           :key="product.id"
           class="product-grid"
         >
           <div class="product-item">
-            <!-- <h2>title</h2> -->
-          </div>
-        </div>
+             <h2>title</h2>
       </div>
+      </div>
+      </div> -->
       <div class="grid grid-cols-3 gap-3">
         <!-- <product-image class="h-56"> -->
         <div class="p-4">
@@ -108,6 +108,13 @@
     </div>
   </section>
 </template>
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
+
+export default defineComponent({
+  name: 'CategoryPage',
+});
+</script>
 <style scoped>
 .category-link {
   @apply block py-2 px-3 relative text-gray-650;
