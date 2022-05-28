@@ -116,11 +116,15 @@ export default {
       }
       if (value === true) {
         window.addEventListener('keydown', this.keyClose);
+        window.addEventListener('click', this.closeOnOutsideClick);
       }
     },
   },
-  mounted() {
-    window.addEventListener('click', (e) => {
+  beforeDestroy() {
+    this.remove();
+  },
+  methods: {
+    closeOnOutsideClick(e) {
       // hide navigation on click outside the container
       if (this.$refs.navOpenedWrapper == null) {
         return;
@@ -131,12 +135,7 @@ export default {
       ) {
         this.close();
       }
-    });
-  },
-  beforeDestroy() {
-    this.remove();
-  },
-  methods: {
+    },
     close() {
       this.$emit('toggleNav');
     },
@@ -147,6 +146,7 @@ export default {
     },
     remove() {
       window.removeEventListener('keydown', this.keyClose);
+      window.removeEventListener('click', this.closeOnOutsideClick);
     },
   },
 };
