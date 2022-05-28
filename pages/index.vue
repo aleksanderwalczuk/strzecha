@@ -1,6 +1,12 @@
 <template>
   <div>
-    <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
+    <div v-if="$fetchState.pending">
+      Loading...
+    </div>
+    <section
+      v-else
+      class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400"
+    >
       <div class="container pt-10 md:pt-20 md:h-full">
         <div class="mb-8 md:mb-30">
           <nuxt-picture
@@ -11,10 +17,7 @@
         </div>
         <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
           <p class="lg:-mx-1 md:text-lg hero-text">
-            Od 1993 roku nieprzerwanie kontynuujemy naszą pasję do sztuki i
-            rzemiosła. Starannie dobieramy asortyment, kierując się twórczym
-            podejściem do koloru, kształtu i jakości towaru, by oszczędzić czas
-            miłośników sztuki w poszukiwaniu unikalnych przedmiotów.
+            {{ page.description }}
           </p>
           <div class="flex justify-center">
             <a
@@ -38,7 +41,27 @@ import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   name: 'IndexPage',
+  data() {
+    return {
+      products: null as null | unknown[],
+      page: null as null,
+    };
+  },
+  async fetch() {
+    const [hero, products] = [
+      await this.$strapi.find('hero-section'),
+      await this.$strapi.find('products'),
+    ];
+    this.products = products;
+    this.page = hero.data.attributes;
+  },
+  fetchOnServer: false,
 
+  computed: {
+    heroImage() {
+      return this.page || '/images/hero-bg@2x.jpg';
+    },
+  },
 });
 </script>
 <style lang="scss">
