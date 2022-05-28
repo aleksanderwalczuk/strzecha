@@ -8,11 +8,10 @@
         <!-- START FETCHED CONTENT -->
         <client-only>
           <a
-            v-for="(item, index, arr) in fetchedData"
+            v-for="item in fetchedData"
             :key="item.id"
             :href="item.link || '#'"
-            :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'"
-            class="product-item-link"
+            class="product-item-link new-product-item"
           >
             <figure class="new-product-item">
               <div class="relative">
@@ -49,15 +48,16 @@
             :pagination-color="'gray-450'"
           >
             <slide
-              v-for="(item, index, arr) in fetchedData"
+              v-for="item in fetchedData"
               :key="item.id"
             >
               <!-- START FETCHED CONTENT -->
               <a
                 :href="item.link || '#'"
-                :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'"
-                class="product-item-link"
+                class="product-item-link new-product-item"
               >
+                <!-- :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'" -->
+
                 <figure class="new-product-item">
                   <div class="relative">
                     <div class="absolute w-full h-full" />
@@ -100,16 +100,11 @@ export default {
     };
   },
   computed: {
-    getImages() {
-      return this.fetchedData.map((el) => el.img);
-    },
+
   },
   methods: {
-    isArrEven(arr) {
-      if (Array.isArray(arr)) {
-        return arr.length % 2 ? 0 : 1;
-      }
-      return null;
+    isArrEven(arr: unknown[]): null | boolean {
+      return arr.length % 2 ? Boolean(0) : Boolean(1);
     },
   },
 };
@@ -122,10 +117,10 @@ export default {
 .product-item-link {
   @apply block h-full;
 }
-.new-product-item-even:nth-child(even) {
+.new-product-item:nth-child(even) {
   @apply mx-6;
 }
-.new-product-item-odd:nth-child(odd) {
+.new-product-item:nth-child(odd) {
   @apply mx-6;
 }
 .VueCarousel-dot {
