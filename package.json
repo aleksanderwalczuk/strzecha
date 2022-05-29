@@ -34,6 +34,7 @@
     "@nuxtjs/eslint-config-typescript": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@types/lodash": "^4.14.182",
+    "@types/tailwindcss": "^3.0.10",
     "@vue/eslint-config-airbnb": "^6.0.0",
     "autoprefixer": "^10.4.4",
     "eslint": "^8.4.1",

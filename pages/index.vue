@@ -31,7 +31,7 @@
       </div>
     </section>
     <new-products />
-    <section-on-demand />
+    <section-on-demand :categories="categories" />
     <section-instagram />
   </div>
 </template>
@@ -40,21 +40,31 @@
 import { defineComponent } from '@vue/composition-api';
 import { get } from 'lodash';
 
+import CategoryInterface from '~/interfaces/CategoryInterface';
+import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
+
 export default defineComponent({
   name: 'IndexPage',
   data() {
     return {
       products: null as null | unknown[],
       page: null as null,
+      categories: [] as CategoryInterface[],
     };
   },
   async fetch() {
-    const [hero, products] = [
+    const [hero, products, categories] = [
       await this.$strapi.find('hero-section', { populate: '*' }),
       await this.$strapi.find('products', { populate: '*' }),
+      await this.$strapi.find('product-categories') as unknown as StrapiResponseInterface<CategoryInterface>,
     ];
+
+    // const foo:  = categories;
     this.products = products;
     this.page = hero.data.attributes;
+    this.categories = categories.data.map(({ id, attributes }) => (
+      { id, ...attributes }
+    ));
   },
   fetchOnServer: false,
 
