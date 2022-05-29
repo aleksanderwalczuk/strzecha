@@ -12,6 +12,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'no-extra-semi': 'off',
+    'vue/multi-word-component-names': 'off',
   },
 
 };
