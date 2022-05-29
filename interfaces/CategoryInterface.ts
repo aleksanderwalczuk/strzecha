@@ -3,7 +3,7 @@ import { StrapiResponseInterface } from './StrapiResponseInterface';
 
 const parentCategories = ['wyposazenie', 'sztuka'] as const;
 
-export default interface CategoryInterface {
+export interface CategoryInterface {
   name: string,
   createdAt: string,
   on_homepage: boolean

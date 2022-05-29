@@ -41,7 +41,7 @@
 import { defineComponent } from '@vue/composition-api';
 import { get } from 'lodash';
 
-import CategoryInterface from '~/interfaces/CategoryInterface';
+import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 
 export default defineComponent({
