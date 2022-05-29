@@ -31,7 +31,8 @@
       </div>
     </section>
     <new-products />
-    <section-on-demand :categories="categories" />
+    <categories :categories="categories" />
+    <section-on-demand />
     <section-instagram />
   </div>
 </template>
@@ -56,7 +57,7 @@ export default defineComponent({
     const [hero, products, categories] = [
       await this.$strapi.find('hero-section', { populate: '*' }),
       await this.$strapi.find('products', { populate: '*' }),
-      await this.$strapi.find('product-categories') as unknown as StrapiResponseInterface<CategoryInterface>,
+      await this.$strapi.find('product-categories', { populate: '*' }) as StrapiResponseInterface<CategoryInterface>,
     ];
 
     // const foo:  = categories;

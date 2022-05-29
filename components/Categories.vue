@@ -9,55 +9,22 @@
       <div class="hidden lg:flex mt-20">
         <div class="flex flex-col justify-between md:w-1/2">
           <div class="flex flex-col items-center text-center">
-            <a
-              data-image="~/static/images/category-banner.jpg"
-              data-imagex2="~/static/images/category-banner@2x.jpg"
-              href="#"
-              class="category-link"
-              @mouseenter="showImage"
-              @focus="showImage"
-            >Rzeźba</a>
-            <a
-              data-image="https://via.placeholder.com/350x441"
-              data-imagex2="https://via.placeholder.com/350x441"
-              href="#"
-              class="category-link"
-              @mouseenter="showImage"
-              @focus="showImage"
-            >Porcelana</a>
-            <a
-              data-image="https://via.placeholder.com/350x441"
-              data-imagex2="https://via.placeholder.com/350x441"
-              href="#"
-              class="category-link"
-              @mouseenter="showImage"
-              @focus="showImage"
-            >Fotele</a>
-            <a
-              :data-image="exampleImg"
-              :data-imagex2="exampleImg"
-              href="#"
-              class="category-link"
-              :class="defaultHover ? 'category-link-active' : null"
-              @mouseenter="showImage"
-              @focus="showImage"
-            >Fotografia</a>
-            <a
-              data-image="https://via.placeholder.com/350x441"
-              data-imagex2="https://via.placeholder.com/350x441"
-              href="#"
-              class="category-link"
-              @mouseenter="showImage"
-              @focus="showImage"
-            >Grafika</a>
-            <a
-              data-image="https://via.placeholder.com/350x441"
-              data-imagex2="https://via.placeholder.com/350x441"
-              href="#"
-              class="category-link"
-              @mouseenter="showImage"
-              @focus="showImage"
-            >Malarstwo</a>
+            <ul>
+              <li
+                v-for="category in activeCategories"
+                :key="category.id"
+                class="category-link"
+                @mouseover="updateHoveredName(category.name)"
+                @focus="updateHoveredName(category.name)"
+              >
+                <nuxt-link
+                  :to="`/category/${category.id}`"
+                  class=""
+                >
+                  {{ category.name }}
+                </nuxt-link>
+              </li>
+            </ul>
           </div>
           <a
             href="#"
@@ -73,13 +40,15 @@
         </div>
         <div class="md:w-1/2">
           <nuxt-img
-            alt=""
-            :src="currentImage.x2 ? currentImage.x2 : exampleImg"
+            v-if="activeImage != null"
+            provider="strapi"
+            :alt="activeImage.alternativeText"
+            :src="activeImage.url"
             class="ml-16 transition ease-in-out"
           />
         </div>
       </div>
-      <div class="lg:hidden">
+      <!-- <div class="lg:hidden">
         <carousel
           :per-page="1"
           :pagination-padding="4"
@@ -112,18 +81,27 @@
             class="ml-2"
           />
         </a>
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from '@vue/composition-api';
+
 import tailwindConfig from '~/tailwind.config';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import resolveConfig from 'tailwindcss/resolveConfig';
+import CategoryInterface from '~/interfaces/CategoryInterface';
+import { get } from 'lodash';
+import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 
-export default {
+export default defineComponent({
   name: 'SectionCategories',
-  components: {
+  props: {
+    categories: {
+      type: Array as PropType<CategoryInterface[]>,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -132,34 +110,39 @@ export default {
         x2: null,
       },
       defaultHover: true,
-      that: this,
+      hoveredCategoryName: null as CategoryInterface['name'] | null,
     };
   },
   computed: {
     twColorGray() {
       const config = resolveConfig(tailwindConfig);
-      if (config) {
-        return config.theme.colors.gray['450'];
+      return get(config, 'theme.colors.gray[\'450\']', '#989898');
+    },
+    activeCategories(): CategoryInterface[] {
+      // eslint-disable-next-line camelcase
+      return this.categories.filter(({ on_homepage }) => on_homepage === true);
+    },
+    activeCategoryName(): CategoryInterface['name'] | null {
+      if (this.hoveredCategoryName != null) {
+        return this.hoveredCategoryName;
       }
-      return null;
+
+      const [firstCategory] = this.categories;
+
+      return get(firstCategory, 'name', null);
+    },
+    activeImage(): StrapiImageInterface | null {
+      const category = this.activeCategories.find(({ name }) => name === this.activeCategoryName);
+      return get(category, 'image.data.attributes', null);
     },
   },
+
   methods: {
-    // TODO:show Image should keep link active when image is shown and mouse is out
-    showImage(event) {
-      this.defaultHover = false;
-      const img = event.target.dataset.image;
-      const imgLg = event.target.dataset.imagex2;
-      if (img && imgLg) {
-        this.currentImage.default = img;
-        this.currentImage.x2 = imgLg;
-        // event.target.classList.toggle('category-link-active')
-      } else if (img) {
-        this.currentImage.default = img;
-      }
+    updateHoveredName(name: CategoryInterface['name']) {
+      this.hoveredCategoryName = name;
     },
   },
-};
+});
 </script>
 <style lang="scss" scoped>
 .category-link {
