@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { get } from 'lodash';
 
 export default defineComponent({
   name: 'IndexPage',
@@ -49,8 +50,8 @@ export default defineComponent({
   },
   async fetch() {
     const [hero, products] = [
-      await this.$strapi.find('hero-section'),
-      await this.$strapi.find('products'),
+      await this.$strapi.find('hero-section', { populate: '*' }),
+      await this.$strapi.find('products', { populate: '*' }),
     ];
     this.products = products;
     this.page = hero.data.attributes;
@@ -59,7 +60,11 @@ export default defineComponent({
 
   computed: {
     heroImage() {
-      return this.page || '/images/hero-bg@2x.jpg';
+      return get(
+        this.page,
+        'image.data.attributes.url',
+        '/images/hero-bg@2x.jpg',
+      );
     },
   },
 });
