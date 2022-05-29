@@ -46,6 +46,11 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/strapi',
   ],
+  image: {
+    strapi: {
+      baseURL: process.env.CMS_URL || 'http://localhost:1337/uploads/',
+    },
+  },
   strapi: {
     entities: ['hero-section', 'products'],
     url: 'http://localhost:1337/api',
