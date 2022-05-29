@@ -10,7 +10,7 @@ interface BaseImageInterface {
   url: string,
 
 }
-export default interface ImageInterface extends BaseImageInterface {
+export interface StrapiImageInterface extends BaseImageInterface {
   alternativeText: string,
   caption: string,
   previewUrl?: string,
