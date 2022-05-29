@@ -4,6 +4,7 @@ import { StrapiResponseInterface } from './StrapiResponseInterface';
 const parentCategories = ['wyposazenie', 'sztuka'] as const;
 
 export interface CategoryInterface {
+  id?: number,
   name: string,
   createdAt: string,
   on_homepage: boolean
