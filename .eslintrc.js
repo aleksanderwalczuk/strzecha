@@ -10,6 +10,8 @@ module.exports = {
     $this: 'readable',
   },
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-extra-semi': 'off',
+  },
 
 };
