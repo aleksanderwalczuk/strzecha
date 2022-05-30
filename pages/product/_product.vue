@@ -103,14 +103,14 @@ export default defineComponent({
     };
   },
   async fetch() {
-    const res = await this.$strapi.find('product-categories', { populate: '*', id: this.$route.params.category }) as StrapiResponseInterface<CategoryInterface>;
+    const res = await this.$strapi.find('product-categories', { populate: '*', id: this.$route.params.product }) as StrapiResponseInterface<CategoryInterface>;
     this.categories = res.data.map(({ id, attributes }) => ({ id, ...attributes }));
 
-    await this.getProductsByCategory(this.$route.params.category);
+    await this.getProductsByCategory(this.$route.params.product);
   },
   computed: {
     activeCategory(): CategoryInterface | undefined {
-      return this.categories.find(({ id }) => this.$route.params.category === id?.toString());
+      return this.categories.find(({ id }) => this.$route.params.product === id?.toString());
     },
   },
   mounted() {
