@@ -11,11 +11,13 @@
         v-if="activeCategory != null"
         class="flex items-center font-serif text-[18px] leading-[32px] spacing mt-20 mb-8"
       >
-        <img
-          src="/icons/icon-arrow.svg"
-          alt=""
-          class="mr-2 transform rotate-180"
-        >
+        <button @click="$router.back()">
+          <img
+            src="/icons/icon-arrow.svg"
+            alt=""
+            class="mr-2 transform rotate-180"
+          >
+        </button>
         <span class="capitalize">
           {{ activeCategory.parent_category }}
         </span>
