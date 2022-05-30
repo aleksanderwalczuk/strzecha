@@ -28,10 +28,18 @@
         v-if="product != null"
         class="flex font-serif"
       >
-        <div class="max-w-1/2 flex-shrink-0">
-          <img src="https://via.placeholder.com/480x578" alt="foo">
+        <div class="max-w-[480px] w-full max-h-[520px] h-full p-6 bg-[#f1f1f1]">
+          <div class="w-full h-full flex items-center justify-center">
+            <nuxt-img
+              v-if="productThumbnail"
+              provider="strapi"
+              fit="cover"
+              :src="productThumbnail"
+              class="max-h-[480px]"
+            />
+          </div>
         </div>
-        <div class="max-w-1/2 flex-grow xl:ml-20 mb-4">
+        <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
           <h2
             class="mb-4"
           >
@@ -92,6 +100,7 @@ import { get } from 'lodash';
 
 import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
+import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 
 export default defineComponent({
@@ -113,6 +122,16 @@ export default defineComponent({
     activeCategory(): CategoryInterface | undefined {
       return this.categories.find(({ id }) => this.$route.params.product === id?.toString());
     },
+
+    productImages(): StrapiImageInterface[] {
+      return this.mapResponseToDataObject(get(this.product, 'info.images', []));
+    },
+    productThumbnail() {
+      const [firstImage] = this.productImages;
+      const baseUrl = get(firstImage, 'url', '');
+      const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
+      return mediumThumbnail || baseUrl;
+    },
   },
   mounted() {
     const { category: categoryId } = this.$route.params;
@@ -131,6 +150,12 @@ export default defineComponent({
       ) as StrapiResponseInterface<ProductInterface>;
       // this.product = res;
       this.product = get(res.data, 'attributes', null);
+    },
+    mapResponseToDataObject(response: StrapiResponseInterface<StrapiImageInterface>) {
+      return response.data.map(({ id, attributes }) => ({
+        id,
+        ...(attributes || {}),
+      }));
     },
   },
 
