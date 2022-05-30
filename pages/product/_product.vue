@@ -143,7 +143,8 @@ export default defineComponent({
 
   methods: {
     async getProductsByCategory(categoryId: string) {
-      const res = await this.$strapi.findOne(
+      const strapi = this.$strapi as any;
+      const res = await strapi.findOne(
         'products',
         categoryId,
         { populate: ['info', 'additional', 'info.product_category', 'info.images'] },
