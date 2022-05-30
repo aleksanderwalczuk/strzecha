@@ -26,32 +26,25 @@
         v-if="products.length > 0"
         class="grid grid-cols-3 gap-6 font-serif"
       >
-        <div
+        <category-item
           v-for="product in activeCategoryProducts"
           :key="`product-${product.id}`"
-          class=""
-        >
-          <h3>{{ product.title }}</h3>
-          <nuxt-link
-            v-if="product.info.link"
-            :to="`/product/${product.id}`"
-          >
-            click
-          </nuxt-link>
-        </div>
+          :product="product"
+        />
       </section>
     </div>
-    <!-- {{ params }} -->
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { get } from 'lodash';
+import CategoryItem from '~/components/CategoryItem.vue';
 import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 
 export default defineComponent({
+  components: { CategoryItem },
   name: 'CategoryPage',
   data() {
     return {
