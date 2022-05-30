@@ -1,9 +1,13 @@
+import { StrapiImageInterface } from './StrapiImageInterface';
+import { StrapiResponseInterface } from './StrapiResponseInterface';
+
 export interface InfoProductInterface {
   currency: string,
   description: string,
   id: number,
   link?: string,
   price?: number,
+  images?: StrapiResponseInterface<StrapiImageInterface>
 }
 export interface AdditionalProductInterface {
   available: boolean,
