@@ -97,28 +97,35 @@
 import { defineComponent } from '@nuxtjs/composition-api';
 
 import { get } from 'lodash';
+import { mapState } from 'pinia';
 
 import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
+import { useCategoriesStore } from '~/stores/main';
 
 export default defineComponent({
   name: 'ProductPage',
   data() {
     return {
-      categories: [] as CategoryInterface[],
       activeId: null as string | null,
       product: null as any,
+      categoriesStore: useCategoriesStore(),
     };
   },
   async fetch() {
+    if (this.categories.length === 0) {
+      this.categoriesStore.fetchCategories();
+    }
     const res = await this.$strapi.find('product-categories', { populate: '*', id: this.$route.params.product }) as StrapiResponseInterface<CategoryInterface>;
     this.categories = res.data.map(({ id, attributes }) => ({ id, ...attributes }));
 
     await this.getProductsByCategory(this.$route.params.product);
   },
   computed: {
+    ...mapState(useCategoriesStore, ['categories']),
+
     activeCategory(): CategoryInterface | undefined {
       return this.categories.find(({ id }) => this.$route.params.product === id?.toString());
     },
