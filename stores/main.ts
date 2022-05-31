@@ -7,16 +7,13 @@ import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 export const useProductsStore = defineStore('Products', {
   state: () => ({
     // all these properties will have their type inferred automatically
-    counter: 0,
-    name: 'Eduardo',
-    isAdmin: true,
     products: [] as ProductInterface[],
   }),
   actions: {
     async fetchProducts(): Promise<any> {
       try {
         const res = await this.$nuxt.$strapi.find('products', {
-          populate: ['info', 'additional', 'info.product_category', 'info.images'],
+          populate: ['info', 'additional', 'info.subcategory', 'info.images'],
         }) as StrapiResponseInterface<ProductInterface[]>;
         this.products = this.mapResponseData(res);
       } catch (error) {
@@ -37,7 +34,7 @@ export const useProductsStore = defineStore('Products', {
     // TODO: put as argument categoryId: string when filters are ready
     async getProductsByCategory() {
       const res = await this.$nuxt.$strapi.find('products', {
-        populate: ['info', 'additional', 'info.product_category', 'info.images'],
+        populate: ['info', 'additional', 'info.subcategory', 'info.images'],
       }) as StrapiResponseInterface<ProductInterface[]>;
 
       return this.mapResponseData(res);
@@ -81,7 +78,7 @@ export const useCategoriesStore = defineStore('Categories', {
       return get(response.data, 'attributes', response.data);
     },
     async getCategoryById(id: string) {
-      await this.$nuxt.$strapi.find('product-categories', { populate: '*', id }) as StrapiResponseInterface<CategoryInterface>;
+      await this.$nuxt.$strapi.find('product-categories', { populate: ['*', 'main-category'], id }) as StrapiResponseInterface<CategoryInterface>;
     },
   },
 });
