@@ -20,74 +20,38 @@
             ref="navOpenedContainer"
             class="flex items-start"
           >
-            <div class="flex justify-between w-1/2">
-              <div class="w-4/12">
-                <h3 class="text-gray-250 mb-8">
-                  Wyposażenie wnętrza
+            <div class="flex justify-start w-1/2">
+              <div
+                v-for="({name, value}, index) in navLinks"
+                :key="name"
+                class="w-4/12"
+              >
+                <h3
+
+                  class="text-gray-250 mb-8 capitalize"
+                >
+                  {{ name }}
                 </h3>
                 <ul>
-                  <li>
+                  <li
+                    v-for="link in value"
+                    :key="link.createdAt"
+                  >
                     <nuxt-link
-                      to="/category/furniture"
+                      :to="`/category/${link.id}`"
                       @click.native="close"
                     >
-                      Meble
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/ceramics">
-                      Ceramika i porcelana
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/ceramics">
-                      Zegary
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/ceramics">
-                      Srebro i platery
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/ceramics">
-                      Inne
+                      {{ link.name }}
                     </nuxt-link>
                   </li>
                 </ul>
                 <nuxt-link
+                  v-if="index === 0"
                   class="btn"
                   to="/category/"
                 >
                   Zobacz wszystkie
                 </nuxt-link>
-              </div>
-              <div class="w-6/12">
-                <h3 class="text-gray-250 mb-8">
-                  Sztuka
-                </h3>
-                <ul>
-                  <li>
-                    <nuxt-link to="/category/paintings">
-                      Malarstwo
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/paintings">
-                      Grafika
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/paintings">
-                      Rzeźba
-                    </nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link to="/category/paintings">
-                      Fotografia
-                    </nuxt-link>
-                  </li>
-                </ul>
               </div>
             </div>
             <div class="category-thumbnail">
@@ -99,7 +63,10 @@
     </div>
   </transition>
 </template>
-<script>
+<script lang="ts">
+import { mapState } from 'pinia';
+import { useCategoriesStore } from '~/stores/main';
+import { CategoryInterface } from '~/interfaces/CategoryInterface';
 
 export default {
   name: 'MainNavigation',
@@ -107,6 +74,30 @@ export default {
     isVisible: {
       type: Boolean,
       default: false,
+    },
+  },
+  data() {
+    return {
+      categoriesStore: useCategoriesStore(),
+    };
+  },
+  computed: {
+    ...mapState(useCategoriesStore, ['categories']),
+    navLinks(): {
+        name: CategoryInterface['parent_category'],
+        value: CategoryInterface[]
+      }[] {
+      const result = [] as any;
+      this.categoriesStore.parentCategories.forEach((category) => {
+        result.push({
+          name: category,
+          value: this.categories
+          // eslint-disable-next-line camelcase
+            .filter(({ parent_category }) => parent_category === category),
+        });
+      });
+
+      return result;
     },
   },
   watch: {

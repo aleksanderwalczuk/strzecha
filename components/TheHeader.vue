@@ -79,7 +79,10 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from '@nuxtjs/composition-api';
+import { useCategoriesStore } from '~/stores/main';
+
+export default defineComponent({
   name: 'PageHeader',
   props: {
     title: {
@@ -91,9 +94,15 @@ export default {
   data() {
     return {
       isNavOpen: false,
+      categoriesStore: useCategoriesStore(),
     };
   },
-};
+  async fetch() {
+    await this.categoriesStore.fetchCategories();
+  },
+  computed: {
+  },
+});
 </script>
 <style lang="scss" scoped>
 
