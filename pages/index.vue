@@ -42,23 +42,27 @@ import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 
 import { mapState } from 'pinia';
-import { useProductsStore, useCategoriesStore } from '~/stores/main';
+import {
+  useProductsStore,
+  useCategoriesStore,
+  usePagesStore,
+} from '~/stores/main';
 
 export default defineComponent({
   name: 'IndexPage',
   data() {
     return {
-      // products: null as null | unknown[],
       page: null as null,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
+      pagesStore: usePagesStore(),
     };
   },
   async fetch() {
     const [hero] = [
       await this.$strapi.find('hero-section', { populate: '*' }),
     ];
-
+    await this.pagesStore.fetchPages();
     await this.productsStore.fetchProducts();
     await this.categoriesStore.fetchCategories();
 
@@ -76,6 +80,7 @@ export default defineComponent({
     },
     ...mapState(useProductsStore, ['products']),
     ...mapState(useCategoriesStore, ['categories']),
+    ...mapState(usePagesStore, ['pages']),
   },
 });
 </script>
