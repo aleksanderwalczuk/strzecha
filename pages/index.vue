@@ -41,31 +41,28 @@
 import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
-import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
+import { mapState } from 'pinia';
+import { useProductsStore, useCategoriesStore } from '~/stores/main';
 
 export default defineComponent({
   name: 'IndexPage',
   data() {
     return {
-      products: null as null | unknown[],
+      // products: null as null | unknown[],
       page: null as null,
-      categories: [] as CategoryInterface[],
+      categoriesStore: useCategoriesStore(),
+      productsStore: useProductsStore(),
     };
   },
   async fetch() {
-    const [hero, products, categories] = [
+    const [hero] = [
       await this.$strapi.find('hero-section', { populate: '*' }),
-      await this.$strapi.find('products', { populate: '*' }),
-      await this.$strapi.find('product-categories', { populate: '*' }) as StrapiResponseInterface<CategoryInterface>,
     ];
 
-    // const foo:  = categories;
-    this.products = products;
+    await this.productsStore.fetchProducts();
+    await this.categoriesStore.fetchCategories();
+
     this.page = hero.data.attributes;
-    this.categories = categories.data.map(({ id, attributes }) => (
-      { id, ...attributes }
-    ));
   },
   fetchOnServer: false,
 
@@ -77,6 +74,8 @@ export default defineComponent({
         '/images/hero-bg@2x.jpg',
       );
     },
+    ...mapState(useProductsStore, ['products']),
+    ...mapState(useCategoriesStore, ['categories']),
   },
 });
 </script>

@@ -132,9 +132,6 @@ export default defineComponent({
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
       return mediumThumbnail || baseUrl;
     },
-    todos() {
-      return this.$store.state;
-    },
   },
   mounted() {
     const { category: categoryId } = this.$route.params;
