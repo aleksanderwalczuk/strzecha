@@ -86,12 +86,11 @@
   </section>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
-
+import { defineComponent, PropType } from '@nuxtjs/composition-api';
 import tailwindConfig from '~/tailwind.config';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import resolveConfig from 'tailwindcss/resolveConfig';
-import CategoryInterface from '~/interfaces/CategoryInterface';
+import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { get } from 'lodash';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 

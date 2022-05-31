@@ -37,7 +37,8 @@ export default {
     '@nuxt/typescript-build',
     '@nuxt/postcss8',
     '@nuxt/image',
-
+    '@nuxtjs/composition-api/module',
+    ['@pinia/nuxt', { disableVuex: false }],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

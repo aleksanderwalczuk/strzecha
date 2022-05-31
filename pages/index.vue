@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 
 import { CategoryInterface } from '~/interfaces/CategoryInterface';

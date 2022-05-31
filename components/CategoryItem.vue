@@ -29,7 +29,7 @@
   </nuxt-link>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import { defineComponent, PropType } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
@@ -50,7 +50,7 @@ export default defineComponent({
     productImages(): StrapiImageInterface[] {
       return this.mapResponseToDataObject(get(this.product, 'info.images', []));
     },
-    productThumbnail() {
+    productThumbnail(): string {
       const [firstImage] = this.productImages;
       const baseUrl = get(firstImage, 'url', '');
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);

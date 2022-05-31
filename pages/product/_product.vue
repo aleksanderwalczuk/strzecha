@@ -94,7 +94,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from '@nuxtjs/composition-api';
 
 import { get } from 'lodash';
 
@@ -131,6 +131,9 @@ export default defineComponent({
       const baseUrl = get(firstImage, 'url', '');
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
       return mediumThumbnail || baseUrl;
+    },
+    todos() {
+      return this.$store.state;
     },
   },
   mounted() {
