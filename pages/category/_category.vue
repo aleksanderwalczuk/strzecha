@@ -40,32 +40,37 @@
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
+import { mapState } from 'pinia';
 import CategoryItem from '~/components/CategoryItem.vue';
 import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
-import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
+
+import { useCategoriesStore, useProductsStore } from '~/stores/main';
 
 export default defineComponent({
-  components: { CategoryItem },
   name: 'CategoryPage',
+  components: { CategoryItem },
   data() {
     return {
-      categories: [] as CategoryInterface[],
       activeId: null as string | null,
-      products: [] as unknown[],
+      productsStore: useProductsStore(),
+      categoriesStore: useCategoriesStore(),
     };
   },
   async fetch() {
-    const res = await this.$strapi.find('product-categories', { populate: '*', id: this.$route.params.category }) as StrapiResponseInterface<CategoryInterface>;
-    this.categories = res.data.map(({ id, attributes }) => ({ id, ...attributes }));
-
-    await this.getProductsByCategory(this.$route.params.category);
+    await this.categoriesStore.fetchCategories();
+    await this.productsStore.fetchProducts();
+    // await this.productsStore.getProductsByCategory(this.$route.params.category);
   },
   computed: {
+
+    ...mapState(useCategoriesStore, ['categories']),
+    ...mapState(useProductsStore, ['products']),
+
     activeCategory(): CategoryInterface | undefined {
       return this.categories.find(({ id }) => this.$route.params.category === id?.toString());
     },
-    activeCategoryProducts() {
+    activeCategoryProducts(): ProductInterface[] {
       return this.products.filter(
         (product) => get(
           product,
@@ -82,22 +87,6 @@ export default defineComponent({
       this.activeId = categoryId;
     }
   },
-
-  methods: {
-    async getProductsByCategory(categoryId: string) {
-      const res = await this.$strapi.find(
-        'products', {
-          populate: ['info', 'additional', 'info.product_category', 'info.images'],
-        },
-      ) as StrapiResponseInterface<ProductInterface[]>;
-      // this.product = res;
-
-      this.products = res.data.map(({ attributes, id }) => (
-        { id, ...attributes }
-      ));
-    },
-  },
-
 });
 </script>
 <style lang="postcss" scoped>

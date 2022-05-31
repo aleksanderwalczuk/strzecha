@@ -15,7 +15,9 @@ export const useProductsStore = defineStore('Products', {
   actions: {
     async fetchProducts(): Promise<any> {
       try {
-        const res = await this.$nuxt.$strapi.find('products', { populate: '*' });
+        const res = await this.$nuxt.$strapi.find('products', {
+          populate: ['info', 'additional', 'info.product_category', 'info.images'],
+        }) as StrapiResponseInterface<ProductInterface[]>;
         this.products = this.mapResponseData(res);
       } catch (error) {
         // showTooltip(error)
@@ -31,6 +33,14 @@ export const useProductsStore = defineStore('Products', {
         ));
       }
       return get(response.data, 'attributes', response.data);
+    },
+    // TODO: put as argument categoryId: string when filters are ready
+    async getProductsByCategory() {
+      const res = await this.$nuxt.$strapi.find('products', {
+        populate: ['info', 'additional', 'info.product_category', 'info.images'],
+      }) as StrapiResponseInterface<ProductInterface[]>;
+
+      return this.mapResponseData(res);
     },
   },
 });
@@ -62,6 +72,9 @@ export const useCategoriesStore = defineStore('Categories', {
         ));
       }
       return get(response.data, 'attributes', response.data);
+    },
+    async getCategoryById(id: string) {
+      await this.$nuxt.$strapi.find('product-categories', { populate: '*', id }) as StrapiResponseInterface<CategoryInterface>;
     },
   },
 });
