@@ -126,7 +126,7 @@ export default defineComponent({
     productImages(): StrapiImageInterface[] {
       return this.mapResponseToDataObject(get(this.product, 'info.images', []));
     },
-    productThumbnail() {
+    productThumbnail(): string {
       const [firstImage] = this.productImages;
       const baseUrl = get(firstImage, 'url', '');
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
