@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, uniq } from 'lodash';
 import { defineStore } from 'pinia';
 import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
@@ -53,6 +53,13 @@ export const useCategoriesStore = defineStore('Categories', {
     isAdmin: true,
     categories: [] as CategoryInterface[],
   }),
+  getters: {
+    parentCategories(): CategoryInterface['parent_category'][] {
+      return uniq(this.categories
+        // eslint-disable-next-line camelcase
+        .map(({ parent_category }) => parent_category));
+    },
+  },
   actions: {
     async fetchCategories() {
       try {
