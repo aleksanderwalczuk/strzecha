@@ -1,8 +1,17 @@
 import { get, uniq } from 'lodash';
 import { defineStore } from 'pinia';
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
+import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
+
+function mapResponseData(response: StrapiResponseInterface<any>): any {
+  if (Array.isArray(response.data)) {
+    return response.data.map(({ id, attributes }) => (
+      { id, ...attributes }
+    ));
+  }
+  return get(response.data, 'attributes', response.data);
+}
 
 export const useProductsStore = defineStore('Products', {
   state: () => ({
@@ -45,10 +54,8 @@ export const useProductsStore = defineStore('Products', {
 export const useCategoriesStore = defineStore('Categories', {
   state: () => ({
     // all these properties will have their type inferred automatically
-    counter: 0,
-    name: 'Eduardo',
-    isAdmin: true,
     categories: [] as CategoryInterface[],
+    subcategories: [] as CategoryInterface[],
   }),
   getters: {
     parentCategories(): CategoryInterface['parent_category'][] {
@@ -56,12 +63,34 @@ export const useCategoriesStore = defineStore('Categories', {
         // eslint-disable-next-line camelcase
         .map(({ parent_category }) => parent_category));
     },
+    inNavigation(): CategoryInterface[] {
+      // eslint-disable-next-line camelcase
+      return this.subcategories.filter(({ on_homepage }) => on_homepage === true);
+    },
+    mainCategories(): MainCategoryInterface['name'][] {
+      return uniq(
+        // eslint-disable-next-line camelcase
+        this.subcategories.map(({ main_category }) => mapResponseData(main_category))
+          .map(({ name }) => name),
+      );
+    },
   },
   actions: {
     async fetchCategories() {
       try {
         const res = await this.$nuxt.$strapi.find('product-categories', { populate: '*' }) as StrapiResponseInterface<CategoryInterface>;
         this.categories = this.mapResponseData(res);
+      } catch (error) {
+        // showTooltip(error)
+        // let the form component display the error
+        return error;
+      }
+      return true;
+    },
+    async fetchSubcategories() {
+      try {
+        const res = await this.$nuxt.$strapi.find('product-categories', { populate: ['main_category', 'image'] }) as StrapiResponseInterface<CategoryInterface>;
+        this.subcategories = this.mapResponseData(res);
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
