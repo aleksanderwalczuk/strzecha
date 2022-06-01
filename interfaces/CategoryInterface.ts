@@ -3,6 +3,13 @@ import { StrapiResponseInterface } from './StrapiResponseInterface';
 
 const parentCategories = ['wyposazenie', 'sztuka'] as const;
 
+export interface MainCategoryInterface {
+  name: string,
+  key: string,
+  createdAt: string,
+  updatedAt: string
+}
+
 export interface CategoryInterface {
   id?: number,
   name: string,
@@ -12,4 +19,5 @@ export interface CategoryInterface {
   image: {
     data?: StrapiResponseInterface<StrapiImageInterface>,
   },
+  main_category: StrapiResponseInterface<MainCategoryInterface>
 };
