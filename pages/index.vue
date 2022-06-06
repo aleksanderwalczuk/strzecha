@@ -65,6 +65,7 @@ export default defineComponent({
     await this.pagesStore.fetchPages();
     await this.productsStore.fetchProducts();
     await this.categoriesStore.fetchCategories();
+    await this.categoriesStore.fetchSubcategories();
 
     this.page = hero.data.attributes;
   },

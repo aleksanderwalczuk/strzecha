@@ -22,8 +22,8 @@
           >
             <div class="flex justify-start w-1/2">
               <div
-                v-for="({name, value}, index) in navLinks"
-                :key="name"
+                v-for="({name, value}, index) in links"
+                :key="name + index"
                 class="w-4/12"
               >
                 <h3
@@ -66,7 +66,7 @@
 <script lang="ts">
 import { mapState } from 'pinia';
 import { useCategoriesStore } from '~/stores/main';
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
+import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
 
 export default {
   name: 'MainNavigation',
@@ -83,20 +83,25 @@ export default {
   },
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
-    navLinks(): {
-        name: CategoryInterface['parent_category'],
-        value: CategoryInterface[]
+    ...mapState(useCategoriesStore, ['inNavigation']),
+    ...mapState(useCategoriesStore, ['mainCategories']),
+    links(): {
+      name: MainCategoryInterface['name'],
+      value: CategoryInterface[]
       }[] {
-      const result = [] as any;
-      this.categoriesStore.parentCategories.forEach((category) => {
+      const result = [] as {
+      name: MainCategoryInterface['name'],
+      value: CategoryInterface[]
+      }[];
+
+      this.mainCategories.forEach((category) => {
         result.push({
           name: category,
           value: this.categories
-          // eslint-disable-next-line camelcase
-            .filter(({ parent_category }) => parent_category === category),
+            // eslint-disable-next-line camelcase
+            .filter(({ main_category }) => main_category.data.attributes.name === category),
         });
       });
-
       return result;
     },
   },
@@ -115,7 +120,7 @@ export default {
     this.remove();
   },
   methods: {
-    closeOnOutsideClick(e) {
+    closeOnOutsideClick(e: Event) {
       // hide navigation on click outside the container
       if (this.$refs.navOpenedWrapper == null) {
         return;
@@ -130,7 +135,7 @@ export default {
     close() {
       this.$emit('toggleNav');
     },
-    keyClose(e) {
+    keyClose(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         this.close();
       }
