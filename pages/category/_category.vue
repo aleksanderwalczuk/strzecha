@@ -74,7 +74,7 @@ export default defineComponent({
       return this.products.filter(
         (product) => get(
           product,
-          'info.product_category.data.attributes.name',
+          'info.subcategory.data.attributes.name',
           null,
         ) === this.activeCategory?.name,
       );

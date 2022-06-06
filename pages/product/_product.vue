@@ -47,12 +47,10 @@
           </h2>
           <!-- those should be computed properties -->
           <p
-            v-if="product.info.price"
+            v-if="price"
             class="font-serif font-normal text-[40px] leading-[40px] mb-4"
           >
-            {{ product.info.price }}
-            &nbsp;
-            <span
+            <span>{{ price }}</span><span
               v-if="product.info.currency"
               class="text-[18px] leading-[32px]"
             >
@@ -62,7 +60,7 @@
           <div class="flex mb-10">
             <a
               href="mailto:example@example.com"
-              class="flex justify-center items-center bg-black-500 text-white py-[10px] px-14"
+              class="flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mr-4"
             >
               <span class="mr-3">
                 <!-- eslint-disable -->
@@ -78,8 +76,9 @@
               v-if="product.info.link"
               :href="product.info.link"
               target="_blank"
+              class="flex justify-center items-center border-black-500 border py-[10px] px-14"
             >
-              Kup na allegro
+              <span class="text-base leading-[1] mt-[2px]">Kup na allegro</span>
             </a>
           </div>
           <p
@@ -138,6 +137,10 @@ export default defineComponent({
       const baseUrl = get(firstImage, 'url', '');
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
       return mediumThumbnail || baseUrl;
+    },
+    price() {
+      const price = get(this.product, 'info.price', '');
+      return price;
     },
   },
   mounted() {

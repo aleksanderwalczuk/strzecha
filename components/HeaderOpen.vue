@@ -64,11 +64,13 @@
   </transition>
 </template>
 <script lang="ts">
+import { defineComponent } from '@vue/composition-api';
+
 import { mapState } from 'pinia';
 import { useCategoriesStore } from '~/stores/main';
 import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
 
-export default {
+export default defineComponent({
   name: 'MainNavigation',
   props: {
     isVisible: {
@@ -98,7 +100,7 @@ export default {
         result.push({
           name: category,
           value: this.categories
-            // eslint-disable-next-line camelcase
+            // @ts-ignore
             .filter(({ main_category }) => main_category.data.attributes.name === category),
         });
       });
@@ -120,14 +122,18 @@ export default {
     this.remove();
   },
   methods: {
-    closeOnOutsideClick(e: Event) {
+    closeOnOutsideClick(e: MouseEvent) {
       // hide navigation on click outside the container
+      // @ts-ignore
       if (this.$refs.navOpenedWrapper == null) {
         return;
       }
+
       if (
-        this.$refs.navOpenedWrapper.contains(e.target)
-        && !this.$refs.navOpenedContainer.contains(e.target)
+      // @ts-ignore
+        (this.$refs.navOpenedWrapper as HTMLElement).contains(e.target as Node)
+        // @ts-ignore
+        && (this.$refs.navOpenedContainer as HTMLElement).contains(e.target as Node)
       ) {
         this.close();
       }
@@ -145,7 +151,7 @@ export default {
       window.removeEventListener('click', this.closeOnOutsideClick);
     },
   },
-};
+});
 </script>
 <style lang="scss" scoped>
 .nav-container {
