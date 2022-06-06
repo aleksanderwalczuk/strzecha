@@ -13,6 +13,8 @@ module.exports = {
   rules: {
     'no-extra-semi': 'off',
     'vue/multi-word-component-names': 'off',
+    camelcase: 'off',
+
   },
 
 };
