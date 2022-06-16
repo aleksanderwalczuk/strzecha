@@ -38,7 +38,7 @@
                     :key="link.createdAt"
                   >
                     <nuxt-link
-                      :to="`/category/${link.id}`"
+                      :to="`/category/${link.url}`"
                       @click.native="close"
                     >
                       {{ link.name }}

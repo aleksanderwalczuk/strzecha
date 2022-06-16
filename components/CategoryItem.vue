@@ -1,6 +1,6 @@
 <template>
   <nuxt-link
-    v-if="product.info.link"
+    v-if="product.info"
     :to="`/product/${product.uid}`"
     class="category-item relative max-h-[400px] h-full font-serif"
   >

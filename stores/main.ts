@@ -17,7 +17,7 @@ export const useProductsStore = defineStore('Products', {
   state: () => ({
     // all these properties will have their type inferred automatically
     products: [] as ProductInterface[],
-    active: {} as ProductInterface | null,
+    active: null as ProductInterface | null,
   }),
 
   getters: {
@@ -70,6 +70,7 @@ export const useCategoriesStore = defineStore('Categories', {
     // all these properties will have their type inferred automatically
     categories: [] as CategoryInterface[],
     subcategories: [] as CategoryInterface[],
+    activeSubcategoryUrl: null as string | null,
   }),
   getters: {
     parentCategories(): CategoryInterface['parent_category'][] {
@@ -88,12 +89,15 @@ export const useCategoriesStore = defineStore('Categories', {
           .map(({ name }) => name),
       );
     },
-    activeSubcategory() {
+    activeSubcategory(): CategoryInterface | null {
       const productsStore = useProductsStore();
-      if (productsStore.activeProduct?.info.subcategory) {
+      if (productsStore.activeProduct != null
+        && productsStore.activeProduct.info
+        && productsStore.activeProduct.info.subcategory
+      ) {
         return mapResponseData(productsStore.activeProduct?.info.subcategory);
       }
-      return null;
+      return this.subcategories.find(({ url }) => url === this.activeSubcategoryUrl) || null;
     },
     activeCategory() {
       if (this.activeSubcategory == null) {

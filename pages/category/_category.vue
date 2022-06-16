@@ -30,7 +30,7 @@
       >
         <category-item
           v-for="product in activeCategoryProducts"
-          :key="`product-${product.id}`"
+          :key="product.uid"
           :product="product"
         />
       </section>
@@ -42,7 +42,6 @@ import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 import { mapState } from 'pinia';
 import CategoryItem from '~/components/CategoryItem.vue';
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 
 import { useCategoriesStore, useProductsStore } from '~/stores/main';
@@ -60,16 +59,15 @@ export default defineComponent({
   async fetch() {
     await this.categoriesStore.fetchCategories();
     await this.productsStore.fetchProducts();
-    // await this.productsStore.getProductsByCategory(this.$route.params.category);
   },
   computed: {
 
     ...mapState(useCategoriesStore, ['categories']),
+    ...mapState(useCategoriesStore, {
+      activeCategory: 'activeSubcategory',
+    }),
     ...mapState(useProductsStore, ['products']),
 
-    activeCategory(): CategoryInterface | undefined {
-      return this.categories.find(({ id }) => this.$route.params.category === id?.toString());
-    },
     activeCategoryProducts(): ProductInterface[] {
       return this.products.filter(
         (product) => get(
@@ -82,6 +80,8 @@ export default defineComponent({
   },
   mounted() {
     const { category: categoryId } = this.$route.params;
+
+    this.categoriesStore.activeSubcategoryUrl = this.$route.params.category;
 
     if (categoryId != null) {
       this.activeId = categoryId;
