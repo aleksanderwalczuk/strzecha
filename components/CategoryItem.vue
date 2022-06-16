@@ -1,7 +1,7 @@
 <template>
   <nuxt-link
     v-if="product.info.link"
-    :to="`/product/${product.id}`"
+    :to="`/product/${product.uid}`"
     class="category-item relative max-h-[400px] h-full font-serif"
   >
     <nuxt-img
