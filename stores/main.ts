@@ -17,12 +17,12 @@ export const useProductsStore = defineStore('Products', {
   state: () => ({
     // all these properties will have their type inferred automatically
     products: [] as ProductInterface[],
-    single: {} as ProductInterface,
+    active: {} as ProductInterface | null,
   }),
 
   getters: {
-    productByUid():ProductInterface {
-      return this.single;
+    activeProduct():ProductInterface | null {
+      return this.active;
     },
   },
   actions: {
@@ -55,7 +55,12 @@ export const useProductsStore = defineStore('Products', {
         populate: ['additional', 'info.subcategory', 'info.images'],
       }) as StrapiResponseInterface<ProductInterface[]>;
       const [product] = mapResponseData(res);
-      this.single = product;
+
+      return product;
+    },
+
+    async setActiveByUid(uid: string) {
+      this.active = await this.getProductByUid(uid);
     },
   },
 });
@@ -83,6 +88,19 @@ export const useCategoriesStore = defineStore('Categories', {
           .map(({ name }) => name),
       );
     },
+    activeSubcategory() {
+      const productsStore = useProductsStore();
+      if (productsStore.activeProduct?.info.subcategory) {
+        return mapResponseData(productsStore.activeProduct?.info.subcategory);
+      }
+      return null;
+    },
+    activeCategory() {
+      if (this.activeSubcategory == null) {
+        return null;
+      }
+      return this.activeSubcategory.parent_category
+    },
   },
   actions: {
     async fetchCategories() {
@@ -108,8 +126,11 @@ export const useCategoriesStore = defineStore('Categories', {
       return true;
     },
 
-    async getCategoryById(id: string) {
-      await this.$nuxt.$strapi.find('product-categories', { populate: ['*', 'main-category'], id }) as StrapiResponseInterface<CategoryInterface>;
+    async getCategoryById(name: string) {
+      await this.$nuxt.$strapi.find('product-categories', {
+        populate: ['*', 'main-category'],
+        'filters[name][$eq]': name,
+      }) as StrapiResponseInterface<CategoryInterface>;
     },
   },
 });

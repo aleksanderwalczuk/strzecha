@@ -19,10 +19,12 @@
           >
         </button>
         <span class="capitalize">
-          {{ activeCategory.parent_category }}
+          {{ activeCategory }}
         </span>
         &nbsp;/&nbsp;
-        <span>{{ activeCategory.name }}</span>
+        <nuxt-link :to="`/category/${activeSubcategory.url}`">
+          <span>{{ activeSubcategory.name }}</span>
+        </nuxt-link>
       </nav>
       <section
         v-if="product != null"
@@ -98,7 +100,6 @@ import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 import { mapState } from 'pinia';
 
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
@@ -109,28 +110,18 @@ export default defineComponent({
   data() {
     return {
       activeId: null as string | null,
-      product: null as any,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
     };
   },
   async fetch() {
-    if (this.categories.length === 0) {
-      this.categoriesStore.fetchCategories();
-    }
-    const res = await this.$strapi.find('product-categories', { populate: '*', id: this.$route.params.product }) as StrapiResponseInterface<CategoryInterface>;
-    this.categories = res.data.map(({ id, attributes }) => ({ id, ...attributes }));
-
-    await this.getProductsByCategory(this.$route.params.product);
-    await this.productsStore.getProductByUid('andrzej-zulawski-i-r-schneider-j-p-fizet-9-30');
+    await this.productsStore.setActiveByUid(this.$route.params.product);
   },
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
-    ...mapState(useProductsStore, ['productByUid']),
-
-    activeCategory(): CategoryInterface | undefined {
-      return this.categories.find(({ id }) => this.$route.params.product === id?.toString());
-    },
+    ...mapState(useCategoriesStore, ['activeSubcategory']),
+    ...mapState(useCategoriesStore, ['activeCategory']),
+    ...mapState(useProductsStore, { product: 'activeProduct' }),
 
     productImages(): StrapiImageInterface[] {
       return this.mapResponseToDataObject(get(this.product, 'info.images', []));
