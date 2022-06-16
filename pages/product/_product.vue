@@ -99,11 +99,9 @@ import { defineComponent } from '@nuxtjs/composition-api';
 
 import { get } from 'lodash';
 import { mapState } from 'pinia';
-
-import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
-import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 import { useCategoriesStore, useProductsStore } from '~/stores/main';
+import { mapResponseData } from '~/utils';
 
 export default defineComponent({
   name: 'ProductPage',
@@ -124,7 +122,7 @@ export default defineComponent({
     ...mapState(useProductsStore, { product: 'activeProduct' }),
 
     productImages(): StrapiImageInterface[] {
-      return this.mapResponseToDataObject(get(this.product, 'info.images', []));
+      return mapResponseData(get(this.product, 'info.images', []));
     },
     productThumbnail(): string {
       const [firstImage] = this.productImages;
@@ -137,33 +135,6 @@ export default defineComponent({
       return price;
     },
   },
-  mounted() {
-    const { category: categoryId } = this.$route.params;
-
-    if (categoryId != null) {
-      this.activeId = categoryId;
-    }
-  },
-
-  methods: {
-    async getProductsByCategory(categoryId: string) {
-      const strapi = this.$strapi as any;
-      const res = await strapi.findOne(
-        'products',
-        categoryId,
-        { populate: ['info', 'additional', 'info.product_category', 'info.images'] },
-      ) as StrapiResponseInterface<ProductInterface>;
-      // this.product = res;
-      this.product = get(res.data, 'attributes', null);
-    },
-    mapResponseToDataObject(response: StrapiResponseInterface<StrapiImageInterface>) {
-      return response.data.map(({ id, attributes }) => ({
-        id,
-        ...(attributes || {}),
-      }));
-    },
-  },
-
 });
 </script>
 <style lang="postcss" scoped>
