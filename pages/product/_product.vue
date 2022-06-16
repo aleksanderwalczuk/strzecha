@@ -102,7 +102,7 @@ import { CategoryInterface } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
-import { useCategoriesStore } from '~/stores/main';
+import { useCategoriesStore, useProductsStore } from '~/stores/main';
 
 export default defineComponent({
   name: 'ProductPage',
@@ -111,6 +111,7 @@ export default defineComponent({
       activeId: null as string | null,
       product: null as any,
       categoriesStore: useCategoriesStore(),
+      productsStore: useProductsStore(),
     };
   },
   async fetch() {
@@ -121,9 +122,11 @@ export default defineComponent({
     this.categories = res.data.map(({ id, attributes }) => ({ id, ...attributes }));
 
     await this.getProductsByCategory(this.$route.params.product);
+    await this.productsStore.getProductByUid('andrzej-zulawski-i-r-schneider-j-p-fizet-9-30');
   },
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
+    ...mapState(useProductsStore, ['productByUid']),
 
     activeCategory(): CategoryInterface | undefined {
       return this.categories.find(({ id }) => this.$route.params.product === id?.toString());

@@ -17,7 +17,14 @@ export const useProductsStore = defineStore('Products', {
   state: () => ({
     // all these properties will have their type inferred automatically
     products: [] as ProductInterface[],
+    single: {} as ProductInterface,
   }),
+
+  getters: {
+    productByUid():ProductInterface {
+      return this.single;
+    },
+  },
   actions: {
     async fetchProducts(): Promise<any> {
       try {
@@ -40,6 +47,15 @@ export const useProductsStore = defineStore('Products', {
       }) as StrapiResponseInterface<ProductInterface[]>;
 
       return mapResponseData(res);
+    },
+
+    async getProductByUid(uid: string) {
+      const res = await this.$nuxt.$strapi.find('products', {
+        'filters[uid][$eq]': uid,
+        populate: ['additional', 'info.subcategory', 'info.images'],
+      }) as StrapiResponseInterface<ProductInterface[]>;
+      const [product] = mapResponseData(res);
+      this.single = product;
     },
   },
 });
