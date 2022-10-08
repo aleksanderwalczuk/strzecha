@@ -72,7 +72,7 @@ export default defineComponent({
       return this.products.filter(
         (product) => get(
           product,
-          'info.subcategory.name',
+          'info.subcategory.data.attributes.uid',
           null,
         ) === this.activeId,
       );
