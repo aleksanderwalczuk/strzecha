@@ -1,0 +1,50 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "./"
+    },
+    {
+      "name": "Frontend",
+      "path": "./packages/front"
+    },
+    {
+      "name": "Backend",
+      "path": "./packages/strapi"
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "My Task",
+        "command": "echo hello",
+        "type": "shell",
+        "args": [],
+        "problemMatcher": [
+          "$tsc"
+        ],
+        "presentation": {
+          "reveal": "always"
+        },
+        "group": "build"
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "attach",
+        "name": "Attach to strapi",
+        "port": 1337,
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "internalConsoleOptions": "openOnSessionStart"
+      }
+    ],
+    "compounds": []
+  }
+}

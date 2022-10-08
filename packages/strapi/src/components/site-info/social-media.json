@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_site_info_social_medias",
+  "info": {
+    "displayName": "Social media",
+    "icon": "ad"
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string",
+      "required": false
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_categories",
+  "info": {
+    "singularName": "product-category",
+    "pluralName": "product-categories",
+    "displayName": "Product Subcategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "on_homepage": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "parent_category": {
+      "type": "enumeration",
+      "enum": [
+        "sztuka",
+        "wyposazenie"
+      ],
+      "required": true,
+      "default": "sztuka"
+    },
+    "uid": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "main_category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::main-category.main-category"
+    }
+  }
+}

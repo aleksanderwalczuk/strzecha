@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_footers",
+  "info": {
+    "singularName": "page-footer",
+    "pluralName": "page-footers",
+    "displayName": "Page Footer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "social_media": {
+      "displayName": "Social media",
+      "type": "component",
+      "repeatable": true,
+      "component": "site-info.social-media"
+    }
+  }
+}
