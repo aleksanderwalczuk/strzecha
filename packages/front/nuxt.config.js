@@ -51,7 +51,7 @@ export default {
   ],
   image: {
     strapi: {
-      baseURL: process.env.CMS_URL || 'http://localhost:1337/uploads/',
+      baseURL: process.env.CMS_URL || 'http://localhost:1337/',
     },
   },
   strapi: {
