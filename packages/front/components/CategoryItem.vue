@@ -59,7 +59,7 @@ export default defineComponent({
   },
   methods: {
     mapResponseToDataObject(response: StrapiResponseInterface<StrapiImageInterface>) {
-      return response.data.map(({ id, attributes }) => ({
+      return (response.data || []).map(({ id, attributes }) => ({
         id,
         ...(attributes || {}),
       }));
