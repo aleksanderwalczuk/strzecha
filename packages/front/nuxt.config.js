@@ -51,12 +51,12 @@ export default {
   ],
   image: {
     strapi: {
-      baseURL: process.env.CMS_URL || 'http://localhost:1337/',
+      baseURL: process.env.CMS_URL || 'http://localhost:3001/',
     },
   },
   strapi: {
     entities: ['hero-section', 'products'],
-    url: 'http://localhost:1337/api',
+    url: 'http://localhost:3001/api',
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

@@ -19,7 +19,7 @@
           >
         </button>
         <span class="capitalize">
-          {{ activeCategory.parent_category }}
+          {{ activeCategory.parentCategory.uid }}
         </span>
         &nbsp;/&nbsp;
         <span>{{ activeCategory.name }}</span>
@@ -57,6 +57,7 @@ export default defineComponent({
     };
   },
   async fetch() {
+    await this.categoriesStore.fetchParentCategories();
     await this.categoriesStore.fetchCategories();
     await this.productsStore.fetchProducts();
   },
@@ -64,7 +65,7 @@ export default defineComponent({
 
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, {
-      activeCategory: 'activeSubcategory',
+      activeCategory: 'activeCategory',
     }),
     ...mapState(useProductsStore, ['products']),
 

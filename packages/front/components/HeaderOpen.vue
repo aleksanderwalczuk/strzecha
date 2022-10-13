@@ -27,7 +27,6 @@
                 class="w-4/12"
               >
                 <h3
-
                   class="text-gray-250 mb-8 capitalize"
                 >
                   {{ name }}
@@ -68,7 +67,7 @@ import { defineComponent } from '@vue/composition-api';
 
 import { mapState } from 'pinia';
 import { useCategoriesStore } from '~/stores/main';
-import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
+import { CategoryInterface } from '~/interfaces/CategoryInterface';
 
 export default defineComponent({
   name: 'MainNavigation',
@@ -86,26 +85,20 @@ export default defineComponent({
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, ['inNavigation']),
-    ...mapState(useCategoriesStore, ['mainCategories']),
-    links(): {
-      name: MainCategoryInterface['name'],
-      value: CategoryInterface[]
-      }[] {
-      const result = [] as {
-      name: MainCategoryInterface['name'],
-      value: CategoryInterface[]
-      }[];
+    ...mapState(useCategoriesStore, ['parentCategories']),
+    links() {
+        return this.categoriesStore.categories.reduce((acc, category) => {
+          const key = category.parentCategory.uid;
 
-      this.mainCategories.forEach((category) => {
-        result.push({
-          name: category,
-          value: this.categories
-            // @ts-ignore
-            .filter(({ main_category }) => main_category.name === category),
-        });
-      });
-      return result;
-    },
+          if (key && acc[key] != null) {
+            return {
+              ...acc,
+              [key]: [...acc[key], category]
+            }
+          }
+          return acc;
+        }, this.categoriesStore.parentCategories.map(({ uid }) => uid))
+    }
   },
   watch: {
     isVisible(value) {

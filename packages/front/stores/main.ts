@@ -1,17 +1,6 @@
-import { get, uniq } from 'lodash';
 import { defineStore } from 'pinia';
-import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
+import { CategoryInterface, ParentCategory } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
-import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
-
-function mapResponseData(response: StrapiResponseInterface<any>): any {
-  if (Array.isArray(response.data)) {
-    return response.data.map(({ id, attributes }) => (
-      { id, ...attributes }
-    ));
-  }
-  return get(response.data, 'attributes', response.data);
-}
 
 export const useProductsStore = defineStore('Products', {
   state: () => ({
@@ -28,10 +17,8 @@ export const useProductsStore = defineStore('Products', {
   actions: {
     async fetchProducts(): Promise<any> {
       try {
-        const res = await this.$nuxt.$strapi.find('products', {
-          populate: ['info', 'additional', 'info.subcategory', 'info.images'],
-        }) as StrapiResponseInterface<ProductInterface[]>;
-        this.products = mapResponseData(res);
+        const res = await this.$nuxt.$strapi.find('products') as ProductInterface[];
+        this.products = res;
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -41,20 +28,17 @@ export const useProductsStore = defineStore('Products', {
     },
 
     // TODO: put as argument categoryId: string when filters are ready
-    async getProductsByCategory() {
-      const res = await this.$nuxt.$strapi.find('products') as StrapiResponseInterface<ProductInterface[]>;
+    async getProductsByCategory(categoryUid: string) {
+      const res = await this.$nuxt.$strapi.find('products', {
+        category: categoryUid
+      }) as ProductInterface[];
 
-      return mapResponseData(res);
+      res;
     },
 
     async getProductByUid(uid: string) {
-      const res = await this.$nuxt.$strapi.find('products', {
-        'filters[uid][$eq]': uid,
-        populate: ['additional', 'info.subcategory', 'info.images'],
-      }) as StrapiResponseInterface<ProductInterface[]>;
-      const [product] = mapResponseData(res);
-
-      return product;
+      const res = await this.$nuxt.$strapi.findOne('products', uid) as ProductInterface;
+      return res;
     },
 
     async setActiveByUid(uid: string) {
@@ -67,48 +51,42 @@ export const useCategoriesStore = defineStore('Categories', {
   state: () => ({
     // all these properties will have their type inferred automatically
     categories: [] as CategoryInterface[],
-    subcategories: [] as CategoryInterface[],
     activeSubcategoryUrl: null as string | null,
+    parentCategories: [] as ParentCategory[]
   }),
   getters: {
-    parentCategories(): CategoryInterface['parent_category'][] {
-      return uniq(this.categories
-        // eslint-disable-next-line camelcase
-        .map(({ parent_category }) => parent_category));
-    },
     inNavigation(): CategoryInterface[] {
       // eslint-disable-next-line camelcase
-      return this.subcategories.filter(({ on_homepage }) => on_homepage === true);
+      return this.categories.filter(({ onHomepage }) => onHomepage === true);
     },
-    mainCategories(): MainCategoryInterface['name'][] {
-      return uniq(
-        // eslint-disable-next-line camelcase
-        this.categories
-          .map(({ main_category }) => main_category.name),
-      );
+    activeCategory(): CategoryInterface | null {
+      return this.categories.find(({ uid }) => uid === this.activeSubcategoryUrl) || null;
     },
-    activeSubcategory(): CategoryInterface | null {
-      const productsStore = useProductsStore();
-      if (productsStore.activeProduct != null
-        && productsStore.activeProduct.info
-        && productsStore.activeProduct.info.subcategory
-      ) {
-        return mapResponseData(productsStore.activeProduct?.info.subcategory);
-      }
-      return this.subcategories.find(({ url }) => url === this.activeSubcategoryUrl) || null;
-    },
-    activeCategory() {
-      if (this.activeSubcategory == null) {
+    activeParentCategory: (state) => {
+      const activeCategory = state.categories.find(({ uid }) => uid === state.activeSubcategoryUrl) || null;
+
+      if (activeCategory == null) {
         return null;
       }
-      return this.activeSubcategory.parent_category
+      return activeCategory.parentCategory;
     },
   },
   actions: {
     async fetchCategories() {
       try {
-        const res = await this.$nuxt.$strapi.find('product-categories', { populate: '*' }) as StrapiResponseInterface<CategoryInterface>;
+        const res = await this.$nuxt.$strapi.find('categories') as CategoryInterface[];
         this.categories = res;
+      } catch (error) {
+        // showTooltip(error)
+        // let the form component display the error
+        return error;
+      }
+      return true;
+    },
+    async fetchParentCategories() {
+      try {
+        const res = await this.$nuxt.$strapi.find('parent-categories') as CategoryInterface[];
+        this.parentCategories = res;
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -118,10 +96,7 @@ export const useCategoriesStore = defineStore('Categories', {
     },
 
     async getCategoryById(name: string) {
-      await this.$nuxt.$strapi.find('product-categories', {
-        populate: ['*', 'main-category'],
-        'filters[name][$eq]': name,
-      }) as StrapiResponseInterface<CategoryInterface>;
+      await this.$nuxt.$strapi.find('categories', name) as CategoryInterface;
     },
   },
 });
@@ -132,16 +107,15 @@ export const usePagesStore = defineStore('Pages', {
     pages: [] as any,
   }),
   actions: {
-    async fetchPages() {
+    async fetchHomePage() {
       try {
-        const res = await this.$nuxt.$strapi.find('hero-section', { populate: '*' });
-        this.pages = [...this.pages, { ...res.data.attributes, name: 'Home' }];
+        const res = await this.$nuxt.$strapi.find('home-page');
+        return res;
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
         return error;
       }
-      return true;
     },
   },
 });

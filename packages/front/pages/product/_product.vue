@@ -22,8 +22,8 @@
           {{ activeCategory }}
         </span>
         &nbsp;/&nbsp;
-        <nuxt-link :to="`/category/${activeSubcategory.url}`">
-          <span>{{ activeSubcategory.name }}</span>
+        <nuxt-link :to="`/category/${activeCategory.uid}`">
+          <span>{{ activeCategory.uid }}</span>
         </nuxt-link>
       </nav>
       <section
@@ -52,12 +52,13 @@
             v-if="price"
             class="font-serif font-normal text-[40px] leading-[40px] mb-4"
           >
-            <span>{{ price }}</span><span
+            <span>{{ price }}</span>
+            <!-- <span
               v-if="product.info.currency"
               class="text-[18px] leading-[32px]"
             >
               {{ product.info.currency }}
-            </span>
+            </span> -->
           </p>
           <div class="flex mb-10">
             <a
@@ -74,20 +75,20 @@
               </span>
               <span class="text-base leading-[1] mt-[2px]">Złóż ofertę</span>
             </a>
-            <a
+            <!-- <a
               v-if="product.info.link"
               :href="product.info.link"
               target="_blank"
               class="flex justify-center items-center border-black-500 border py-[10px] px-14"
             >
               <span class="text-base leading-[1] mt-[2px]">Kup na allegro</span>
-            </a>
+            </a> -->
           </div>
           <p
-            v-if="product.info.description"
+            v-if="product.description"
             class="leading[24px]"
           >
-            {{ product.info.description }}
+            {{ product.description }}
           </p>
         </div>
       </section>
@@ -114,17 +115,21 @@ export default defineComponent({
   },
   async fetch() {
     await this.productsStore.setActiveByUid(this.$route.params.product);
+    await this.productsStore.fetchProducts();
   },
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
-    ...mapState(useCategoriesStore, ['activeSubcategory']),
     ...mapState(useCategoriesStore, ['activeCategory']),
+    ...mapState(useCategoriesStore, {activeCategory: 'activeParentCategory'}),
     ...mapState(useProductsStore, { product: 'activeProduct' }),
 
     productImages(): StrapiImageInterface[] {
-      return mapResponseData(get(this.product, 'info.images', []));
+      return get(this.product, 'images', []);
     },
     productThumbnail(): string {
+      if (this.productImages.length === 0) {
+        return '';
+      }
       const [firstImage] = this.productImages;
       const baseUrl = get(firstImage, 'url', '');
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
