@@ -22,25 +22,25 @@
           >
             <div class="flex justify-start w-1/2">
               <div
-                v-for="({name, value}, index) in links"
-                :key="name + index"
+                v-for="(category, key, index) in linksWithCategories"
+                :key="'nav-category-' + index"
                 class="w-4/12"
               >
                 <h3
                   class="text-gray-250 mb-8 capitalize"
                 >
-                  {{ name }}
+                  {{ key }}
                 </h3>
                 <ul>
                   <li
-                    v-for="link in value"
-                    :key="link.createdAt"
+                    v-for="{ createdAt, uid, name } in category"
+                    :key="createdAt"
                   >
                     <nuxt-link
-                      :to="`/category/${link.uid}`"
+                      :to="`/category/${uid}`"
                       @click.native="close"
                     >
-                      {{ link.name }}
+                      {{ name }}
                     </nuxt-link>
                   </li>
                 </ul>
@@ -67,7 +67,6 @@ import { defineComponent } from '@vue/composition-api';
 
 import { mapState } from 'pinia';
 import { useCategoriesStore } from '~/stores/main';
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
 
 export default defineComponent({
   name: 'MainNavigation',
@@ -86,18 +85,23 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, ['inNavigation']),
     ...mapState(useCategoriesStore, ['parentCategories']),
-    links() {
-        return this.categoriesStore.categories.reduce((acc, category) => {
+    linksWithCategories() {
+        const final =  this.categoriesStore.categories.reduce((acc, category) => {
           const key = category.parentCategory.uid;
-
+          let item;
           if (key && acc[key] != null) {
             return {
               ...acc,
               [key]: [...acc[key], category]
             }
           }
-          return acc;
-        }, this.categoriesStore.parentCategories.map(({ uid }) => uid))
+            return acc;
+            
+        }, Object.fromEntries(
+          this.categoriesStore.parentCategories.
+            map(({ uid, name }) => [uid, []])
+        ));
+        return final;
     }
   },
   watch: {

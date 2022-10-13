@@ -74,6 +74,9 @@ export const useCategoriesStore = defineStore('Categories', {
   actions: {
     async fetchCategories() {
       try {
+        if(this.parentCategories.length === 0) {
+          await this.fetchParentCategories();
+        }
         const res = await this.$nuxt.$strapi.find('categories') as CategoryInterface[];
         this.categories = res;
       } catch (error) {

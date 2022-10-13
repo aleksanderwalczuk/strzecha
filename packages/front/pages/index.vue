@@ -60,9 +60,8 @@ export default defineComponent({
   },
   async fetch() {
     this.page = await this.pagesStore.fetchHomePage();
-    await this.productsStore.fetchProducts();
     await this.categoriesStore.fetchCategories();
-
+    await this.productsStore.fetchProducts();
   },
   fetchOnServer: false,
 
