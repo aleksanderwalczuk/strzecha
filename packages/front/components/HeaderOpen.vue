@@ -29,11 +29,11 @@
                 <h3
                   class="text-gray-250 mb-8 capitalize"
                 >
-                  {{ key }}
+                  {{ category.name }}
                 </h3>
                 <ul>
                   <li
-                    v-for="{ createdAt, uid, name } in category"
+                    v-for="{ createdAt, uid, name } in category.data"
                     :key="createdAt"
                   >
                     <nuxt-link
@@ -66,7 +66,13 @@
 import { defineComponent } from '@vue/composition-api';
 
 import { mapState } from 'pinia';
+import { CategoryInterface, ParentCategory } from '~/interfaces/CategoryInterface';
 import { useCategoriesStore } from '~/stores/main';
+
+type ParentCategoryLinkObject = Record<ParentCategory['uid'], {
+        name: ParentCategory['name'],
+        data: CategoryInterface[]
+}>;
 
 export default defineComponent({
   name: 'MainNavigation',
@@ -85,23 +91,22 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, ['inNavigation']),
     ...mapState(useCategoriesStore, ['parentCategories']),
-    linksWithCategories() {
-        const final =  this.categoriesStore.categories.reduce((acc, category) => {
-          const key = category.parentCategory.uid;
-          let item;
-          if (key && acc[key] != null) {
-            return {
-              ...acc,
-              [key]: [...acc[key], category]
-            }
-          }
-            return acc;
-            
-        }, Object.fromEntries(
-          this.categoriesStore.parentCategories.
-            map(({ uid, name }) => [uid, []])
-        ));
-        return final;
+    linksWithCategories(): ParentCategoryLinkObject {
+      
+      const parentCategories = this.categoriesStore.parentCategories
+      .reduce((acc, parentCategory) => ({
+      ...acc, 
+      [parentCategory.uid]: {
+         name: parentCategory.name, 
+         data: [],
+        }
+      }), {} as ParentCategoryLinkObject)
+
+      return this.categoriesStore.categories.reduce((acc, category) => {
+        const key = category.parentCategory.uid;
+        acc[key].data.push(category);
+        return acc;
+      }, parentCategories);
     }
   },
   watch: {
