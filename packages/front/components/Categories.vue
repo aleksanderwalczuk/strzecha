@@ -1,10 +1,10 @@
 /* eslint-disable vuejs-accessibility/mouse-events-have-key-events */
 <template>
-  <section class="bg-gray-25 py-20">
+  <section 
+  v-if="activeCategories.length > 2"
+  class="bg-gray-25 py-20">
     <div class="container">
-      <h2 class="h2">
-        Odkryj nasze produkty
-      </h2>
+      <h2 class="h2">Odkryj nasze produkty</h2>
 
       <div class="hidden lg:flex mt-20">
         <div class="flex flex-col justify-between md:w-1/2">
@@ -17,25 +17,15 @@
                 @mouseover="updateHoveredName(category.name)"
                 @focus="updateHoveredName(category.name)"
               >
-                <nuxt-link
-                  :to="`/category/${category.id}`"
-                  class=""
-                >
+                <nuxt-link :to="`/category/${category.id}`" class="">
                   {{ category.name }}
                 </nuxt-link>
               </li>
             </ul>
           </div>
-          <a
-            href="#"
-            class="flex text-lg mx-auto items-center"
-          >
+          <a href="#" class="flex text-lg mx-auto items-center">
             <span>Zobacz wszystkie</span>
-            <img
-              src="/icons/icon-arrow.svg"
-              alt=""
-              class="ml-2"
-            >
+            <img src="/icons/icon-arrow.svg" alt="" class="ml-2" />
           </a>
         </div>
         <div class="md:w-1/2">
@@ -86,14 +76,14 @@
   </section>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@nuxtjs/composition-api';
+import { defineComponent, PropType } from "@nuxtjs/composition-api";
 
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
-import { get } from 'lodash';
-import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
+import { CategoryInterface } from "~/interfaces/CategoryInterface";
+import { get } from "lodash";
+import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
 
 export default defineComponent({
-  name: 'SectionCategories',
+  name: "SectionCategories",
   props: {
     categories: {
       type: Array as PropType<CategoryInterface[]>,
@@ -107,32 +97,32 @@ export default defineComponent({
         x2: null,
       },
       defaultHover: true,
-      hoveredCategoryName: null as CategoryInterface['name'] | null,
+      hoveredCategoryName: null as CategoryInterface["name"] | null,
     };
   },
   computed: {
-
     activeCategories(): CategoryInterface[] {
-      // eslint-disable-next-line camelcase
-      return this.categories.filter(({ on_homepage }) => on_homepage === true);
+      return this.categories.filter(({ onHomepage }) => onHomepage === true);
     },
-    activeCategoryName(): CategoryInterface['name'] | null {
+    activeCategoryName(): CategoryInterface["name"] | null {
       if (this.hoveredCategoryName != null) {
         return this.hoveredCategoryName;
       }
 
       const [firstCategory] = this.categories;
 
-      return get(firstCategory, 'name', null);
+      return get(firstCategory, "name", null);
     },
     activeImage(): StrapiImageInterface | null {
-      const category = this.activeCategories.find(({ name }) => name === this.activeCategoryName);
-      return get(category, 'image.data.attributes', null);
+      const category = this.activeCategories.find(
+        ({ name }) => name === this.activeCategoryName
+      );
+      return get(category, "image.data.attributes", null);
     },
   },
 
   methods: {
-    updateHoveredName(name: CategoryInterface['name']) {
+    updateHoveredName(name: CategoryInterface["name"]) {
       this.hoveredCategoryName = name;
     },
   },
