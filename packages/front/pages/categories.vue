@@ -19,15 +19,15 @@
           v-for="product in productsStore.products"
           :to="`/product/${product.uid}`"
           :key="product.uid"
-          class="p-2 md:p-4 h-36 flex justify-center"
+          class="p-2 md:p-4 h-36 md:h-56 flex justify-center"
         >
           <nuxt-img
             :alt="product.images[0].alt"
             provider="strapi"
-            fit="contain"
+            fit="cover"
             blur="40"
             :src="product.images[0].url"
-            class="max-h-[9rem] object-center"
+            class="max-h-[9rem] object-center md:max-h-max md:h-full"
           />
         </nuxt-link>
       </div>
