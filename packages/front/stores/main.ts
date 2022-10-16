@@ -2,6 +2,11 @@ import { defineStore } from 'pinia';
 import { CategoryInterface, ParentCategory } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
 
+type ParentCategoryLinkObject = Record<ParentCategory['uid'], {
+  name: ParentCategory['name'],
+  data: CategoryInterface[]
+}>;
+
 export const useProductsStore = defineStore('Products', {
   state: () => ({
     // all these properties will have their type inferred automatically
@@ -70,6 +75,22 @@ export const useCategoriesStore = defineStore('Categories', {
       }
       return activeCategory.parentCategory;
     },
+    linksWithParentCategories(): ParentCategoryLinkObject {
+      const parentCategories = this.parentCategories
+      .reduce((acc, parentCategory) => ({
+      ...acc, 
+      [parentCategory.uid]: {
+         name: parentCategory.name, 
+         data: [],
+        }
+      }), {} as ParentCategoryLinkObject)
+
+      return this.categories.reduce((acc, category) => {
+        const key = category.parentCategory.uid;
+        acc[key].data.push(category);
+        return acc;
+      }, parentCategories);
+    }
   },
   actions: {
     async fetchCategories() {

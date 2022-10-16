@@ -22,7 +22,7 @@
           >
             <div class="flex justify-start w-1/2">
               <div
-                v-for="(category, key, index) in linksWithCategories"
+                v-for="(category, key, index) in linksWithParentCategories"
                 :key="'nav-category-' + index"
                 class="w-4/12"
               >
@@ -64,15 +64,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-
 import { mapState } from 'pinia';
-import { CategoryInterface, ParentCategory } from '~/interfaces/CategoryInterface';
 import { useCategoriesStore } from '~/stores/main';
-
-type ParentCategoryLinkObject = Record<ParentCategory['uid'], {
-        name: ParentCategory['name'],
-        data: CategoryInterface[]
-}>;
 
 export default defineComponent({
   name: 'MainNavigation',
@@ -91,23 +84,8 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, ['inNavigation']),
     ...mapState(useCategoriesStore, ['parentCategories']),
-    linksWithCategories(): ParentCategoryLinkObject {
-      
-      const parentCategories = this.categoriesStore.parentCategories
-      .reduce((acc, parentCategory) => ({
-      ...acc, 
-      [parentCategory.uid]: {
-         name: parentCategory.name, 
-         data: [],
-        }
-      }), {} as ParentCategoryLinkObject)
+    ...mapState(useCategoriesStore, ['linksWithParentCategories']),
 
-      return this.categoriesStore.categories.reduce((acc, category) => {
-        const key = category.parentCategory.uid;
-        acc[key].data.push(category);
-        return acc;
-      }, parentCategories);
-    }
   },
   watch: {
     isVisible(value) {
