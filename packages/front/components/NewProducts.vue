@@ -9,7 +9,6 @@
             :to="`/product/${product.uid}`"
             v-for="product in products"
             :key="product.uid"
-            :href="product.uid || '#'"
             class="product-item-link new-product-item"
           >
             <figure class="new-product-item">
@@ -21,7 +20,7 @@
                   fit="cover"
                   height="320px"
                   width="250px"
-                  alt=""
+                  :alt="product.images[0].alt"
                   class="news-img object-cover mix-blend-multiply min-h-[20rem] mx-auto"
                 />
               </div>
@@ -47,10 +46,10 @@
             :pagination-padding="4"
             :pagination-color="'gray-450'"
           >
-            <slide v-for="item in fetchedData" :key="item.id">
+            <slide v-for="product in products" :key="product.uid">
               <!-- START FETCHED CONTENT -->
-              <a
-                :href="item.link || '#'"
+              <nuxt-link
+                :to="`/products/${product.uid}`"
                 class="product-item-link new-product-item"
               >
                 <!-- :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'" -->
@@ -59,25 +58,25 @@
                   <div class="relative">
                     <div class="absolute w-full h-full" />
                     <nuxt-img
-                      :src="item.imgLg"
-                      alt=""
+                      :src="product.images[0].url"
+                      provider="strapi"
+                      :alt="product.images[0].alt"
                       class="news-img object-cover h-full mix-blend-multiply"
                     />
                   </div>
                   <figcaption>
-                    <a
-                      href="#"
+                  <div
                       class="flex mt-4 justify-center md:justify-start"
                     >
-                      <span>{{ item.title }}</span>
+                      <span>{{ product.title }}</span>
                       <nuxt-img
                         src="/icons/icon-arrow.svg"
                         class="ml-2 hidden md:block"
                       />
-                    </a>
+                    </div>
                   </figcaption>
                 </figure>
-              </a>
+              </nuxt-link>
               <!-- END FETCHED CONTENT -->
             </slide>
           </carousel>
