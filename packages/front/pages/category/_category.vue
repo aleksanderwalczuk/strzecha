@@ -57,9 +57,10 @@ export default defineComponent({
     };
   },
   async fetch() {
-    await this.categoriesStore.fetchParentCategories();
-    await this.categoriesStore.fetchCategories();
+    await this.categoriesStore.getCategoryById(this.$route.params.category)
     await this.productsStore.fetchProducts();
+    // FIXME
+    // should fetch products by category
   },
   computed: {
 
@@ -71,23 +72,13 @@ export default defineComponent({
 
     activeCategoryProducts(): ProductInterface[] {
       return this.products.filter(
-        (product) => get(
-          product,
-          'info.subcategory.data.attributes.uid',
-          null,
-        ) === this.activeId,
+        (product) => product.category.uid === this.activeId
       );
     },
   },
   mounted() {
-    const { category: categoryUid } = this.$route.params;
-
-    console.log(this.$route.params);
-
-    this.categoriesStore.activeSubcategoryUrl = this.$route.params.category;
-
-    if (categoryUid != null) {
-      this.activeId = categoryUid;
+    if (this.$route.params.category != null) {
+      this.activeId = this.$route.params.category;
     }
   },
 });
