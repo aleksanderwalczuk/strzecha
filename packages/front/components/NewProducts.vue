@@ -18,10 +18,10 @@
                   :src="product.images[0].url"
                   provider="strapi"
                   fit="cover"
-                  height="320px"
-                  width="250px"
-                  :alt="product.images[0].alt"
-                  class="news-img object-cover mix-blend-multiply min-h-[20rem] mx-auto"
+                  height="400px"
+                  width="360px"
+                  :alt="product.images[0].alternativeText"
+                  class="news-img object-cover mix-blend-multiply min-h-[25rem] mx-auto"
                 />
               </div>
               <figcaption>

@@ -12,12 +12,12 @@
             <ul>
               <li
                 v-for="category in activeCategories"
-                :key="category.id"
+                :key="category.uid"
                 class="category-link"
                 @mouseover="updateHoveredName(category.name)"
                 @focus="updateHoveredName(category.name)"
               >
-                <nuxt-link :to="`/category/${category.id}`" class="">
+                <nuxt-link :to="`/category/${category.uid}`" class="">
                   {{ category.name }}
                 </nuxt-link>
               </li>
@@ -28,7 +28,7 @@
             <img src="/icons/icon-arrow.svg" alt="" class="ml-2" />
           </a>
         </div>
-        <div class="md:w-1/2">
+        <div class="md:w-1/2 md:min-h-[390px]">
           <nuxt-img
             v-if="activeImage != null"
             provider="strapi"
@@ -86,7 +86,7 @@ export default defineComponent({
   name: "SectionCategories",
   props: {
     categories: {
-      type: Array as PropType<CategoryInterface[]>,
+      type: Array,
       default: () => [],
     },
   },
@@ -101,7 +101,7 @@ export default defineComponent({
     };
   },
   computed: {
-    activeCategories(): CategoryInterface[] {
+    activeCategories(): [] {
       return this.categories.filter(({ onHomepage }) => onHomepage === true);
     },
     activeCategoryName(): CategoryInterface["name"] | null {
@@ -111,13 +111,13 @@ export default defineComponent({
 
       const [firstCategory] = this.categories;
 
-      return get(firstCategory, "name", null);
+      return firstCategory.name;
     },
     activeImage(): StrapiImageInterface | null {
       const category = this.activeCategories.find(
         ({ name }) => name === this.activeCategoryName
       );
-      return get(category, "image.data.attributes", null);
+      return get(category, "image", null);
     },
   },
 

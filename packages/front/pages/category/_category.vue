@@ -5,8 +5,9 @@
     </p>
     <div
       v-else
-      class="min-h-screen container"
+      class="min-h-screen container pt-10"
     >
+      <categories-navigation :categories="categories" />
       <nav
         v-if="activeCategory != null"
         class="flex items-center font-serif text-[18px] leading-[32px] spacing mt-20 mb-8"

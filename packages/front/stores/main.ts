@@ -7,51 +7,6 @@ type ParentCategoryLinkObject = Record<ParentCategory['uid'], {
   data: CategoryInterface[]
 }>;
 
-export const useProductsStore = defineStore('Products', {
-  state: () => ({
-    // all these properties will have their type inferred automatically
-    products: [] as ProductInterface[],
-    active: null as ProductInterface | null,
-  }),
-
-  getters: {
-    activeProduct():ProductInterface | null {
-      return this.active;
-    },
-  },
-  actions: {
-    async fetchProducts(): Promise<any> {
-      try {
-        const res = await this.$nuxt.$strapi.find('products') as ProductInterface[];
-        this.products = res;
-      } catch (error) {
-        // showTooltip(error)
-        // let the form component display the error
-        return error;
-      }
-      return true;
-    },
-
-    // TODO: put as argument categoryId: string when filters are ready
-    async getProductsByCategory(categoryUid: string) {
-      const res = await this.$nuxt.$strapi.find('products', {
-        category: categoryUid
-      }) as ProductInterface[];
-
-      res;
-    },
-
-    async getProductByUid(uid: string) {
-      const res = await this.$nuxt.$strapi.findOne('products', uid) as ProductInterface;
-      return res;
-    },
-
-    async setActiveByUid(uid: string) {
-      this.active = await this.getProductByUid(uid);
-    },
-  },
-});
-
 export const useCategoriesStore = defineStore('Categories', {
   state: () => ({
     // all these properties will have their type inferred automatically
@@ -121,6 +76,53 @@ export const useCategoriesStore = defineStore('Categories', {
 
     async getCategoryById(name: string) {
       await this.$nuxt.$strapi.find('categories', name) as CategoryInterface;
+    },
+  },
+});
+
+export const useProductsStore = defineStore('Products', {
+  state: () => ({
+    // all these properties will have their type inferred automatically
+    products: [] as ProductInterface[],
+    active: null as ProductInterface | null,
+    categories: useCategoriesStore(),
+  }),
+
+  getters: {
+    activeProduct():ProductInterface | null {
+      return this.active;
+    },
+  },
+  actions: {
+    async fetchProducts(): Promise<any> {
+      try {
+        const res = await this.$nuxt.$strapi.find('products') as ProductInterface[];
+        this.products = res;
+      } catch (error) {
+        // showTooltip(error)
+        // let the form component display the error
+        return error;
+      }
+      return true;
+    },
+
+    // TODO: put as argument categoryId: string when filters are ready
+    async getProductsByCategory(categoryUid: string) {
+      const res = await this.$nuxt.$strapi.find('products', {
+        category: categoryUid
+      }) as ProductInterface[];
+
+      res;
+    },
+
+    async getProductByUid(uid: string) {
+      const res = await this.$nuxt.$strapi.findOne('products', uid) as ProductInterface;
+      return res;
+    },
+
+    async setActiveByUid(uid: string) {
+      this.active = await this.getProductByUid(uid);
+      this.categories.activeSubcategoryUrl = this.active.category.uid;
     },
   },
 });

@@ -47,7 +47,7 @@
                 <nuxt-link
                   v-if="index === 0"
                   class="btn"
-                  to="/category/"
+                  to="/categories/"
                 >
                   Zobacz wszystkie
                 </nuxt-link>

@@ -19,11 +19,11 @@
           >
         </button>
         <span class="capitalize">
-          {{ activeCategory }}
+          {{ activeCategory.parentCategory.uid }}
         </span>
         &nbsp;/&nbsp;
         <nuxt-link :to="`/category/${activeCategory.uid}`">
-          <span>{{ activeCategory.uid }}</span>
+          <span>{{ activeCategory.name }}</span>
         </nuxt-link>
       </nav>
       <section
@@ -97,12 +97,10 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api';
-
 import { get } from 'lodash';
 import { mapState } from 'pinia';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 import { useCategoriesStore, useProductsStore } from '~/stores/main';
-import { mapResponseData } from '~/utils';
 
 export default defineComponent({
   name: 'ProductPage',
@@ -116,13 +114,20 @@ export default defineComponent({
   async fetch() {
     await this.productsStore.setActiveByUid(this.$route.params.product);
     await this.productsStore.fetchProducts();
+    await this.categoriesStore.fetchCategories();
   },
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, ['activeCategory']),
-    ...mapState(useCategoriesStore, {activeCategory: 'activeParentCategory'}),
     ...mapState(useProductsStore, { product: 'activeProduct' }),
 
+    activeParentCategory() {
+      if (this.activeCategory == null || this.categoriesStore.parentCategories == null) {
+        return null;
+      }
+
+      return (this.categoriesStore?.parentCategories || []).find(({ uid }) => uid === this.activeCategory?.parentCategory.uid);
+    },
     productImages(): StrapiImageInterface[] {
       return get(this.product, 'images', []);
     },
