@@ -14,12 +14,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api';
+import { defineComponent, PropType } from '@nuxtjs/composition-api';
+import { CategoryInterface } from '~/interfaces/CategoryInterface';
 
 export default defineComponent({
   name:"CategoriesNavigation",
   props: {
     categories: {
+      type: Array as PropType<CategoryInterface[]>,
       default: [],
     }
   }

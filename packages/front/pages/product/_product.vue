@@ -28,7 +28,7 @@
       </nav>
       <section
         v-if="product != null"
-        class="flex font-serif"
+        class="flex font-serif flex-col md:flex-row"
       >
         <div class="max-w-[480px] w-full max-h-[520px] h-full p-6 bg-[#f1f1f1]">
           <div class="w-full h-full flex items-center justify-center">
@@ -43,7 +43,7 @@
         </div>
         <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
           <h2
-            class="mb-4"
+            class=" my-4 md:mt-0"
           >
             {{ product.title }}
           </h2>

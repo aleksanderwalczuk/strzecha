@@ -11,6 +11,10 @@
       class="w-full max-w-[400px] object-cover max-h-full h-full"
       :src="productThumbnail"
     />
+    <div class="md:hidden">
+      <p>{{ product.title }}</p>
+      <span>{{ product.price }}</span>
+    </div>
     <div
       class="product-overlay"
       :class="inverted === false
@@ -56,8 +60,9 @@ export default defineComponent({
 </script>
 <style lang="postcss" scoped>
 .product-overlay {
-  @apply absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center;
+  @apply absolute top-0 left-0 hidden w-full h-full flex-col justify-center items-center;
   @apply text-white bg-[#2E2B2C];
+  @apply md:flex;
 }
 .product-overlay-animation-inverted {
   @apply transform hover:transition-all duration-[300ms] ease-out hover:opacity-0;

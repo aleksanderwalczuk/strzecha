@@ -1,30 +1,15 @@
 <template>
   <section class="py-10">
     <div class="container">
-      <CategoriesNavigation v-if="categoriesStore.categories" :categories="categoriesStore.categories" />
-      <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 mt-8">
-        <nuxt-link
-          v-for="product in productsStore.products"
-          :to="`/product/${product.uid}`"
-          :key="product.uid"
-          class="p-2 md:p-4 h-36 md:h-56 flex justify-center bg-[#F9F8F8]"
-        >
-          <nuxt-img
-            :alt="product.images[0].alternativeText"
-            provider="strapi"
-            fit="cover"
-            blur="40"
-            :src="product.images[0].url"
-            class="max-h-[9rem] object-center md:max-h-max md:h-full"
-          />
-        </nuxt-link>
+      <categories-navigation v-if="categoriesStore.categories" :categories="sortedCategories" />
+      <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 mt-8 pb-12">
+        <category-item v-for="product in productsStore.products" :key="product.uid" :product="product"/>
       </div>
     </div>
   </section>
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
-import CategoriesNavigation from "~/components/CategoriesNavigation.vue";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 
 export default defineComponent({
@@ -39,7 +24,19 @@ export default defineComponent({
         await this.categoriesStore.fetchCategories();
         await this.productsStore.fetchProducts();
     },
-    components: { CategoriesNavigation }
+    computed: {
+      sortedCategories() {
+        return this.categoriesStore.categories.sort((a, b) => {
+          if (a.order === b.order || a.order == null || b.order == null) {
+            return 0;
+          }
+
+        return a.order > b.order ? 1 : -1;
+        });
+      }
+
+    }
+
 });
 </script>
 <style scoped>

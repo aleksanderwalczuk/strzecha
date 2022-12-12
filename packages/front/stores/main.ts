@@ -11,7 +11,7 @@ export const useCategoriesStore = defineStore('Categories', {
   state: () => ({
     // all these properties will have their type inferred automatically
     categories: [] as CategoryInterface[],
-    activeSubcategoryUrl: null as string | null,
+    activeCategoryUid: null as string | null,
     parentCategories: [] as ParentCategory[]
   }),
   getters: {
@@ -20,10 +20,10 @@ export const useCategoriesStore = defineStore('Categories', {
       return this.categories.filter(({ onHomepage }) => onHomepage === true);
     },
     activeCategory(): CategoryInterface | null {
-      return this.categories.find(({ uid }) => uid === this.activeSubcategoryUrl) || null;
+      return this.categories.find(({ uid }) => uid === this.activeCategoryUid) || null;
     },
     activeParentCategory: (state) => {
-      const activeCategory = state.categories.find(({ uid }) => uid === state.activeSubcategoryUrl) || null;
+      const activeCategory = state.categories.find(({ uid }) => uid === state.activeCategoryUid) || null;
 
       if (activeCategory == null) {
         return null;

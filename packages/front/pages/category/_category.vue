@@ -5,29 +5,12 @@
     </p>
     <div
       v-else
-      class="min-h-screen container pt-10"
+      class="min-h-screen container pt-8 md:pt-10"
     >
       <categories-navigation :categories="categories" />
-      <nav
-        v-if="activeCategory != null"
-        class="flex items-center font-serif text-[18px] leading-[32px] spacing mt-20 mb-8"
-      >
-        <button @click="$router.back()">
-          <img
-            src="/icons/icon-arrow.svg"
-            alt=""
-            class="mr-2 transform rotate-180"
-          >
-        </button>
-        <span class="capitalize">
-          {{ activeCategory.parentCategory.uid }}
-        </span>
-        &nbsp;/&nbsp;
-        <span>{{ activeCategory.name }}</span>
-      </nav>
       <section
         v-if="products.length > 0"
-        class="grid grid-cols-3 gap-6 font-serif"
+        class="grid grid-cols-2 gap-2 mt-8 md:grid-cols-3 md:gap-3 font-serif"
       >
         <category-item
           v-for="product in activeCategoryProducts"
@@ -40,7 +23,6 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api';
-import { get } from 'lodash';
 import { mapState } from 'pinia';
 import CategoryItem from '~/components/CategoryItem.vue';
 import { ProductInterface } from '~/interfaces/ProductInterface';
@@ -80,6 +62,7 @@ export default defineComponent({
   mounted() {
     if (this.$route.params.category != null) {
       this.activeId = this.$route.params.category;
+      this.categoriesStore.activeCategoryUid = this.$route.params.category;
     }
   },
 });
