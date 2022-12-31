@@ -122,7 +122,7 @@ export const useProductsStore = defineStore('Products', {
 
     async setActiveByUid(uid: string) {
       this.active = await this.getProductByUid(uid);
-      this.categories.activeSubcategoryUrl = this.active.category.uid;
+      this.categories.activeCategoryUid = this.active.category.uid;
     },
   },
 });

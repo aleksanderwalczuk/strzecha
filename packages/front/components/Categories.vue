@@ -86,8 +86,8 @@ export default defineComponent({
   name: "SectionCategories",
   props: {
     categories: {
-      type: Array,
-      default: () => [],
+      type: Array as PropType<CategoryInterface[]>,
+      default: () => [] as CategoryInterface[],
     },
   },
   data() {
@@ -101,7 +101,7 @@ export default defineComponent({
     };
   },
   computed: {
-    activeCategories(): [] {
+    activeCategories(): CategoryInterface[] {
       return this.categories.filter(({ onHomepage }) => onHomepage === true);
     },
     activeCategoryName(): CategoryInterface["name"] | null {

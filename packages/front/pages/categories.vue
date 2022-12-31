@@ -10,6 +10,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
+import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 
 export default defineComponent({
@@ -25,7 +26,7 @@ export default defineComponent({
         await this.productsStore.fetchProducts();
     },
     computed: {
-      sortedCategories() {
+      sortedCategories(): CategoryInterface[] {
         return this.categoriesStore.categories.sort((a, b) => {
           if (a.order === b.order || a.order == null || b.order == null) {
             return 0;

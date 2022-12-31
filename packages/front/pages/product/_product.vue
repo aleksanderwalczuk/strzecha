@@ -99,6 +99,7 @@
 import { defineComponent } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 import { mapState } from 'pinia';
+import { ParentCategory } from '~/interfaces/CategoryInterface';
 import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
 import { useCategoriesStore, useProductsStore } from '~/stores/main';
 
@@ -121,12 +122,12 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ['activeCategory']),
     ...mapState(useProductsStore, { product: 'activeProduct' }),
 
-    activeParentCategory() {
+    activeParentCategory(): ParentCategory | undefined | null {
       if (this.activeCategory == null || this.categoriesStore.parentCategories == null) {
         return null;
       }
 
-      return (this.categoriesStore?.parentCategories || []).find(({ uid }) => uid === this.activeCategory?.parentCategory.uid);
+      return this.categoriesStore.parentCategories.find(({ uid }) => uid === this.activeCategory?.parentCategory.uid);
     },
     productImages(): StrapiImageInterface[] {
       return get(this.product, 'images', []);
