@@ -15,5 +15,5 @@ export interface StrapiImageInterface extends BaseImageInterface {
   caption: string,
   previewUrl?: string,
   provider: string,
-  formats: Record<'thumbnail' | 'small' | 'medium' | 'large', BaseImageInterface>
+  formats: Record<"thumbnail" | "small" | "medium" | "large", BaseImageInterface>
 };

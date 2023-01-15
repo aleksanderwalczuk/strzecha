@@ -1,4 +1,4 @@
-import { StrapiImageInterface } from './StrapiImageInterface';
+import { StrapiImageInterface } from "./StrapiImageInterface";
 
 interface CrudEntries {
   createdAt: string,
@@ -16,7 +16,7 @@ export interface CategoryInterface extends CrudEntries {
   name: string,
   uid: string,
   onHomepage: boolean,
-  parentCategory: Pick<ParentCategory, 'uid'>
+  parentCategory: Pick<ParentCategory, "uid">
   image?: StrapiImageInterface,
   order?: number
 };

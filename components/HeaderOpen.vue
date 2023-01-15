@@ -12,9 +12,9 @@
             class="nav-close w-5 h-5"
             @click.self="close"
           >
-            <div class="sr-only">
+            <span class="sr-only">
               Close
-            </div>
+            </span>
           </button>
           <div
             ref="navOpenedContainer"
@@ -63,12 +63,12 @@
   </transition>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { mapState } from 'pinia';
-import { useCategoriesStore } from '~/stores/main';
+import { defineComponent } from "@vue/composition-api";
+import { mapState } from "pinia";
+import { useCategoriesStore } from "~/stores/main";
 
 export default defineComponent({
-  name: 'MainNavigation',
+  name: "MainNavigation",
   props: {
     isVisible: {
       type: Boolean,
@@ -81,10 +81,10 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useCategoriesStore, ['categories']),
-    ...mapState(useCategoriesStore, ['inNavigation']),
-    ...mapState(useCategoriesStore, ['parentCategories']),
-    ...mapState(useCategoriesStore, ['linksWithParentCategories']),
+    ...mapState(useCategoriesStore, ["categories"]),
+    ...mapState(useCategoriesStore, ["inNavigation"]),
+    ...mapState(useCategoriesStore, ["parentCategories"]),
+    ...mapState(useCategoriesStore, ["linksWithParentCategories"]),
 
   },
   watch: {
@@ -93,8 +93,8 @@ export default defineComponent({
         this.remove();
       }
       if (value === true) {
-        window.addEventListener('keydown', this.keyClose);
-        window.addEventListener('click', this.closeOnOutsideClick);
+        window.addEventListener("keydown", this.keyClose);
+        window.addEventListener("click", this.closeOnOutsideClick);
       }
     },
   },
@@ -119,16 +119,16 @@ export default defineComponent({
       }
     },
     close() {
-      this.$emit('toggleNav');
+      this.$emit("toggleNav");
     },
     keyClose(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         this.close();
       }
     },
     remove() {
-      window.removeEventListener('keydown', this.keyClose);
-      window.removeEventListener('click', this.closeOnOutsideClick);
+      window.removeEventListener("keydown", this.keyClose);
+      window.removeEventListener("click", this.closeOnOutsideClick);
     },
   },
 });

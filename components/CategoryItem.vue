@@ -33,9 +33,9 @@
   </nuxt-link>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@nuxtjs/composition-api';
-import { get } from 'lodash';
-import { ProductInterface } from '~/interfaces/ProductInterface';
+import { defineComponent, PropType } from "@nuxtjs/composition-api";
+import { get } from "lodash";
+import { ProductInterface } from "~/interfaces/ProductInterface";
 
 export default defineComponent({
   props: {
@@ -51,8 +51,8 @@ export default defineComponent({
   computed: {
     productThumbnail(): string {
       const [firstImage] = this.product.images;
-      const baseUrl = get(firstImage, 'url', '');
-      const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
+      const baseUrl = get(firstImage, "url", "");
+      const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
     },
   },

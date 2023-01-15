@@ -1,5 +1,5 @@
-import { CategoryInterface } from './CategoryInterface';
-import { StrapiImageInterface } from './StrapiImageInterface';
+import { CategoryInterface } from "./CategoryInterface";
+import { StrapiImageInterface } from "./StrapiImageInterface";
 
 export interface ProductInterface {
   createdAt: string,

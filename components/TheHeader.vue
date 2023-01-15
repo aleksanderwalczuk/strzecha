@@ -9,7 +9,10 @@
             <div class="search-container relative z-20 w-3/12">
               <form class="relative">
                 <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-                <label for="search" class="cursor-pointer">
+                <label
+                  for="search"
+                  class="cursor-pointer"
+                >
                   <nuxt-img src="/icons/icon-search.svg" />
                 </label>
                 <div class="absolute top-0 left-9">
@@ -35,15 +38,24 @@
             </div>
             <div class="relative top-0 z-20 hidden md:block w-3/12">
               <nav class="flex gap-x-4 items-center justify-end">
-                <nuxt-link class="nav-link" to="/contact">
+                <nuxt-link
+                  class="nav-link"
+                  to="/contact"
+                >
                   Kontakt
                 </nuxt-link>
-                <nuxt-link class="nav-link" to="/blog/">
+                <nuxt-link
+                  class="nav-link"
+                  to="/blog/"
+                >
                   <nuxt-img src="/icons/icon-lang.svg" />
                 </nuxt-link>
               </nav>
             </div>
-            <nuxt-link to="/" class="nav-site-title font-title md:hidden">
+            <nuxt-link
+              to="/"
+              class="nav-site-title font-title md:hidden"
+            >
               <h2 class="nav-site-title font-light font-title uppercase">
                 Strzecha
               </h2>
@@ -79,16 +91,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api';
-import { useCategoriesStore } from '~/stores/main';
+import { defineComponent } from "@nuxtjs/composition-api";
+import { useCategoriesStore } from "~/stores/main";
 
 export default defineComponent({
-  name: 'PageHeader',
+  name: "PageHeader",
   props: {
     title: {
       type: String,
       required: false,
-      default: 'Strzecha',
+      default: "Strzecha",
     },
   },
   data() {

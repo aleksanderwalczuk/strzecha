@@ -13,7 +13,7 @@
 <script>
 
 export default {
-  name: 'SectionInstagram',
+  name: "SectionInstagram",
   // eslint-disable-next-line vue/no-unused-components
   methods: {
     isArrEven(arr) {

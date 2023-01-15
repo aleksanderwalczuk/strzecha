@@ -1,5 +1,6 @@
-import Vue from 'vue';
+import Vue from "vue";
 
-const Carousel = require('vue-carousel').default;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Carousel = require("vue-carousel").default;
 
 Vue.use(Carousel);

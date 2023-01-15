@@ -38,24 +38,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api';
-import { get } from 'lodash';
+import { defineComponent } from "@nuxtjs/composition-api";
+import { get } from "lodash";
 
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
 import {
   useProductsStore,
   useCategoriesStore,
-  usePagesStore,
-} from '~/stores/main';
+  usePagesStore
+} from "~/stores/main";
 
 export default defineComponent({
-  name: 'IndexPage',
+  name: "IndexPage",
   data() {
     return {
       page: null as null,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
-      pagesStore: usePagesStore(),
+      pagesStore: usePagesStore()
     };
   },
   async fetch() {
@@ -69,14 +69,14 @@ export default defineComponent({
     heroImage() {
       return get(
         this.page,
-        'image.data.attributes.url',
-        '/images/hero-bg@2x.jpg',
+        "image.data.attributes.url",
+        "/images/hero-bg@2x.jpg"
       );
     },
-    ...mapState(useProductsStore, ['products']),
-    ...mapState(useCategoriesStore, ['categories']),
-    ...mapState(usePagesStore, ['pages']),
-  },
+    ...mapState(useProductsStore, ["products"]),
+    ...mapState(useCategoriesStore, ["categories"]),
+    ...mapState(usePagesStore, ["pages"])
+  }
 });
 </script>
 <style lang="scss">

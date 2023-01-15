@@ -12,26 +12,41 @@
         <span class="hamburger__inner" />
       </span>
     </button>
-    <div class="navigation" :class="open && 'navigation--active'">
+    <div
+      class="navigation"
+      :class="open && 'navigation--active'"
+    >
       <div class="container h-full flex flex-col justify-between">
         <ul class="navigation__list flex-1">
           <li class="navigation__item">
-            <nuxt-link to="/categories" @click.native="open = false">
+            <nuxt-link
+              to="/categories"
+              @click.native="open = false"
+            >
               Wszystkie produkty
             </nuxt-link>
           </li>
           <li class="navigation__item">
-            <nuxt-link to="/on-demand" @click.native="open = false">
+            <nuxt-link
+              to="/on-demand"
+              @click.native="open = false"
+            >
               Na zamówienie
             </nuxt-link>
           </li>
           <li class="navigation__item">
-            <nuxt-link to="/about" @click.native="open = false">
+            <nuxt-link
+              to="/about"
+              @click.native="open = false"
+            >
               O nas
             </nuxt-link>
           </li>
           <li class="navigation__item">
-            <nuxt-link to="/contact" @click.native="open = false">
+            <nuxt-link
+              to="/contact"
+              @click.native="open = false"
+            >
               Kontakt
             </nuxt-link>
           </li>
@@ -51,7 +66,7 @@
 
 <script>
 export default {
-  name: 'HamburgerMenu',
+  name: "HamburgerMenu",
   data() {
     return {
       open: false,
@@ -77,8 +92,7 @@ $nav_height: 60px;
   cursor: pointer;
   background-color: transparent;
   border: 0;
-  margin: 0;
-  margin-left: auto;
+  margin: 0 0 0 auto;
 }
 
 .hamburger,

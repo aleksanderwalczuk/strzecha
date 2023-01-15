@@ -2,7 +2,10 @@
   <footer class="bg-black-500 text-white pt-14 pb-6">
     <div class="container">
       <h2 class="mb-10">
-        <nuxt-link to="/" class="nav-site-title font-title font-normal uppercase">
+        <nuxt-link
+          to="/"
+          class="nav-site-title font-title font-normal uppercase"
+        >
           {{ title }}
         </nuxt-link>
       </h2>
@@ -78,12 +81,12 @@
 
 <script>
 export default {
-  name: 'PageFooter',
+  name: "PageFooter",
   props: {
     title: {
       type: String,
       required: false,
-      default: 'Strzecha',
+      default: "Strzecha",
     },
   },
 };

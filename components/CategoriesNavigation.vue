@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-wrap md:mb-8">
-    <nuxt-link class="category-link" to="/categories/">
+    <nuxt-link
+      class="category-link"
+      to="/categories/"
+    >
       Wszystko
     </nuxt-link>
     <nuxt-link
@@ -14,8 +17,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@nuxtjs/composition-api';
-import { CategoryInterface } from '~/interfaces/CategoryInterface';
+import { defineComponent, PropType } from "@nuxtjs/composition-api";
+import { CategoryInterface } from "~/interfaces/CategoryInterface";
 
 export default defineComponent({
   name:"CategoriesNavigation",

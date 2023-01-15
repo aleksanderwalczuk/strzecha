@@ -96,20 +96,20 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api';
-import { get } from 'lodash';
-import { mapState } from 'pinia';
-import { ParentCategory } from '~/interfaces/CategoryInterface';
-import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
-import { useCategoriesStore, useProductsStore } from '~/stores/main';
+import { defineComponent } from "@nuxtjs/composition-api";
+import { get } from "lodash";
+import { mapState } from "pinia";
+import { ParentCategory } from "~/interfaces/CategoryInterface";
+import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
+import { useCategoriesStore, useProductsStore } from "~/stores/main";
 
 export default defineComponent({
-  name: 'ProductPage',
+  name: "ProductPage",
   data() {
     return {
       activeId: null as string | null,
       categoriesStore: useCategoriesStore(),
-      productsStore: useProductsStore(),
+      productsStore: useProductsStore()
     };
   },
   async fetch() {
@@ -118,9 +118,9 @@ export default defineComponent({
     await this.categoriesStore.fetchCategories();
   },
   computed: {
-    ...mapState(useCategoriesStore, ['categories']),
-    ...mapState(useCategoriesStore, ['activeCategory']),
-    ...mapState(useProductsStore, { product: 'activeProduct' }),
+    ...mapState(useCategoriesStore, ["categories"]),
+    ...mapState(useCategoriesStore, ["activeCategory"]),
+    ...mapState(useProductsStore, { product: "activeProduct" }),
 
     activeParentCategory(): ParentCategory | undefined | null {
       if (this.activeCategory == null || this.categoriesStore.parentCategories == null) {
@@ -130,22 +130,21 @@ export default defineComponent({
       return this.categoriesStore.parentCategories.find(({ uid }) => uid === this.activeCategory?.parentCategory.uid);
     },
     productImages(): StrapiImageInterface[] {
-      return get(this.product, 'images', []);
+      return get(this.product, "images", []);
     },
     productThumbnail(): string {
       if (this.productImages.length === 0) {
-        return '';
+        return "";
       }
       const [firstImage] = this.productImages;
-      const baseUrl = get(firstImage, 'url', '');
-      const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
+      const baseUrl = get(firstImage, "url", "");
+      const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
     },
     price() {
-      const price = get(this.product, 'info.price', '');
-      return price;
-    },
-  },
+      return get(this.product, "info.price", "");
+    }
+  }
 });
 </script>
 <style lang="postcss" scoped>

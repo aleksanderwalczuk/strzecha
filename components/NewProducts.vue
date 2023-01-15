@@ -35,7 +35,6 @@
             </figure>
           </nuxt-link>
         </client-only>
-
       </div>
       <div class="carousel md:hidden">
         <client-only>
@@ -92,7 +91,7 @@ export default defineComponent({
   data() {
     return {
       store: useProductsStore(),
-      products: [] as ProductInterface[],
+      products: [] as ProductInterface[]
     };
   },
   async fetch() {
@@ -102,12 +101,12 @@ export default defineComponent({
     }
     this.products = this.store.products;
   },
-  mounted() {},
   computed: {
     trimmed() {
       return this.products.slice(-3);
     }
   },
+  mounted() {},
   methods: {
     truncate,
     isArrEven(arr: unknown[]): null | boolean {

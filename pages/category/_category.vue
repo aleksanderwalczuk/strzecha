@@ -22,21 +22,21 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api';
-import { mapState } from 'pinia';
-import CategoryItem from '~/components/CategoryItem.vue';
-import { ProductInterface } from '~/interfaces/ProductInterface';
+import { defineComponent } from "@nuxtjs/composition-api";
+import { mapState } from "pinia";
+import CategoryItem from "~/components/CategoryItem.vue";
+import { ProductInterface } from "~/interfaces/ProductInterface";
 
-import { useCategoriesStore, useProductsStore } from '~/stores/main';
+import { useCategoriesStore, useProductsStore } from "~/stores/main";
 
 export default defineComponent({
-  name: 'CategoryPage',
+  name: "CategoryPage",
   components: { CategoryItem },
   data() {
     return {
       activeId: null as string | null,
       productsStore: useProductsStore(),
-      categoriesStore: useCategoriesStore(),
+      categoriesStore: useCategoriesStore()
     };
   },
   async fetch() {
@@ -47,24 +47,24 @@ export default defineComponent({
   },
   computed: {
 
-    ...mapState(useCategoriesStore, ['categories']),
+    ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useCategoriesStore, {
-      activeCategory: 'activeCategory',
+      activeCategory: "activeCategory"
     }),
-    ...mapState(useProductsStore, ['products']),
+    ...mapState(useProductsStore, ["products"]),
 
     activeCategoryProducts(): ProductInterface[] {
       return this.products.filter(
         (product) => product.category.uid === this.activeId
       );
-    },
+    }
   },
   mounted() {
     if (this.$route.params.category != null) {
       this.activeId = this.$route.params.category;
       this.categoriesStore.activeCategoryUid = this.$route.params.category;
     }
-  },
+  }
 });
 </script>
 <style lang="postcss" scoped>

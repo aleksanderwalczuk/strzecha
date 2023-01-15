@@ -1,10 +1,13 @@
 /* eslint-disable vuejs-accessibility/mouse-events-have-key-events */
 <template>
   <section 
-  v-if="activeCategories.length > 2"
-  class="bg-gray-25 py-20">
+    v-if="activeCategories.length > 2"
+    class="bg-gray-25 py-20"
+  >
     <div class="container">
-      <h2 class="h2">Odkryj nasze produkty</h2>
+      <h2 class="h2">
+        Odkryj nasze produkty
+      </h2>
 
       <div class="hidden lg:flex mt-20">
         <div class="flex flex-col justify-between md:w-1/2">
@@ -17,15 +20,25 @@
                 @mouseover="updateHoveredName(category.name)"
                 @focus="updateHoveredName(category.name)"
               >
-                <nuxt-link :to="`/category/${category.uid}`" class="">
+                <nuxt-link
+                  :to="`/category/${category.uid}`"
+                  class=""
+                >
                   {{ category.name }}
                 </nuxt-link>
               </li>
             </ul>
           </div>
-          <a href="#" class="flex text-lg mx-auto items-center">
+          <a
+            href="#"
+            class="flex text-lg mx-auto items-center"
+          >
             <span>Zobacz wszystkie</span>
-            <img src="/icons/icon-arrow.svg" alt="" class="ml-2" />
+            <img
+              src="/icons/icon-arrow.svg"
+              alt=""
+              class="ml-2"
+            >
           </a>
         </div>
         <div class="md:w-1/2 md:min-h-[390px]">
