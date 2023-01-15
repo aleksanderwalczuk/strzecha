@@ -1,6 +1,19 @@
 import { CategoryInterface } from "./CategoryInterface";
 import { StrapiImageInterface } from "./StrapiImageInterface";
 
+interface  CurrencyInterface {
+  isBeforePrice: boolean,
+  name: string,
+  symbol: string,
+  id: number
+}
+
+interface Provider {
+  name: string,
+  label?: string
+  url: string
+}
+
 export interface ProductInterface {
   createdAt: string,
   publishedAt: string,
@@ -11,5 +24,7 @@ export interface ProductInterface {
   price: number,
   description: string,
   images: StrapiImageInterface[],
-  category: CategoryInterface
+  category: CategoryInterface,
+  currency: CurrencyInterface,
+  providers: Provider[]
 };

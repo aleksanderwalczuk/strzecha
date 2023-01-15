@@ -43,22 +43,22 @@
         </div>
         <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
           <h2
-            class=" my-4 md:mt-0"
+            class="text-lg tracking-wide my-4 md:mt-0"
           >
             {{ product.title }}
           </h2>
           <!-- those should be computed properties -->
           <p
-            v-if="price"
+            v-if="product.price"
             class="font-serif font-normal text-[40px] leading-[40px] mb-4"
           >
-            <span>{{ price }}</span>
-            <!-- <span
-              v-if="product.info.currency"
+            <span>{{ product.price }}</span>
+            <span
+              v-if="product.currency"
               class="text-[18px] leading-[32px]"
             >
-              {{ product.info.currency }}
-            </span> -->
+              {{ product.currency.symbol }}
+            </span>
           </p>
           <div class="flex mb-10">
             <a
@@ -75,6 +75,17 @@
               </span>
               <span class="text-base leading-[1] mt-[2px]">Złóż ofertę</span>
             </a>
+            <div
+              v-for="provider in product.providers"
+              :key="provider.name"
+            >
+              <a
+                :href="provider.url"
+                class="flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mr-4"
+              >
+                {{ provider.label || provider.name }}
+              </a>
+            </div>
             <!-- <a
               v-if="product.info.link"
               :href="product.info.link"
@@ -141,9 +152,6 @@ export default defineComponent({
       const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
     },
-    price() {
-      return get(this.product, "info.price", "");
-    }
   }
 });
 </script>
