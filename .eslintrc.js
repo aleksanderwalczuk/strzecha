@@ -1,20 +1,27 @@
 module.exports = {
-  root: true,
   env: {
     browser: true,
-    node: true,
+    es2021: true
   },
-  extends: ['@nuxtjs/eslint-config-typescript', '@vue/airbnb'],
-  plugins: ['vue'],
-  globals: {
-    $this: 'readable',
+  root: true,
+  extends: [
+    'plugin:vue/recommended',
+    'standard-with-typescript'
+  ],
+  overrides: [
+  ],
+  parser: 'vue-eslint-parser',
+
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+    ecmaVersion: 'latest',
+    sourceType: 'module'
   },
-  // add your custom rules here
+  plugins: [
+    'vue'
+  ],
   rules: {
-    'no-extra-semi': 'off',
-    'vue/multi-word-component-names': 'off',
-    camelcase: 'off',
-
-  },
-
-};
+    semi: 0,
+    'space-before-function-paren': 0
+  }
+}
