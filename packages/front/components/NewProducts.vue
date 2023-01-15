@@ -1,15 +1,14 @@
 <template>
   <section class="pt-20 pb-16 lg:pb-56">
     <div class="container">
-      <h2 class="h2">Nowości</h2>
+      <h2 class="h2">Polecane</h2>
       <div class="hidden md:flex">
-        <!-- START FETCHED CONTENT -->
         <client-only>
           <nuxt-link
             :to="`/product/${product.uid}`"
-            v-for="product in products"
+            v-for="product in trimmed"
             :key="product.uid"
-            class="product-item-link new-product-item"
+            class="product-item-link new-product-item flex-grow"
           >
             <figure class="new-product-item">
               <div class="relative">
@@ -18,15 +17,15 @@
                   :src="product.images[0].url"
                   provider="strapi"
                   fit="cover"
-                  height="400px"
-                  width="360px"
+                  height="400"
+                  width="360"
                   :alt="product.images[0].alternativeText"
-                  class="news-img object-cover mix-blend-multiply min-h-[25rem] mx-auto"
+                  class="object-cover mix-blend-multiply mx-auto h-[369px]"
                 />
               </div>
               <figcaption>
                 <span class="flex mt-4 justify-center md:justify-start">
-                  <span>{{ product.title }}</span>
+                  <span>{{ truncate(product.title, { length: 30, separator: " "}) }}</span>
                   <nuxt-img
                     src="/icons/icon-arrow.svg"
                     class="ml-2 hidden md:block"
@@ -37,7 +36,6 @@
           </nuxt-link>
         </client-only>
 
-        <!-- END FETCHED CONTENT -->
       </div>
       <div class="carousel md:hidden">
         <client-only>
@@ -46,8 +44,7 @@
             :pagination-padding="4"
             :pagination-color="'gray-450'"
           >
-            <slide v-for="product in products" :key="product.uid">
-              <!-- START FETCHED CONTENT -->
+            <slide v-for="product in trimmed" :key="product.uid">
               <nuxt-link
                 :to="`/products/${product.uid}`"
                 class="product-item-link new-product-item"
@@ -68,7 +65,7 @@
                   <div
                       class="flex mt-4 justify-center md:justify-start"
                     >
-                      <span>{{ product.title }}</span>
+                      <span>{{ truncate(product.title, { length: 30, separator: " "}) }}</span>
                       <nuxt-img
                         src="/icons/icon-arrow.svg"
                         class="ml-2 hidden md:block"
@@ -77,7 +74,6 @@
                   </figcaption>
                 </figure>
               </nuxt-link>
-              <!-- END FETCHED CONTENT -->
             </slide>
           </carousel>
         </client-only>
@@ -87,15 +83,14 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
+import { truncate } from "lodash";
 import { ProductInterface } from "~/interfaces/ProductInterface";
 import { useProductsStore } from "~/stores/main";
-import ExampleData from "../static/exampleData";
 
 export default defineComponent({
   name: "NewProducts",
   data() {
     return {
-      fetchedData: ExampleData,
       store: useProductsStore(),
       products: [] as ProductInterface[],
     };
@@ -108,8 +103,13 @@ export default defineComponent({
     this.products = this.store.products;
   },
   mounted() {},
-  computed: {},
+  computed: {
+    trimmed() {
+      return this.products.slice(-3);
+    }
+  },
   methods: {
+    truncate,
     isArrEven(arr: unknown[]): null | boolean {
       return arr.length % 2 ? Boolean(0) : Boolean(1);
     },
@@ -121,17 +121,23 @@ export default defineComponent({
   background: rgba(198, 198, 198, 0.5);
 }
 .new-product-item {
-  @apply max-w-xs h-96;
+  //@apply max-w-xs h-96;
 }
 .product-item-link {
-  @apply block h-full;
+  @apply block;
 }
 .new-product-item:nth-child(even) {
   @apply mx-6;
 }
-.new-product-item:nth-child(odd) {
-  @apply mx-6;
-}
+//.new-product-item:first-child {
+//  @apply mr-6;
+//}
+//.new-product-item:last-child {
+//  @apply ml-6;
+//}
+//.new-product-item:nth-child(odd) {
+//  @apply mx-6;
+//}
 .VueCarousel-dot {
   @apply focus:ring-0;
   height: 2px !important;

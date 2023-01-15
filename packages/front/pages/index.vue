@@ -31,7 +31,7 @@
       </div>
     </section>
     <new-products />
-    <Categories :categories="categories" />
+    <categories :categories="categories" />
     <section-on-demand />
     <section-instagram />
   </div>
