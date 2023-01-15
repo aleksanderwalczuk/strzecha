@@ -1,23 +1,91 @@
-import { get, uniq } from 'lodash';
 import { defineStore } from 'pinia';
-import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
+import { CategoryInterface, ParentCategory } from '~/interfaces/CategoryInterface';
 import { ProductInterface } from '~/interfaces/ProductInterface';
-import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 
-function mapResponseData(response: StrapiResponseInterface<any>): any {
-  if (Array.isArray(response.data)) {
-    return response.data.map(({ id, attributes }) => (
-      { id, ...attributes }
-    ));
-  }
-  return get(response.data, 'attributes', response.data);
-}
+type ParentCategoryLinkObject = Record<ParentCategory['uid'], {
+  name: ParentCategory['name'],
+  data: CategoryInterface[]
+}>;
+
+export const useCategoriesStore = defineStore('Categories', {
+  state: () => ({
+    // all these properties will have their type inferred automatically
+    categories: [] as CategoryInterface[],
+    activeCategoryUid: null as string | null,
+    parentCategories: [] as ParentCategory[]
+  }),
+  getters: {
+    inNavigation(): CategoryInterface[] {
+      // eslint-disable-next-line camelcase
+      return this.categories.filter(({ onHomepage }) => onHomepage === true);
+    },
+    activeCategory(): CategoryInterface | null {
+      return this.categories.find(({ uid }) => uid === this.activeCategoryUid) || null;
+    },
+    activeParentCategory: (state) => {
+      const activeCategory = state.categories.find(({ uid }) => uid === state.activeCategoryUid) || null;
+
+      if (activeCategory == null) {
+        return null;
+      }
+      return activeCategory.parentCategory;
+    },
+    linksWithParentCategories(): ParentCategoryLinkObject {
+      const parentCategories = this.parentCategories
+      .reduce((acc, parentCategory) => ({
+      ...acc, 
+      [parentCategory.uid]: {
+         name: parentCategory.name, 
+         data: [],
+        }
+      }), {} as ParentCategoryLinkObject)
+
+      return this.categories.reduce((acc, category) => {
+        const key = category.parentCategory.uid;
+        acc[key].data.push(category);
+        return acc;
+      }, parentCategories);
+    }
+  },
+  actions: {
+    async fetchCategories() {
+      try {
+        if(this.parentCategories.length === 0) {
+          await this.fetchParentCategories();
+        }
+        const res = await this.$nuxt.$strapi.find('categories') as CategoryInterface[];
+        this.categories = res;
+      } catch (error) {
+        // showTooltip(error)
+        // let the form component display the error
+        return error;
+      }
+      return true;
+    },
+    async fetchParentCategories() {
+      try {
+        const res = await this.$nuxt.$strapi.find('parent-categories') as CategoryInterface[];
+        this.parentCategories = res;
+      } catch (error) {
+        // showTooltip(error)
+        // let the form component display the error
+        return error;
+      }
+      return true;
+    },
+
+    async getCategoryById(name: string) {
+      await this.$nuxt.$strapi.find('categories', name) as CategoryInterface;
+    },
+  },
+});
 
 export const useProductsStore = defineStore('Products', {
   state: () => ({
     // all these properties will have their type inferred automatically
     products: [] as ProductInterface[],
     active: null as ProductInterface | null,
+    categories: useCategoriesStore(),
   }),
 
   getters: {
@@ -28,10 +96,8 @@ export const useProductsStore = defineStore('Products', {
   actions: {
     async fetchProducts(): Promise<any> {
       try {
-        const res = await this.$nuxt.$strapi.find('products', {
-          populate: ['info', 'additional', 'info.subcategory', 'info.images'],
-        }) as StrapiResponseInterface<ProductInterface[]>;
-        this.products = mapResponseData(res);
+        const res = await this.$nuxt.$strapi.find('products') as ProductInterface[];
+        this.products = res;
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -41,100 +107,22 @@ export const useProductsStore = defineStore('Products', {
     },
 
     // TODO: put as argument categoryId: string when filters are ready
-    async getProductsByCategory() {
+    async getProductsByCategory(categoryUid: string) {
       const res = await this.$nuxt.$strapi.find('products', {
-        populate: ['info', 'additional', 'info.subcategory', 'info.images'],
-      }) as StrapiResponseInterface<ProductInterface[]>;
+        category: categoryUid
+      }) as ProductInterface[];
 
-      return mapResponseData(res);
+      res;
     },
 
     async getProductByUid(uid: string) {
-      const res = await this.$nuxt.$strapi.find('products', {
-        'filters[uid][$eq]': uid,
-        populate: ['additional', 'info.subcategory', 'info.images'],
-      }) as StrapiResponseInterface<ProductInterface[]>;
-      const [product] = mapResponseData(res);
-
-      return product;
+      const res = await this.$nuxt.$strapi.findOne('products', uid) as ProductInterface;
+      return res;
     },
 
     async setActiveByUid(uid: string) {
       this.active = await this.getProductByUid(uid);
-    },
-  },
-});
-
-export const useCategoriesStore = defineStore('Categories', {
-  state: () => ({
-    // all these properties will have their type inferred automatically
-    categories: [] as CategoryInterface[],
-    subcategories: [] as CategoryInterface[],
-    activeSubcategoryUrl: null as string | null,
-  }),
-  getters: {
-    parentCategories(): CategoryInterface['parent_category'][] {
-      return uniq(this.categories
-        // eslint-disable-next-line camelcase
-        .map(({ parent_category }) => parent_category));
-    },
-    inNavigation(): CategoryInterface[] {
-      // eslint-disable-next-line camelcase
-      return this.subcategories.filter(({ on_homepage }) => on_homepage === true);
-    },
-    mainCategories(): MainCategoryInterface['name'][] {
-      return uniq(
-        // eslint-disable-next-line camelcase
-        this.subcategories.map(({ main_category }) => mapResponseData(main_category))
-          .map(({ name }) => name),
-      );
-    },
-    activeSubcategory(): CategoryInterface | null {
-      const productsStore = useProductsStore();
-      if (productsStore.activeProduct != null
-        && productsStore.activeProduct.info
-        && productsStore.activeProduct.info.subcategory
-      ) {
-        return mapResponseData(productsStore.activeProduct?.info.subcategory);
-      }
-      return this.subcategories.find(({ url }) => url === this.activeSubcategoryUrl) || null;
-    },
-    activeCategory() {
-      if (this.activeSubcategory == null) {
-        return null;
-      }
-      return this.activeSubcategory.parent_category
-    },
-  },
-  actions: {
-    async fetchCategories() {
-      try {
-        const res = await this.$nuxt.$strapi.find('product-categories', { populate: '*' }) as StrapiResponseInterface<CategoryInterface>;
-        this.categories = mapResponseData(res);
-      } catch (error) {
-        // showTooltip(error)
-        // let the form component display the error
-        return error;
-      }
-      return true;
-    },
-    async fetchSubcategories() {
-      try {
-        const res = await this.$nuxt.$strapi.find('product-categories', { populate: ['main_category', 'image'] }) as StrapiResponseInterface<CategoryInterface>;
-        this.subcategories = mapResponseData(res);
-      } catch (error) {
-        // showTooltip(error)
-        // let the form component display the error
-        return error;
-      }
-      return true;
-    },
-
-    async getCategoryById(name: string) {
-      await this.$nuxt.$strapi.find('product-categories', {
-        populate: ['*', 'main-category'],
-        'filters[name][$eq]': name,
-      }) as StrapiResponseInterface<CategoryInterface>;
+      this.categories.activeCategoryUid = this.active.category.uid;
     },
   },
 });
@@ -145,16 +133,15 @@ export const usePagesStore = defineStore('Pages', {
     pages: [] as any,
   }),
   actions: {
-    async fetchPages() {
+    async fetchHomePage() {
       try {
-        const res = await this.$nuxt.$strapi.find('hero-section', { populate: '*' });
-        this.pages = [...this.pages, { ...res.data.attributes, name: 'Home' }];
+        const res = await this.$nuxt.$strapi.find('home-page');
+        return res;
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
         return error;
       }
-      return true;
     },
   },
 });

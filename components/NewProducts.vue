@@ -1,44 +1,41 @@
 <template>
   <section class="pt-20 pb-16 lg:pb-56">
     <div class="container">
-      <h2 class="h2">
-        Nowości
-      </h2>
+      <h2 class="h2">Polecane</h2>
       <div class="hidden md:flex">
-        <!-- START FETCHED CONTENT -->
         <client-only>
-          <a
-            v-for="item in fetchedData"
-            :key="item.id"
-            :href="item.link || '#'"
-            class="product-item-link new-product-item"
+          <nuxt-link
+            :to="`/product/${product.uid}`"
+            v-for="product in trimmed"
+            :key="product.uid"
+            class="product-item-link new-product-item flex-grow"
           >
             <figure class="new-product-item">
               <div class="relative">
                 <div class="absolute w-full h-full" />
-                <nuxt-picture
-                  :src="item.imgLg"
-                  alt=""
-                  class="news-img object-cover h-full mix-blend-multiply"
+                <nuxt-img
+                  :src="product.images[0].url"
+                  provider="strapi"
+                  fit="cover"
+                  height="400"
+                  width="360"
+                  :alt="product.images[0].alternativeText"
+                  class="object-cover mix-blend-multiply mx-auto h-[369px]"
                 />
               </div>
               <figcaption>
-                <a
-                  href="#"
-                  class="flex mt-4 justify-center md:justify-start"
-                >
-                  <span>{{ item.title }}</span>
+                <span class="flex mt-4 justify-center md:justify-start">
+                  <span>{{ truncate(product.title, { length: 30, separator: " "}) }}</span>
                   <nuxt-img
                     src="/icons/icon-arrow.svg"
                     class="ml-2 hidden md:block"
                   />
-                </a>
+                </span>
               </figcaption>
             </figure>
-          </a>
+          </nuxt-link>
         </client-only>
 
-        <!-- END FETCHED CONTENT -->
       </div>
       <div class="carousel md:hidden">
         <client-only>
@@ -47,13 +44,9 @@
             :pagination-padding="4"
             :pagination-color="'gray-450'"
           >
-            <slide
-              v-for="item in fetchedData"
-              :key="item.id"
-            >
-              <!-- START FETCHED CONTENT -->
-              <a
-                :href="item.link || '#'"
+            <slide v-for="product in trimmed" :key="product.uid">
+              <nuxt-link
+                :to="`/products/${product.uid}`"
                 class="product-item-link new-product-item"
               >
                 <!-- :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'" -->
@@ -61,27 +54,26 @@
                 <figure class="new-product-item">
                   <div class="relative">
                     <div class="absolute w-full h-full" />
-                    <nuxt-picture
-                      :src="item.imgLg"
-                      alt=""
+                    <nuxt-img
+                      :src="product.images[0].url"
+                      provider="strapi"
+                      :alt="product.images[0].alt"
                       class="news-img object-cover h-full mix-blend-multiply"
                     />
                   </div>
                   <figcaption>
-                    <a
-                      href="#"
+                  <div
                       class="flex mt-4 justify-center md:justify-start"
                     >
-                      <span>{{ item.title }}</span>
+                      <span>{{ truncate(product.title, { length: 30, separator: " "}) }}</span>
                       <nuxt-img
                         src="/icons/icon-arrow.svg"
                         class="ml-2 hidden md:block"
                       />
-                    </a>
+                    </div>
                   </figcaption>
                 </figure>
-              </a>
-              <!-- END FETCHED CONTENT -->
+              </nuxt-link>
             </slide>
           </carousel>
         </client-only>
@@ -90,39 +82,62 @@
   </section>
 </template>
 <script lang="ts">
-import ExampleData from '../static/exampleData';
+import { defineComponent } from "@nuxtjs/composition-api";
+import { truncate } from "lodash";
+import { ProductInterface } from "~/interfaces/ProductInterface";
+import { useProductsStore } from "~/stores/main";
 
-export default {
-  name: 'NewProducts',
+export default defineComponent({
+  name: "NewProducts",
   data() {
     return {
-      fetchedData: ExampleData,
+      store: useProductsStore(),
+      products: [] as ProductInterface[],
     };
   },
+  async fetch() {
+    if (this.store.products.length === 0) {
+      // FIXME: should fetch only new products
+      await this.store.fetchProducts();
+    }
+    this.products = this.store.products;
+  },
+  mounted() {},
   computed: {
-
+    trimmed() {
+      return this.products.slice(-3);
+    }
   },
   methods: {
+    truncate,
     isArrEven(arr: unknown[]): null | boolean {
       return arr.length % 2 ? Boolean(0) : Boolean(1);
     },
   },
-};
+});
 </script>
 <style lang="scss" scoped>
-
 .new-product-item .relative > .absolute {
   background: rgba(198, 198, 198, 0.5);
 }
+.new-product-item {
+  //@apply max-w-xs h-96;
+}
 .product-item-link {
-  @apply block h-full;
+  @apply block;
 }
 .new-product-item:nth-child(even) {
   @apply mx-6;
 }
-.new-product-item:nth-child(odd) {
-  @apply mx-6;
-}
+//.new-product-item:first-child {
+//  @apply mr-6;
+//}
+//.new-product-item:last-child {
+//  @apply ml-6;
+//}
+//.new-product-item:nth-child(odd) {
+//  @apply mx-6;
+//}
 .VueCarousel-dot {
   @apply focus:ring-0;
   height: 2px !important;

@@ -1,6 +1,6 @@
 <template>
   <nuxt-link
-    v-if="product.info"
+    v-if="product"
     :to="`/product/${product.uid}`"
     class="category-item relative max-h-[400px] h-full font-serif"
   >
@@ -11,6 +11,10 @@
       class="w-full max-w-[400px] object-cover max-h-full h-full"
       :src="productThumbnail"
     />
+    <div class="md:hidden">
+      <p>{{ product.title }}</p>
+      <span>{{ product.price }}</span>
+    </div>
     <div
       class="product-overlay"
       :class="inverted === false
@@ -22,8 +26,8 @@
         {{ product.title }}
       </h3>
       <p class="text-center">
-        <span class="text-[32px] leading-[48px]">{{ product.info.price }}</span>
-        <span>{{ product.info.currency }}</span>
+        <span class="text-[32px] leading-[48px]">{{ product.price }}</span>
+        <span>{{ product.currency || 'zł' }}</span>
       </p>
     </div>
   </nuxt-link>
@@ -32,8 +36,6 @@
 import { defineComponent, PropType } from '@nuxtjs/composition-api';
 import { get } from 'lodash';
 import { ProductInterface } from '~/interfaces/ProductInterface';
-import { StrapiImageInterface } from '~/interfaces/StrapiImageInterface';
-import { StrapiResponseInterface } from '~/interfaces/StrapiResponseInterface';
 
 export default defineComponent({
   props: {
@@ -47,30 +49,20 @@ export default defineComponent({
     },
   },
   computed: {
-    productImages(): StrapiImageInterface[] {
-      return this.mapResponseToDataObject(get(this.product, 'info.images', []));
-    },
     productThumbnail(): string {
-      const [firstImage] = this.productImages;
+      const [firstImage] = this.product.images;
       const baseUrl = get(firstImage, 'url', '');
       const mediumThumbnail = get(firstImage, 'formats.medium.url', null);
       return mediumThumbnail || baseUrl;
-    },
-  },
-  methods: {
-    mapResponseToDataObject(response: StrapiResponseInterface<StrapiImageInterface>) {
-      return response.data.map(({ id, attributes }) => ({
-        id,
-        ...(attributes || {}),
-      }));
     },
   },
 });
 </script>
 <style lang="postcss" scoped>
 .product-overlay {
-  @apply absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center;
+  @apply absolute top-0 left-0 hidden w-full h-full flex-col justify-center items-center;
   @apply text-white bg-[#2E2B2C];
+  @apply md:flex;
 }
 .product-overlay-animation-inverted {
   @apply transform hover:transition-all duration-[300ms] ease-out hover:opacity-0;

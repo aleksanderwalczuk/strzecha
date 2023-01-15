@@ -59,15 +59,9 @@ export default defineComponent({
     };
   },
   async fetch() {
-    const [hero] = [
-      await this.$strapi.find('hero-section', { populate: '*' }),
-    ];
-    await this.pagesStore.fetchPages();
-    await this.productsStore.fetchProducts();
+    this.page = await this.pagesStore.fetchHomePage();
     await this.categoriesStore.fetchCategories();
-    await this.categoriesStore.fetchSubcategories();
-
-    this.page = hero.data.attributes;
+    await this.productsStore.fetchProducts();
   },
   fetchOnServer: false,
 

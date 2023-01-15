@@ -22,33 +22,32 @@
           >
             <div class="flex justify-start w-1/2">
               <div
-                v-for="({name, value}, index) in links"
-                :key="name + index"
+                v-for="(category, key, index) in linksWithParentCategories"
+                :key="'nav-category-' + index"
                 class="w-4/12"
               >
                 <h3
-
                   class="text-gray-250 mb-8 capitalize"
                 >
-                  {{ name }}
+                  {{ category.name }}
                 </h3>
                 <ul>
                   <li
-                    v-for="link in value"
-                    :key="link.createdAt"
+                    v-for="{ createdAt, uid, name } in category.data"
+                    :key="createdAt"
                   >
                     <nuxt-link
-                      :to="`/category/${link.url}`"
+                      :to="`/category/${uid}`"
                       @click.native="close"
                     >
-                      {{ link.name }}
+                      {{ name }}
                     </nuxt-link>
                   </li>
                 </ul>
                 <nuxt-link
                   v-if="index === 0"
                   class="btn"
-                  to="/category/"
+                  to="/categories/"
                 >
                   Zobacz wszystkie
                 </nuxt-link>
@@ -65,10 +64,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-
 import { mapState } from 'pinia';
 import { useCategoriesStore } from '~/stores/main';
-import { CategoryInterface, MainCategoryInterface } from '~/interfaces/CategoryInterface';
 
 export default defineComponent({
   name: 'MainNavigation',
@@ -86,26 +83,9 @@ export default defineComponent({
   computed: {
     ...mapState(useCategoriesStore, ['categories']),
     ...mapState(useCategoriesStore, ['inNavigation']),
-    ...mapState(useCategoriesStore, ['mainCategories']),
-    links(): {
-      name: MainCategoryInterface['name'],
-      value: CategoryInterface[]
-      }[] {
-      const result = [] as {
-      name: MainCategoryInterface['name'],
-      value: CategoryInterface[]
-      }[];
+    ...mapState(useCategoriesStore, ['parentCategories']),
+    ...mapState(useCategoriesStore, ['linksWithParentCategories']),
 
-      this.mainCategories.forEach((category) => {
-        result.push({
-          name: category,
-          value: this.categories
-            // @ts-ignore
-            .filter(({ main_category }) => main_category.data.attributes.name === category),
-        });
-      });
-      return result;
-    },
   },
   watch: {
     isVisible(value) {

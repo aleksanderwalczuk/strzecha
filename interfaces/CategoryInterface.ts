@@ -1,23 +1,22 @@
 import { StrapiImageInterface } from './StrapiImageInterface';
-import { StrapiResponseInterface } from './StrapiResponseInterface';
 
-const parentCategories = ['wyposazenie', 'sztuka'] as const;
-
-export interface MainCategoryInterface {
-  name: string,
-  key: string,
+interface CrudEntries {
   createdAt: string,
-  updatedAt: string
+  updatedAt: string,
+  publishedAt: string,
+}
+export interface ParentCategory extends CrudEntries {
+  name: string,
+  uid: string,
+  id: number,
 }
 
-export interface CategoryInterface {
-  id?: number,
+export interface CategoryInterface extends CrudEntries {
+  id: number,
   name: string,
-  createdAt: string,
-  on_homepage: boolean
-  parent_category: typeof parentCategories[number],
-  image: {
-    data?: StrapiResponseInterface<StrapiImageInterface>,
-  },
-  main_category: StrapiResponseInterface<MainCategoryInterface>
+  uid: string,
+  onHomepage: boolean,
+  parentCategory: Pick<ParentCategory, 'uid'>
+  image?: StrapiImageInterface,
+  order?: number
 };

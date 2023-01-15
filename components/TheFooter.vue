@@ -101,7 +101,12 @@ export default {
   @apply flex justify-center items-center uppercase w-10 h-10 rounded-full border border-white;
   @apply mr-3;
 }
-@media screen and (min-width: 375px) {
+@media screen and (min-width: 375px) and (max-width: 500px) {
+  .footer-item {
+    @apply w-full;
+  }
+}
+@media screen and (min-width: 500px) {
   .footer-item:nth-child(2) {
     @apply ml-9;
   }

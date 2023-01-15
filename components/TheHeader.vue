@@ -99,7 +99,6 @@ export default defineComponent({
   },
   async fetch() {
     await this.categoriesStore.fetchCategories();
-    await this.categoriesStore.fetchSubcategories();
   },
   computed: {
   },

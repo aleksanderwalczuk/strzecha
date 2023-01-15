@@ -3,14 +3,6 @@
     {
       "name": "root",
       "path": "./"
-    },
-    {
-      "name": "Frontend",
-      "path": "./packages/front"
-    },
-    {
-      "name": "Backend",
-      "path": "./packages/strapi"
     }
   ],
   "tasks": {
