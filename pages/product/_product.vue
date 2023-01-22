@@ -9,7 +9,7 @@
     >
       <nav
         v-if="activeCategory != null"
-        class="flex items-center font-serif text-[18px] leading-[32px] spacing mt-20 mb-8"
+        class="flex items-center font-serif text-[18px] leading-[32px] spacing mt-8 sm:mt-20 mb-8"
       >
         <button @click="$router.back()">
           <img
@@ -32,13 +32,27 @@
       >
         <div class="max-w-[480px] w-full max-h-[520px] h-full p-6 bg-[#f1f1f1]">
           <div class="w-full h-full flex items-center justify-center">
-            <nuxt-img
-              v-if="productThumbnail"
-              provider="strapi"
-              fit="cover"
-              :src="productThumbnail"
-              class="max-h-[480px]"
-            />
+            <carousel
+              :per-page="1"
+              :pagination-padding="4"
+              class="text-center"
+            >
+              <slide
+                v-for="image in productImages"
+                :key="image.name"
+                class="flex items-center"
+              >
+                <nuxt-img
+                  v-if="image"
+                  provider="strapi"
+                  fit="cover"
+                  :src="image.url"
+                  :width="image.width"
+                  :height="image.height"
+                  class="max-h-[480px] mx-auto"
+                />
+              </slide>
+            </carousel>
           </div>
         </div>
         <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
@@ -143,19 +157,21 @@ export default defineComponent({
     },
     productImages(): StrapiImageInterface[] {
       return get(this.product, "images", []);
-    },
-    productThumbnail(): string {
-      if (this.productImages.length === 0) {
-        return "";
-      }
-      const [firstImage] = this.productImages;
-      const baseUrl = get(firstImage, "url", "");
-      const mediumThumbnail = get(firstImage, "formats.medium.url", null);
-      return mediumThumbnail || baseUrl;
     }
   }
 });
 </script>
+<style lang="postcss">
+.VueCarousel-dot {
+  @apply !bg-gray-450 !w-5 !px-2;
+  border-radius: unset !important;
+  height: 2px !important;
+}
+
+.VueCarousel-dot.VueCarousel-dot--active {
+  @apply !bg-gray-800;
+}
+</style>
 <style lang="postcss" scoped>
  .container {
   @apply max-w-6xl px-3 mx-auto;
