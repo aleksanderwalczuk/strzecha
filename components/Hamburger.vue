@@ -69,9 +69,9 @@ export default {
   name: "HamburgerMenu",
   data() {
     return {
-      open: false,
+      open: false
     };
-  },
+  }
 };
 </script>
 

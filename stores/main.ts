@@ -1,13 +1,13 @@
-import { defineStore } from 'pinia';
-import { CategoryInterface, ParentCategory } from '~/interfaces/CategoryInterface';
-import { ProductInterface } from '~/interfaces/ProductInterface';
+import { defineStore } from "pinia";
+import { CategoryInterface, ParentCategory } from "~/interfaces/CategoryInterface";
+import { ProductInterface } from "~/interfaces/ProductInterface";
 
-type ParentCategoryLinkObject = Record<ParentCategory['uid'], {
-  name: ParentCategory['name'],
+type ParentCategoryLinkObject = Record<ParentCategory["uid"], {
+  name: ParentCategory["name"]
   data: CategoryInterface[]
 }>;
 
-export const useCategoriesStore = defineStore('Categories', {
+export const useCategoriesStore = defineStore("Categories", {
   state: () => ({
     // all these properties will have their type inferred automatically
     categories: [] as CategoryInterface[],
@@ -17,13 +17,19 @@ export const useCategoriesStore = defineStore('Categories', {
   getters: {
     inNavigation(): CategoryInterface[] {
       // eslint-disable-next-line camelcase
-      return this.categories.filter(({ onHomepage }) => onHomepage === true);
+      return this.categories.filter(({ onHomepage }) => onHomepage);
     },
     activeCategory(): CategoryInterface | null {
-      return this.categories.find(({ uid }) => uid === this.activeCategoryUid) || null;
+      const category = this.categories.find(({ uid }) => uid === this.activeCategoryUid);
+
+      if (category != null) {
+        return category;
+      }
+
+      return null;
     },
     activeParentCategory: (state) => {
-      const activeCategory = state.categories.find(({ uid }) => uid === state.activeCategoryUid) || null;
+      const activeCategory = state.categories.find(({ uid }) => uid === state.activeCategoryUid);
 
       if (activeCategory == null) {
         return null;
@@ -32,13 +38,13 @@ export const useCategoriesStore = defineStore('Categories', {
     },
     linksWithParentCategories(): ParentCategoryLinkObject {
       const parentCategories = this.parentCategories
-      .reduce((acc, parentCategory) => ({
-      ...acc, 
-      [parentCategory.uid]: {
-         name: parentCategory.name, 
-         data: [],
+        .reduce<ParentCategoryLinkObject>((acc, parentCategory) => ({
+        ...acc,
+        [parentCategory.uid]: {
+          name: parentCategory.name,
+          data: []
         }
-      }), {} as ParentCategoryLinkObject)
+      }), {});
 
       return this.categories.reduce((acc, category) => {
         const key = category.parentCategory.uid;
@@ -50,11 +56,10 @@ export const useCategoriesStore = defineStore('Categories', {
   actions: {
     async fetchCategories() {
       try {
-        if(this.parentCategories.length === 0) {
+        if (this.parentCategories.length === 0) {
           await this.fetchParentCategories();
         }
-        const res = await this.$nuxt.$strapi.find('categories') as CategoryInterface[];
-        this.categories = res;
+        this.categories = await this.$nuxt.$strapi.find("categories");
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -64,8 +69,7 @@ export const useCategoriesStore = defineStore('Categories', {
     },
     async fetchParentCategories() {
       try {
-        const res = await this.$nuxt.$strapi.find('parent-categories') as CategoryInterface[];
-        this.parentCategories = res;
+        this.parentCategories = await this.$nuxt.$strapi.find("parent-categories");
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -75,29 +79,28 @@ export const useCategoriesStore = defineStore('Categories', {
     },
 
     async getCategoryById(name: string) {
-      await this.$nuxt.$strapi.find('categories', name) as CategoryInterface;
-    },
-  },
+      await this.$nuxt.$strapi.find("categories", name);
+    }
+  }
 });
 
-export const useProductsStore = defineStore('Products', {
+export const useProductsStore = defineStore("Products", {
   state: () => ({
     // all these properties will have their type inferred automatically
     products: [] as ProductInterface[],
     active: null as ProductInterface | null,
-    categories: useCategoriesStore(),
+    categories: useCategoriesStore()
   }),
 
   getters: {
-    activeProduct():ProductInterface | null {
+    activeProduct(): ProductInterface | null {
       return this.active;
-    },
+    }
   },
   actions: {
-    async fetchProducts(): Promise<any> {
+    async fetchProducts(): Promise<ProductInterface[] | unknown> {
       try {
-        const res = await this.$nuxt.$strapi.find('products') as ProductInterface[];
-        this.products = res;
+        this.products = await this.$nuxt.$strapi.find("products");
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -108,40 +111,40 @@ export const useProductsStore = defineStore('Products', {
 
     // TODO: put as argument categoryId: string when filters are ready
     async getProductsByCategory(categoryUid: string) {
-      const res = await this.$nuxt.$strapi.find('products', {
+      return this.$nuxt.$strapi.find("products", {
         category: categoryUid
-      }) as ProductInterface[];
-
-      res;
+      });
     },
 
     async getProductByUid(uid: string) {
-      const res = await this.$nuxt.$strapi.findOne('products', uid) as ProductInterface;
-      return res;
+      return this.$nuxt.$strapi.findOne<ProductInterface>("products", uid);
     },
 
     async setActiveByUid(uid: string) {
-      this.active = await this.getProductByUid(uid);
-      this.categories.activeCategoryUid = this.active.category.uid;
-    },
-  },
+      const req = await this.getProductByUid(uid);
+
+      if (req != null) {
+        this.active = req;
+        this.categories.activeCategoryUid = this.active?.category.uid;
+      }
+    }
+  }
 });
 
-export const usePagesStore = defineStore('Pages', {
+export const usePagesStore = defineStore("Pages", {
   state: () => ({
     // all these properties will have their type inferred automatically
-    pages: [] as any,
+    pages: []
   }),
   actions: {
     async fetchHomePage() {
       try {
-        const res = await this.$nuxt.$strapi.find('home-page');
-        return res;
+        return this.$nuxt.$strapi.find("home-page");
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
         return error;
       }
-    },
-  },
+    }
+  }
 });

@@ -82,6 +82,7 @@
               <a
                 :href="provider.url"
                 class="flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mr-4"
+                target="_blank"
               >
                 {{ provider.label || provider.name }}
               </a>
@@ -151,7 +152,7 @@ export default defineComponent({
       const baseUrl = get(firstImage, "url", "");
       const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
-    },
+    }
   }
 });
 </script>

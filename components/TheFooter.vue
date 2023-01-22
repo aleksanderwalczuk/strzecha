@@ -86,9 +86,9 @@ export default {
     title: {
       type: String,
       required: false,
-      default: "Strzecha",
-    },
-  },
+      default: "Strzecha"
+    }
+  }
 };
 </script>
 

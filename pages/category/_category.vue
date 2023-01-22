@@ -40,7 +40,8 @@ export default defineComponent({
     };
   },
   async fetch() {
-    await this.categoriesStore.getCategoryById(this.$route.params.category)
+    // eslint-disable-next-line no-unused-expressions
+    await this.categoriesStore.getCategoryById(this.$route.params.category);
     await this.productsStore.fetchProducts();
     // FIXME
     // should fetch products by category

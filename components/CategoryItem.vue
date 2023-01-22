@@ -41,12 +41,12 @@ export default defineComponent({
   props: {
     product: {
       type: Object as PropType<ProductInterface>,
-      required: true,
+      required: true
     },
     inverted: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     productThumbnail(): string {
@@ -54,8 +54,8 @@ export default defineComponent({
       const baseUrl = get(firstImage, "url", "");
       const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
-    },
-  },
+    }
+  }
 });
 </script>
 <style lang="postcss" scoped>

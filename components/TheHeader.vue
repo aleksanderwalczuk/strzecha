@@ -100,20 +100,18 @@ export default defineComponent({
     title: {
       type: String,
       required: false,
-      default: "Strzecha",
-    },
+      default: "Strzecha"
+    }
   },
   data() {
     return {
       isNavOpen: false,
-      categoriesStore: useCategoriesStore(),
+      categoriesStore: useCategoriesStore()
     };
   },
   async fetch() {
     await this.categoriesStore.fetchCategories();
-  },
-  computed: {
-  },
+  }
 });
 </script>
 <style lang="scss" scoped>
