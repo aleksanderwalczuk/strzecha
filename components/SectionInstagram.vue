@@ -21,8 +21,8 @@ export default {
         return arr.length % 2 ? 0 : 1;
       }
       return null;
-    },
-  },
+    }
+  }
 };
 </script>
 

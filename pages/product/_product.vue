@@ -152,7 +152,7 @@ export default defineComponent({
       const baseUrl = get(firstImage, "url", "");
       const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
-    },
+    }
   }
 });
 </script>

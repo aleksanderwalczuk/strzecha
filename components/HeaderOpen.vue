@@ -72,19 +72,19 @@ export default defineComponent({
   props: {
     isVisible: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
-      categoriesStore: useCategoriesStore(),
+      categoriesStore: useCategoriesStore()
     };
   },
   computed: {
     ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useCategoriesStore, ["inNavigation"]),
     ...mapState(useCategoriesStore, ["parentCategories"]),
-    ...mapState(useCategoriesStore, ["linksWithParentCategories"]),
+    ...mapState(useCategoriesStore, ["linksWithParentCategories"])
 
   },
   watch: {
@@ -96,7 +96,7 @@ export default defineComponent({
         window.addEventListener("keydown", this.keyClose);
         window.addEventListener("click", this.closeOnOutsideClick);
       }
-    },
+    }
   },
   beforeDestroy() {
     this.remove();
@@ -104,16 +104,13 @@ export default defineComponent({
   methods: {
     closeOnOutsideClick(e: MouseEvent) {
       // hide navigation on click outside the container
-      // @ts-ignore
       if (this.$refs.navOpenedWrapper == null) {
         return;
       }
 
       if (
-      // @ts-ignore
-        (this.$refs.navOpenedWrapper as HTMLElement).contains(e.target as Node)
-        // @ts-ignore
-        && (this.$refs.navOpenedContainer as HTMLElement).contains(e.target as Node)
+        (this.$refs.navOpenedWrapper as HTMLElement).contains(e.target as Node) &&
+        (this.$refs.navOpenedContainer as HTMLElement).contains(e.target as Node)
       ) {
         this.close();
       }
@@ -129,8 +126,8 @@ export default defineComponent({
     remove() {
       window.removeEventListener("keydown", this.keyClose);
       window.removeEventListener("click", this.closeOnOutsideClick);
-    },
-  },
+    }
+  }
 });
 </script>
 <style lang="scss" scoped>

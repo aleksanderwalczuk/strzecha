@@ -111,8 +111,8 @@ export default defineComponent({
     truncate,
     isArrEven(arr: unknown[]): null | boolean {
       return arr.length % 2 ? Boolean(0) : Boolean(1);
-    },
-  },
+    }
+  }
 });
 </script>
 <style lang="scss" scoped>
