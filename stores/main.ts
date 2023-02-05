@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { CategoryInterface, ParentCategory } from "~/interfaces/CategoryInterface";
 import { ProductInterface } from "~/interfaces/ProductInterface";
+import { Paginated } from "~/interfaces/base";
 
 type ParentCategoryLinkObject = Record<ParentCategory["uid"], {
   name: ParentCategory["name"]
@@ -110,8 +111,8 @@ export const useProductsStore = defineStore("Products", {
     },
 
     // TODO: put as argument categoryId: string when filters are ready
-    async getProductsByCategory(categoryUid: string) {
-      return this.$nuxt.$strapi.find("products", {
+    async getProductsByCategory(categoryUid: string): Promise<Paginated<ProductInterface>> {
+      return this.$nuxt.$strapi.find<Paginated<ProductInterface>>("products", {
         category: categoryUid
       });
     },
@@ -127,6 +128,10 @@ export const useProductsStore = defineStore("Products", {
         this.active = req;
         this.categories.activeCategoryUid = this.active?.category.uid;
       }
+    },
+    async testFetch() {
+      const res = await this.$nuxt.$strapi.find<ProductInterface>("products", { query: "q=Andy Warhol" });
+      console.log("Success, ", res);
     }
   }
 });

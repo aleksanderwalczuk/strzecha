@@ -56,6 +56,7 @@
           </div>
         </div>
         <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
+          <button @click="handler">LOL</button>
           <h2
             class="text-lg tracking-wide my-4 md:mt-0"
           >
@@ -157,6 +158,11 @@ export default defineComponent({
     },
     productImages(): StrapiImageInterface[] {
       return get(this.product, "images", []);
+    }
+  },
+  methods: {
+    handler() {
+      this.productsStore.testFetch();
     }
   }
 });
