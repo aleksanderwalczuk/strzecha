@@ -79,8 +79,10 @@
   </footer>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "@nuxtjs/composition-api";
+
+export default defineComponent({
   name: "PageFooter",
   props: {
     title: {
@@ -89,7 +91,7 @@ export default {
       default: "Strzecha"
     }
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>

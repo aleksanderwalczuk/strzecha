@@ -64,15 +64,17 @@
   </nav>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "@nuxtjs/composition-api";
+
+export default defineComponent({
   name: "HamburgerMenu",
   data() {
     return {
       open: false
     };
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>

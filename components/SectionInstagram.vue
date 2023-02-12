@@ -10,20 +10,22 @@
     </div>
   </section>
 </template>
-<script>
 
-export default {
+<script lang="ts">
+import { defineComponent } from "@nuxtjs/composition-api";
+
+export default defineComponent({
   name: "SectionInstagram",
   // eslint-disable-next-line vue/no-unused-components
   methods: {
-    isArrEven(arr) {
+    isArrEven(arr: number) {
       if (Array.isArray(arr)) {
         return arr.length % 2 ? 0 : 1;
       }
       return null;
     }
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>

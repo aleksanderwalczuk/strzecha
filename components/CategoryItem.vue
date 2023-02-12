@@ -22,7 +22,7 @@
         : 'product-overlay-animation-inverted'
       "
     >
-      <h3 class="mb-4 text-[18px]">
+      <h3 class="mb-4 text-[18px] text-center px-4">
         {{ product.title }}
       </h3>
       <p class="text-center">
