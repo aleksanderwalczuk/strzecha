@@ -7,30 +7,38 @@
       />
       <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 mt-8 pb-12">
         <category-item
-          v-for="product in productsStore.products"
+          v-for="product in productsStore.products.results"
           :key="product.uid"
           :product="product"
         />
       </div>
+      <Pagination
+        v-if="productsStore.products.pagination"
+        :pagination="productsStore.products.pagination"
+        @update="updateProducts"
+      />
     </div>
   </section>
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
+import Pagination from "~/components/Pagination.vue";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "CategoryPage",
+  components: { Pagination },
   data() {
     return {
       categoriesStore: useCategoriesStore(),
-      productsStore: useProductsStore()
+      productsStore: useProductsStore(),
     };
   },
   async fetch() {
     await this.categoriesStore.fetchCategories();
-    await this.productsStore.fetchProducts();
+    const page = this.$route.query.p ? Number(this.$route.query.p) : undefined;
+    await this.productsStore.fetchProducts({ page });
   },
   computed: {
     sortedCategories(): CategoryInterface[] {
@@ -38,13 +46,18 @@ export default defineComponent({
         if (a.order === b.order || a.order == null || b.order == null) {
           return 0;
         }
-
         return a.order > b.order ? 1 : -1;
       });
-    }
-
-  }
-
+    },
+  },
+  methods: {
+    async updateProducts() {
+      const page = this.$route.query.p
+        ? Number(this.$route.query.p)
+        : undefined;
+      await this.productsStore.fetchProducts({ page });
+    },
+  },
 });
 </script>
 <style scoped>

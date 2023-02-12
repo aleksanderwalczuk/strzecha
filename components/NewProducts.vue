@@ -95,11 +95,11 @@ export default defineComponent({
     };
   },
   async fetch() {
-    if (this.store.products.length === 0) {
+    if (this.store.products.results.length === 0) {
       // FIXME: should fetch only new products
       await this.store.fetchProducts();
     }
-    this.products = this.store.products;
+    this.products = this.store.products.results;
   },
   computed: {
     trimmed() {

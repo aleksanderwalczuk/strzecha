@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { CategoryInterface, ParentCategory } from "~/interfaces/CategoryInterface";
 import { ProductInterface } from "~/interfaces/ProductInterface";
+import { Paginated } from "~/interfaces/base";
 
 type ParentCategoryLinkObject = Record<ParentCategory["uid"], {
   name: ParentCategory["name"]
@@ -87,7 +88,10 @@ export const useCategoriesStore = defineStore("Categories", {
 export const useProductsStore = defineStore("Products", {
   state: () => ({
     // all these properties will have their type inferred automatically
-    products: [] as ProductInterface[],
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    products: {
+      results: []
+    } as Paginated<ProductInterface[]>,
     active: null as ProductInterface | null,
     categories: useCategoriesStore()
   }),
@@ -98,22 +102,23 @@ export const useProductsStore = defineStore("Products", {
     }
   },
   actions: {
-    async fetchProducts(): Promise<ProductInterface[] | unknown> {
+    async fetchProducts(args? : {
+      page?: number,
+      category?: CategoryInterface["uid"]
+    }): Promise<Paginated<ProductInterface[]> | unknown> {
       try {
-        this.products = await this.$nuxt.$strapi.find("products");
+        this.products = await this.$nuxt.$strapi.find<Paginated<ProductInterface[]>>(
+          "products", args != null ? {
+            ...(args.category != null ? {category: args.category} : {} ),
+            ...(args.page != null ? {page: args.page} : {} )
+          } : undefined
+        );
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
         return error;
       }
       return true;
-    },
-
-    // TODO: put as argument categoryId: string when filters are ready
-    async getProductsByCategory(categoryUid: string) {
-      return this.$nuxt.$strapi.find("products", {
-        category: categoryUid
-      });
     },
 
     async getProductByUid(uid: string) {
@@ -127,6 +132,10 @@ export const useProductsStore = defineStore("Products", {
         this.active = req;
         this.categories.activeCategoryUid = this.active?.category.uid;
       }
+    },
+    async testFetch() {
+      const res = await this.$nuxt.$strapi.find<ProductInterface>("products", { query: "q=Andy Warhol" });
+      console.log("Success, ", res);
     }
   }
 });
