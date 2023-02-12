@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div v-if="$fetchState.pending">
-      Loading...
-    </div>
+    <div v-if="$fetchState.pending">Loading...</div>
     <section
       v-else
       class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400"
@@ -16,7 +14,7 @@
           />
         </div>
         <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
-          <p class="lg:-mx-1 md:text-lg hero-text">
+          <p v-if="page" class="lg:-mx-1 md:text-lg hero-text">
             {{ page.description }}
           </p>
           <div class="flex justify-center">
@@ -30,10 +28,10 @@
         </div>
       </div>
     </section>
-    <new-products />
-    <categories :categories="categories" />
-    <section-on-demand />
-    <section-instagram />
+    <NewProducts />
+    <Categories :categories="categories" />
+    <SectionOnDemand />
+    <SectionInstagram />
   </div>
 </template>
 
@@ -42,20 +40,26 @@ import { defineComponent } from "@nuxtjs/composition-api";
 import { get } from "lodash";
 
 import { mapState } from "pinia";
+import Categories from "~/components/Categories.vue";
+import NewProducts from "~/components/NewProducts.vue";
+import SectionInstagram from "~/components/SectionInstagram.vue";
+import SectionOnDemand from "~/components/SectionOnDemand.vue";
+import { PageInterface } from "~/interfaces/PageInterface";
 import {
   useProductsStore,
   useCategoriesStore,
-  usePagesStore
+  usePagesStore,
 } from "~/stores/main";
 
 export default defineComponent({
   name: "IndexPage",
+  components: { Categories, NewProducts, SectionOnDemand, SectionInstagram },
   data() {
     return {
-      page: null as null,
+      page: null as null | PageInterface,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
-      pagesStore: usePagesStore()
+      pagesStore: usePagesStore(),
     };
   },
   async fetch() {
@@ -64,7 +68,6 @@ export default defineComponent({
     await this.productsStore.fetchProducts();
   },
   fetchOnServer: false,
-
   computed: {
     heroImage() {
       return get(
@@ -75,34 +78,34 @@ export default defineComponent({
     },
     ...mapState(useProductsStore, ["products"]),
     ...mapState(useCategoriesStore, ["categories"]),
-    ...mapState(usePagesStore, ["pages"])
-  }
+    ...mapState(usePagesStore, ["pages"]),
+  },
 });
 </script>
 <style lang="scss">
 * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 .container {
-    @apply px-8 mx-auto;
-    max-width: 100%;
+  @apply px-8 mx-auto;
+  max-width: 100%;
 }
 
 .h2 {
-    @apply text-lg mb-10 text-center;
-    letter-spacing: 0.035em;
+  @apply text-lg mb-10 text-center;
+  letter-spacing: 0.035em;
 }
 
 @screen lg {
-    .container {
-        max-width: 70.5rem;
-    }
-    .h2 {
-        @apply text-2xl mb-10 text-center;
-        letter-spacing: 0.035em;
-    }
+  .container {
+    max-width: 70.5rem;
+  }
+  .h2 {
+    @apply text-2xl mb-10 text-center;
+    letter-spacing: 0.035em;
+  }
 }
 </style>
 <style lang="scss" scoped>
@@ -114,9 +117,9 @@ export default defineComponent({
 }
 @screen lg {
   .hero-bg {
-      width: 100%;
-      min-height: 100vh;
-      background-size: cover;
+    width: 100%;
+    min-height: 100vh;
+    background-size: cover;
   }
 }
 </style>

@@ -30,12 +30,12 @@
         v-if="product != null"
         class="flex font-serif flex-col md:flex-row"
       >
-        <div class="max-w-[480px] w-full max-h-[520px] h-full p-6 bg-[#f1f1f1]">
+        <div class="max-w-[480px] w-full max-h-[520px] h-full">
           <div class="w-full h-full flex items-center justify-center">
             <carousel
               :per-page="1"
               :pagination-padding="4"
-              class="text-center"
+              class="text-center cursor-grab active:cursor-grabbing bg-[#f1f1f1]"
             >
               <slide
                 v-for="image in productImages"
@@ -56,7 +56,6 @@
           </div>
         </div>
         <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
-          <button @click="handler">LOL</button>
           <h2
             class="text-lg tracking-wide my-4 md:mt-0"
           >
@@ -160,11 +159,6 @@ export default defineComponent({
       return get(this.product, "images", []);
     }
   },
-  methods: {
-    handler() {
-      this.productsStore.testFetch();
-    }
-  }
 });
 </script>
 <style lang="postcss">
@@ -179,10 +173,10 @@ export default defineComponent({
 }
 </style>
 <style lang="postcss" scoped>
- .container {
+.container {
   @apply max-w-6xl px-3 mx-auto;
- }
- .spacing {
+}
+.spacing {
   letter-spacing: 0.035em;
- }
+}
 </style>
