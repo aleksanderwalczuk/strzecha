@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { CategoryInterface, ParentCategory } from "~/interfaces/CategoryInterface";
 import { ProductInterface } from "~/interfaces/ProductInterface";
+import { PageInterface } from "~/interfaces/PageInterface";
 import { Paginated } from "~/interfaces/base";
 
 type ParentCategoryLinkObject = Record<ParentCategory["uid"], {
@@ -132,10 +133,6 @@ export const useProductsStore = defineStore("Products", {
         this.active = req;
         this.categories.activeCategoryUid = this.active?.category.uid;
       }
-    },
-    async testFetch() {
-      const res = await this.$nuxt.$strapi.find<ProductInterface>("products", { query: "q=Andy Warhol" });
-      console.log("Success, ", res);
     }
   }
 });
@@ -146,13 +143,13 @@ export const usePagesStore = defineStore("Pages", {
     pages: []
   }),
   actions: {
-    async fetchHomePage() {
+    async fetchHomePage(): Promise<PageInterface> {
       try {
-        return this.$nuxt.$strapi.find("home-page");
+        return this.$nuxt.$strapi.find<PageInterface>("home-page");
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
-        return error;
+        throw error;
       }
     }
   }
