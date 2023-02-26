@@ -23,12 +23,13 @@
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
 import Pagination from "~/components/Pagination.vue";
+import CategoryItem from "~/components/CategoryItem.vue";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "CategoryPage",
-  components: { Pagination },
+  components: { Pagination, CategoryItem },
   data() {
     return {
       categoriesStore: useCategoriesStore(),
@@ -60,7 +61,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style scoped lang="postcss">
 .product-grid {
   @apply grid grid-cols-1;
 }

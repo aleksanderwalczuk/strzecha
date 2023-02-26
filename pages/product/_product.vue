@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <p v-if="$fetchState.pending">
       Loading...
     </p>
@@ -55,7 +55,7 @@
             </carousel>
           </div>
         </div>
-        <div class="max-w-1/2 max-w-[526px] w-full xl:ml-20 mb-4">
+        <div class="max-w-1/2 max-w-[526px] w-full md:ml-4 xl:ml-20 mb-4">
           <h2
             class="text-lg tracking-wide my-4 md:mt-0"
           >
@@ -74,10 +74,10 @@
               {{ product.currency.symbol }}
             </span>
           </p>
-          <div class="flex mb-10">
+          <div class="flex flex-col lg:flex-row mb-10">
             <a
               href="mailto:example@example.com"
-              class="flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mr-4"
+              class="btn"
             >
               <span class="mr-3">
                 <!-- eslint-disable -->
@@ -87,7 +87,7 @@
                 </svg>
                 <!-- eslint-enable -->
               </span>
-              <span class="text-base leading-[1] mt-[2px]">Złóż ofertę</span>
+              <span class="btn-label">Złóż ofertę</span>
             </a>
             <div
               v-for="provider in product.providers"
@@ -95,10 +95,10 @@
             >
               <a
                 :href="provider.url"
-                class="flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mr-4"
+                class="btn"
                 target="_blank"
               >
-                {{ provider.label || provider.name }}
+              <span class="btn-label">{{ provider.label || provider.name }}</span>
               </a>
             </div>
             <!-- <a
@@ -118,6 +118,7 @@
           </p>
         </div>
       </section>
+      <related-products v-if="product" :product="product"/>
     </div>
   </div>
 </template>
@@ -128,9 +129,13 @@ import { mapState } from "pinia";
 import { ParentCategory } from "~/interfaces/CategoryInterface";
 import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
+import RelatedProducts from "~/components/RelatedProducts.vue";
 
 export default defineComponent({
   name: "ProductPage",
+  components: {
+    RelatedProducts
+  },
   data() {
     return {
       activeId: null as string | null,
@@ -178,5 +183,19 @@ export default defineComponent({
 }
 .spacing {
   letter-spacing: 0.035em;
+}
+.btn {
+  @apply flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mb-3;
+}
+
+@screen md {
+  .btn > .btn-label {
+    @apply text-base leading-[1] mt-[2px];
+  }
+}
+@screen lg {
+  .btn {
+    @apply mr-4 mb-0;
+  }
 }
 </style>
