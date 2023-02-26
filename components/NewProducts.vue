@@ -45,11 +45,9 @@
           >
             <slide v-for="product in trimmed" :key="product.uid">
               <nuxt-link
-                :to="`/products/${product.uid}`"
+                :to="`/product/${product.uid}`"
                 class="product-item-link new-product-item"
               >
-                <!-- :class="isArrEven(arr) ? 'new-product-item-even' : 'new-product-item-odd'" -->
-
                 <figure class="new-product-item">
                   <div class="relative">
                     <div class="absolute w-full h-full" />
