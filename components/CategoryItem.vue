@@ -27,7 +27,7 @@
       </h3>
       <p class="text-center">
         <span class="text-[32px] leading-[48px]">{{ product.price }}</span>
-        <span>{{ product.currency || 'zł' }}</span>
+        <span v-if="product.currency">{{ product.currency.symbol || 'zł' }}</span>
       </p>
     </div>
   </nuxt-link>

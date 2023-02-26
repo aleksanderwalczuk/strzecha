@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap md:mb-8">
+  <div class="flex flex-wrap justify-center md:mb-8">
     <nuxt-link
       class="category-link"
       to="/categories/"
