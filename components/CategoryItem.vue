@@ -12,8 +12,8 @@
       :src="productThumbnail"
     />
     <div class="md:hidden">
-      <p>{{ product.title }}</p>
-      <span>{{ product.price }}<span v-if="product.currency">{{ product.currency.symbol || 'zł' }}</span></span>
+      <p class="text-center">{{ product.title }}</p>
+      <span class="block text-center">{{ product.price }}<span v-if="product.currency">{{ product.currency.symbol || 'zł' }}</span></span>
     </div>
     <div
       class="product-overlay"
