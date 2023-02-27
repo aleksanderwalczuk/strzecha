@@ -2,18 +2,18 @@
   <nuxt-link
     v-if="product"
     :to="`/product/${product.uid}`"
-    class="category-item relative max-h-[400px] h-full font-serif"
+    class="category-item relative max-h-[400px] h-full font-serif py-2 px-1 md:p-0"
   >
     <nuxt-img
       v-if="productThumbnail"
       provider="strapi"
       fit="cover"
-      class="w-full max-w-[400px] object-cover max-h-full h-full"
+      class="w-full max-w-[400px] object-cover max-h-full md:h-full"
       :src="productThumbnail"
     />
     <div class="md:hidden">
-      <p>{{ product.title }}</p>
-      <span>{{ product.price }}</span>
+      <p class="text-center">{{ product.title }}</p>
+      <span class="block text-center">{{ product.price }}<span v-if="product.currency">{{ product.currency.symbol || 'zł' }}</span></span>
     </div>
     <div
       class="product-overlay"

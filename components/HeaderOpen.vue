@@ -5,30 +5,18 @@
       class="hidden nav-open fixed w-full z-30 md:block"
     >
       <nav class="nav-open-wrapper relative bg-gray-50 py-20">
-        <div
-          class="nav-container"
-        >
-          <button
-            class="nav-close w-5 h-5"
-            @click.self="close"
-          >
-            <span class="sr-only">
-              Close
-            </span>
+        <div class="nav-container">
+          <button class="nav-close w-5 h-5" @click.self="close">
+            <span class="sr-only"> Close </span>
           </button>
-          <div
-            ref="navOpenedContainer"
-            class="flex items-start"
-          >
-            <div class="flex justify-start w-1/2">
+          <div ref="navOpenedContainer" class="flex items-start">
+            <div class="flex justify-start w-1/2 lg:justify-around">
               <div
                 v-for="(category, key, index) in linksWithParentCategories"
                 :key="'nav-category-' + index"
-                class="w-4/12"
+                class="w-5/12"
               >
-                <h3
-                  class="text-gray-250 mb-8 capitalize"
-                >
+                <h3 class="text-gray-250 mb-8 capitalize">
                   {{ category.name }}
                 </h3>
                 <ul>
@@ -36,20 +24,32 @@
                     v-for="{ createdAt, uid, name } in category.data"
                     :key="createdAt"
                   >
-                    <nuxt-link
-                      :to="`/category/${uid}`"
-                      @click.native="close"
-                    >
+                    <nuxt-link :to="`/category/${uid}`" @click.native="close">
                       {{ name }}
                     </nuxt-link>
                   </li>
                 </ul>
-                <nuxt-link
-                  v-if="index === 0"
-                  class="btn"
-                  to="/categories/"
-                >
-                  Zobacz wszystkie
+                <nuxt-link v-if="index === 0" class="btn flex justify-start items-center lg:whitespace-nowrap" to="/categories/"
+                  ><span class="mr-2">Zobacz wszystkie</span
+                  ><svg
+                    width="33"
+                    height="14"
+                    viewBox="0 0 33 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 7L16 7L31 7"
+                      stroke="#2C2022"
+                      stroke-linecap="square"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M27 1.5L32 7L27 12.5"
+                      stroke="#2C2022"
+                      stroke-linecap="square"
+                    />
+                  </svg>
                 </nuxt-link>
               </div>
             </div>
@@ -72,20 +72,19 @@ export default defineComponent({
   props: {
     isVisible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      categoriesStore: useCategoriesStore()
+      categoriesStore: useCategoriesStore(),
     };
   },
   computed: {
     ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useCategoriesStore, ["inNavigation"]),
     ...mapState(useCategoriesStore, ["parentCategories"]),
-    ...mapState(useCategoriesStore, ["linksWithParentCategories"])
-
+    ...mapState(useCategoriesStore, ["linksWithParentCategories"]),
   },
   watch: {
     isVisible(value) {
@@ -96,7 +95,7 @@ export default defineComponent({
         window.addEventListener("keydown", this.keyClose);
         window.addEventListener("click", this.closeOnOutsideClick);
       }
-    }
+    },
   },
   beforeDestroy() {
     this.remove();
@@ -109,8 +108,12 @@ export default defineComponent({
       }
 
       if (
-        (this.$refs.navOpenedWrapper as HTMLElement).contains(e.target as Node) &&
-        (this.$refs.navOpenedContainer as HTMLElement).contains(e.target as Node)
+        (this.$refs.navOpenedWrapper as HTMLElement).contains(
+          e.target as Node
+        ) &&
+        (this.$refs.navOpenedContainer as HTMLElement).contains(
+          e.target as Node
+        )
       ) {
         this.close();
       }
@@ -126,8 +129,8 @@ export default defineComponent({
     remove() {
       window.removeEventListener("keydown", this.keyClose);
       window.removeEventListener("click", this.closeOnOutsideClick);
-    }
-  }
+    },
+  },
 });
 </script>
 <style lang="scss" scoped>
@@ -146,7 +149,7 @@ li {
   @apply absolute right-0 -top-12;
 }
 .nav-close::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 0%;
@@ -156,7 +159,7 @@ li {
   background: #000;
 }
 .nav-close::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 0%;
@@ -180,5 +183,4 @@ li {
 .fade-leave-active {
   opacity: 0;
 }
-
 </style>
