@@ -10,7 +10,7 @@
             <span class="sr-only"> Close </span>
           </button>
           <div ref="navOpenedContainer" class="flex items-start">
-            <div class="flex justify-start w-1/2 lg:justify-around">
+            <div class="flex flex-wrap justify-start w-1/2 lg:justify-between">
               <div
                 v-for="(category, key, index) in linksWithParentCategories"
                 :key="'nav-category-' + index"
@@ -29,7 +29,9 @@
                     </nuxt-link>
                   </li>
                 </ul>
-                <nuxt-link v-if="index === 0" class="btn flex justify-start items-center lg:whitespace-nowrap" to="/categories/"
+              </div>
+              <div class="mr-auto">
+                <nuxt-link class="btn flex justify-start items-center lg:whitespace-nowrap" to="/categories/"
                   ><span class="mr-2">Zobacz wszystkie</span
                   ><svg
                     width="33"
@@ -133,7 +135,7 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .nav-container {
   @apply relative px-8 mx-auto;
   max-width: 57.5rem;
@@ -169,12 +171,21 @@ li {
 
   background: #000;
 }
+@screen md {
+  .nav-close {
+    right: 1rem;
+  }
+}
 @screen lg {
   .nav-container {
     @apply px-5;
   }
+
+  .nav-close {
+    right: 0;
+  }
 }
-// component transition
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;

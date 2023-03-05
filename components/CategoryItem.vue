@@ -2,13 +2,13 @@
   <nuxt-link
     v-if="product"
     :to="`/product/${product.uid}`"
-    class="category-item relative max-h-[400px] h-full font-serif py-2 px-1 md:p-0"
+    class="relative font-serif py-2 px-1 md:p-0"
   >
     <nuxt-img
       v-if="productThumbnail"
       provider="strapi"
       fit="cover"
-      class="w-full max-w-[400px] object-cover max-h-full md:h-full"
+      class="ratio w-full max-w-[400px] object-cover max-h-full md:h-full"
       :src="productThumbnail"
     />
     <div class="md:hidden">
@@ -69,5 +69,8 @@ export default defineComponent({
 }
 .product-overlay-animation {
   @apply transform hover:transition-all duration-[300ms] ease-out opacity-0 hover:opacity-100;
+}
+.ratio {
+  aspect-ratio: 36/40;
 }
 </style>
