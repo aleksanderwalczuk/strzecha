@@ -1,38 +1,35 @@
 <template>
-  <div>
-    <div v-if="$fetchState.pending">Loading...</div>
-    <section
-      v-else
-      class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400"
-    >
-      <div class="container pt-10 md:pt-20 md:h-full">
-        <div class="mb-8 md:mb-30">
-          <nuxt-picture
-            class="w-full hero-img"
-            src="/images/hero-bg@2x.jpg"
-            preload
-          />
-        </div>
-        <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
-          <p v-if="page" class="lg:-mx-1 md:text-lg hero-text">
-            {{ page.description }}
-          </p>
-          <div class="flex justify-center">
-            <a
-              href="#"
-              class="block px-8 md:px-9 py-2 md:pb-3 mx-auto border border-black-300 mt-12 md:mt-16"
-            >
-              Skontaktuj się z nami
-            </a>
+    <with-loader :loading="$fetchState.pending">
+      <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
+        <div class="container pt-10 md:pt-20 md:h-full">
+          <div class="mb-8 md:mb-30">
+            <nuxt-picture
+              class="w-full hero-img"
+              src="/images/hero-bg@2x.jpg"
+              preload
+            />
+          </div>
+          <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
+            <p v-if="page" class="lg:-mx-1 md:text-lg hero-text">
+              {{ page.description }}
+            </p>
+            <div class="flex justify-center">
+              <a
+                href="#"
+                class="block px-8 md:px-9 py-2 md:pb-3 mx-auto border border-black-300 mt-12 md:mt-16"
+              >
+                Skontaktuj się z nami
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <NewProducts />
-    <Categories :categories="categories" />
-    <SectionOnDemand />
-    <SectionInstagram />
-  </div>
+      </section>
+      <NewProducts />
+      <Categories :categories="categories" />
+      <SectionOnDemand />
+      <SectionInstagram
+    />
+  </with-loader>
 </template>
 
 <script lang="ts">
@@ -44,6 +41,7 @@ import Categories from "~/components/Categories.vue";
 import NewProducts from "~/components/NewProducts.vue";
 import SectionInstagram from "~/components/SectionInstagram.vue";
 import SectionOnDemand from "~/components/SectionOnDemand.vue";
+import WithLoader from "~/components/WithLoader.vue";
 import { PageInterface } from "~/interfaces/PageInterface";
 import {
   useProductsStore,
@@ -53,7 +51,13 @@ import {
 
 export default defineComponent({
   name: "IndexPage",
-  components: { Categories, NewProducts, SectionOnDemand, SectionInstagram },
+  components: {
+    Categories,
+    NewProducts,
+    SectionOnDemand,
+    SectionInstagram,
+    WithLoader,
+  },
   data() {
     return {
       page: null as null | PageInterface,
