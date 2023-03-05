@@ -1,12 +1,6 @@
 <template>
-  <div>
-    <p v-if="$fetchState.pending">
-      Loading...
-    </p>
-    <div
-      v-else
-      class="min-h-screen container"
-    >
+  <with-loader :loading="$fetchState.pending">
+    <div class="min-h-screen container">
       <nav
         v-if="activeCategory != null"
         class="flex items-center font-serif text-[18px] leading-[32px] spacing mt-8 sm:mt-20 mb-8"
@@ -16,10 +10,10 @@
             src="/icons/icon-arrow.svg"
             alt=""
             class="mr-2 transform rotate-180"
-          >
+          />
         </button>
         <span class="capitalize">
-          {{ activeCategory.parentCategory.uid }}
+          {{ activeParentCategory.name }}
         </span>
         &nbsp;/&nbsp;
         <nuxt-link :to="`/category/${activeCategory.uid}`">
@@ -35,7 +29,7 @@
             <carousel
               :per-page="1"
               :pagination-padding="4"
-              class="text-center cursor-grab active:cursor-grabbing bg-[#f1f1f1]"
+              class="flex-1 text-center cursor-grab active:cursor-grabbing bg-[#f1f1f1]"
             >
               <slide
                 v-for="image in productImages"
@@ -56,9 +50,7 @@
           </div>
         </div>
         <div class="max-w-1/2 max-w-[526px] w-full md:ml-4 xl:ml-20 mb-4">
-          <h2
-            class="text-lg tracking-wide my-4 md:mt-0"
-          >
+          <h2 class="text-lg tracking-wide my-4 md:mt-0">
             {{ product.title }}
           </h2>
           <!-- those should be computed properties -->
@@ -67,60 +59,56 @@
             class="font-serif font-normal text-[40px] leading-[40px] mb-4"
           >
             <span>{{ product.price }}</span>
-            <span
-              v-if="product.currency"
-              class="text-[18px] leading-[32px]"
-            >
+            <span v-if="product.currency" class="text-[18px] leading-[32px]">
               {{ product.currency.symbol }}
             </span>
           </p>
           <div class="flex flex-col lg:flex-row mb-10">
-            <a
-              href="mailto:example@example.com"
-              class="btn"
-            >
+            <a href="mailto:example@example.com" class="btn">
               <span class="mr-3">
                 <!-- eslint-disable -->
-                <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1.28613 0.5L9.99945 8.83333L18.7128 0.5" stroke="#F9F8F8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M18.7128 0.5H1.28613V15.5H18.7128V0.5Z" stroke="#F9F8F8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                  width="20"
+                  height="16"
+                  viewBox="0 0 20 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.28613 0.5L9.99945 8.83333L18.7128 0.5"
+                    stroke="#F9F8F8"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M18.7128 0.5H1.28613V15.5H18.7128V0.5Z"
+                    stroke="#F9F8F8"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
                 <!-- eslint-enable -->
               </span>
               <span class="btn-label">Złóż ofertę</span>
             </a>
-            <div
-              v-for="provider in product.providers"
-              :key="provider.name"
-            >
-              <a
-                :href="provider.url"
-                class="btn"
-                target="_blank"
-              >
-              <span class="btn-label">{{ provider.label || provider.name }}</span>
+            <div v-for="provider in product.providers" :key="provider.name">
+              <a :href="provider.url" class="btn btn-secondary" target="_blank">
+                <span class="btn-label">{{
+                  provider.label || provider.name
+                }}</span>
               </a>
             </div>
-            <!-- <a
-              v-if="product.info.link"
-              :href="product.info.link"
-              target="_blank"
-              class="flex justify-center items-center border-black-500 border py-[10px] px-14"
-            >
-              <span class="text-base leading-[1] mt-[2px]">Kup na allegro</span>
-            </a> -->
           </div>
-          <p
-            v-if="product.description"
-            class="leading[24px]"
-          >
+          <p v-if="product.description" class="leading-[24px]">
             {{ product.description }}
           </p>
         </div>
       </section>
-      <related-products v-if="product" :product="product"/>
+      <related-products v-if="product" :product="product" />
     </div>
-  </div>
+  </with-loader>
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
@@ -130,17 +118,19 @@ import { ParentCategory } from "~/interfaces/CategoryInterface";
 import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 import RelatedProducts from "~/components/RelatedProducts.vue";
+import WithLoader from "~/components/WithLoader.vue";
 
 export default defineComponent({
   name: "ProductPage",
   components: {
-    RelatedProducts
+    RelatedProducts,
+    WithLoader
   },
   data() {
     return {
       activeId: null as string | null,
       categoriesStore: useCategoriesStore(),
-      productsStore: useProductsStore()
+      productsStore: useProductsStore(),
     };
   },
   async fetch() {
@@ -154,15 +144,20 @@ export default defineComponent({
     ...mapState(useProductsStore, { product: "activeProduct" }),
 
     activeParentCategory(): ParentCategory | undefined | null {
-      if (this.activeCategory == null || this.categoriesStore.parentCategories == null) {
+      if (
+        this.activeCategory == null ||
+        this.categoriesStore.parentCategories == null
+      ) {
         return null;
       }
 
-      return this.categoriesStore.parentCategories.find(({ uid }) => uid === this.activeCategory?.parentCategory.uid);
+      return this.categoriesStore.parentCategories.find(
+        ({ uid }) => uid === this.activeCategory?.parentCategory.uid
+      );
     },
     productImages(): StrapiImageInterface[] {
       return get(this.product, "images", []);
-    }
+    },
   },
 });
 </script>
@@ -186,6 +181,10 @@ export default defineComponent({
 }
 .btn {
   @apply flex justify-center items-center bg-black-500 text-white py-[10px] px-14 mb-3;
+}
+
+.btn-secondary {
+  @apply bg-transparent border border-black-500 text-black-500;
 }
 
 @screen md {
