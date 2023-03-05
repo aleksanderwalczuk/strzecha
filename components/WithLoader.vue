@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col flex-1">
-    <div v-if="!loaded" class="flex-1 loader-container flex justify-center items-center">
+    <div
+      v-if="!loaded"
+      class="flex-1 loader-container flex justify-center items-center"
+    >
       <svg
         width="48"
         height="48"
@@ -24,6 +27,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
+import { initial } from "lodash";
 import { wait } from "../utils/wait";
 
 export default defineComponent({
@@ -35,6 +39,10 @@ export default defineComponent({
   data() {
     return {
       loaded: false,
+      STORAGE_KEY: "routesMap",
+      routesMap: {} as Record<string, string>,
+      path: this.$route.fullPath,
+      limit: 1000 * 60 * 10,
     };
   },
   watch: {
@@ -44,10 +52,40 @@ export default defineComponent({
       }
     },
   },
+  mounted() {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+
+    if (data != null) {
+      try {
+        this.routesMap = JSON.parse(data);
+      } catch {
+        console.error("Failed to parse saved routes");
+      }
+    }
+    this.saveRoutes();
+  },
   methods: {
+    timeDiff(from: number, to: number) {
+      return from - to > this.limit;
+    },
     async postpone() {
-      await wait(1000);
+      const initialTime = new Date(this.routesMap[this.path] || 0).getTime();
+      const diff = this.timeDiff(Date.now(), initialTime);
+
+      if (diff) {
+        await wait(1000);
+      }
       this.loaded = true;
+    },
+    saveRoutes() {
+      const now = new Date().toISOString();
+      const path = this.$route.fullPath;
+      this.routesMap = {
+        ...this.routesMap,
+        [path]: now,
+      };
+
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.routesMap));
     },
   },
 });
@@ -70,7 +108,11 @@ export default defineComponent({
 .fade-leave-active {
   opacity: 0;
 }
-@screen lg {
+
+  .loader-container {
+    min-height: calc(100vh - 62px);
+  }
+@screen md {
   .loader-container {
     min-height: calc(100vh - 169px);
   }

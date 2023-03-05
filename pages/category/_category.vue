@@ -1,10 +1,6 @@
 <template>
-  <div class="">
-    <p v-if="$fetchState.pending">
-      Loading...
-    </p>
+  <with-loader :loading="$fetchState.pending">
     <div
-      v-else
       class="min-h-screen container pt-8 md:pt-10"
     >
       <categories-navigation :categories="categories" />
@@ -24,7 +20,7 @@
         @update="updateProducts"
       />
     </div>
-  </div>
+  </with-loader>
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
@@ -33,10 +29,11 @@ import CategoryItem from "~/components/CategoryItem.vue";
 import { ProductInterface } from "~/interfaces/ProductInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 import Pagination from "~/components/Pagination.vue";
+import WithLoader from "~/components/WithLoader.vue";
 
 export default defineComponent({
   name: "CategoryPage",
-  components: { CategoryItem, Pagination },
+  components: { CategoryItem, Pagination, WithLoader },
   data() {
     return {
       activeId: null as string | null,

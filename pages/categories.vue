@@ -1,7 +1,7 @@
 <template>
-  <section class="py-10">
-    <div class="container">
-      <with-loader :loading="$fetchState.pending">
+  <with-loader :loading="$fetchState.pending">
+    <section class="py-10">
+      <div class="container">
         <categories-navigation
           v-if="categoriesStore.categories"
           :categories="sortedCategories"
@@ -18,9 +18,9 @@
           :pagination="productsStore.products.pagination"
           @update="updateProducts"
         />
-      </with-loader>
-    </div>
-  </section>
+      </div>
+    </section>
+  </with-loader>
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
