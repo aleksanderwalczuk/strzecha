@@ -56,7 +56,7 @@
               </div>
             </div>
             <div class="category-thumbnail">
-              <nuxt-img src="/images/nav-cat-thumbnail-1.jpg" />
+              <nuxt-img :src="image" />
             </div>
           </div>
         </div>
@@ -67,7 +67,8 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import { mapState } from "pinia";
-import { useCategoriesStore } from "~/stores/main";
+import { SettingsInterface } from "~/interfaces/SettingsInterface";
+import { useCategoriesStore, useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "MainNavigation",
@@ -80,6 +81,8 @@ export default defineComponent({
   data() {
     return {
       categoriesStore: useCategoriesStore(),
+      settingsStore: useSettingsStore(),
+      settings: null as null | SettingsInterface
     };
   },
   computed: {
@@ -87,6 +90,9 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ["inNavigation"]),
     ...mapState(useCategoriesStore, ["parentCategories"]),
     ...mapState(useCategoriesStore, ["linksWithParentCategories"]),
+    image() {
+      return this.settings?.navigation?.menu_image?.url ?? "/images/nav-cat-thumbnail-1.jpg"
+    }
   },
   watch: {
     isVisible(value) {
@@ -98,6 +104,12 @@ export default defineComponent({
         window.addEventListener("click", this.closeOnOutsideClick);
       }
     },
+  },
+  async mounted() {
+    if (this.settingsStore.settings == null) {
+      await this.settingsStore.fetch();
+    }
+    this.settings = this.settingsStore.settings;
   },
   beforeDestroy() {
     this.remove();

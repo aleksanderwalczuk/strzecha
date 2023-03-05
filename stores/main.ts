@@ -7,6 +7,7 @@ import { ProductInterface } from "~/interfaces/ProductInterface";
 import { PageInterface } from "~/interfaces/PageInterface";
 import { Paginated } from "~/interfaces/base";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
+import { StrapiResponseInterface } from "~/interfaces/StrapiResponseInterface";
 
 type ParentCategoryLinkObject = Record<
   ParentCategory["uid"],
@@ -158,21 +159,29 @@ export const useProductsStore = defineStore("Products", {
   },
 });
 
-export const usePagesStore = defineStore("Pages", {
+export const useSettingsStore = defineStore("Settings", {
   state: () => ({
     // all these properties will have their type inferred automatically
     pages: [],
     settings: null as SettingsInterface | null,
   }),
   actions: {
-    async fetchHomePage(): Promise<PageInterface> {
-      try {
-        return this.$nuxt.$strapi.find<PageInterface>("home-page");
-      } catch (error) {
-        // showTooltip(error)
-        // let the form component display the error
-        throw error;
+    async fetch(): Promise<SettingsInterface | undefined> {
+      if (this.settings == null) {
+        try {
+          const response = await this.$nuxt.$strapi.find<
+            SettingsInterface
+          >("settings");
+
+          const result = response;
+
+          this.settings = result;
+        } catch (e) {
+          throw e;
+        }
+
+        return this.settings;
       }
-    }
-  }
+    },
+  },
 });

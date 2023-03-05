@@ -46,7 +46,7 @@ import { PageInterface } from "~/interfaces/PageInterface";
 import {
   useProductsStore,
   useCategoriesStore,
-  usePagesStore,
+  useSettingsStore,
 } from "~/stores/main";
 
 export default defineComponent({
@@ -60,14 +60,14 @@ export default defineComponent({
   },
   data() {
     return {
-      page: null as null | PageInterface,
+      settings: null as null | any,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
-      pagesStore: usePagesStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
-    this.page = await this.pagesStore.fetchHomePage();
+    this.settings = this.settingsStore.settings ?? await this.settingsStore.fetch();
     await this.categoriesStore.fetchCategories();
     await this.productsStore.fetchProducts();
   },
@@ -75,14 +75,14 @@ export default defineComponent({
   computed: {
     heroImage() {
       return get(
-        this.page,
+        this.settings,
         "image.data.attributes.url",
         "/images/hero-bg@2x.jpg"
       );
     },
     ...mapState(useProductsStore, ["products"]),
     ...mapState(useCategoriesStore, ["categories"]),
-    ...mapState(usePagesStore, ["pages"]),
+    ...mapState(useSettingsStore, ["pages"]),
   },
 });
 </script>

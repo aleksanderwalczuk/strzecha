@@ -8,7 +8,6 @@
           <div class="flex justify-between items-center py-4 md:py-10">
             <div class="search-container relative z-20 w-3/12">
               <form class="relative">
-                <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                 <label
                   for="search"
                   class="cursor-pointer"

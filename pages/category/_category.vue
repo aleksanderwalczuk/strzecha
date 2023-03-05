@@ -58,10 +58,7 @@ export default defineComponent({
 
     activeCategoryProducts(): ProductInterface[] {
       return this.products.results.filter(
-        (product) => {
-          console.log(product)
-          return product.category.uid === this.activeId;
-        }
+        (product) =>  product.category.uid === this.activeId
       );
     }
   },
