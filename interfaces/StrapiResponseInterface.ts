@@ -4,6 +4,6 @@ export interface StrapiResponseData<T> {
 
 }
 export interface StrapiResponseInterface<T> {
-  data: Array<StrapiResponseData<T>>
+  data: Array<StrapiResponseData<T>> | StrapiResponseData<T>
   meta: unknown
 }

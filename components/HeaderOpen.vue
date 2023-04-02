@@ -10,7 +10,7 @@
             <span class="sr-only"> Close </span>
           </button>
           <div ref="navOpenedContainer" class="flex items-start">
-            <div class="flex justify-start w-1/2 lg:justify-around">
+            <div class="flex flex-wrap justify-start w-1/2 lg:justify-between">
               <div
                 v-for="(category, key, index) in linksWithParentCategories"
                 :key="'nav-category-' + index"
@@ -29,7 +29,9 @@
                     </nuxt-link>
                   </li>
                 </ul>
-                <nuxt-link v-if="index === 0" class="btn flex justify-start items-center lg:whitespace-nowrap" to="/categories/"
+              </div>
+              <div class="mr-auto">
+                <nuxt-link class="btn flex justify-start items-center lg:whitespace-nowrap" to="/categories/"
                   ><span class="mr-2">Zobacz wszystkie</span
                   ><svg
                     width="33"
@@ -54,7 +56,7 @@
               </div>
             </div>
             <div class="category-thumbnail">
-              <nuxt-img src="/images/nav-cat-thumbnail-1.jpg" />
+              <nuxt-img provider="strapi" :src="image" />
             </div>
           </div>
         </div>
@@ -65,7 +67,8 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import { mapState } from "pinia";
-import { useCategoriesStore } from "~/stores/main";
+import { SettingsInterface } from "~/interfaces/SettingsInterface";
+import { useCategoriesStore, useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "MainNavigation",
@@ -78,6 +81,8 @@ export default defineComponent({
   data() {
     return {
       categoriesStore: useCategoriesStore(),
+      settingsStore: useSettingsStore(),
+      settings: null as null | SettingsInterface
     };
   },
   computed: {
@@ -85,6 +90,9 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ["inNavigation"]),
     ...mapState(useCategoriesStore, ["parentCategories"]),
     ...mapState(useCategoriesStore, ["linksWithParentCategories"]),
+    image() {
+      return this.settings?.navigation?.menu_image?.url ?? "/images/nav-cat-thumbnail-1.jpg"
+    }
   },
   watch: {
     isVisible(value) {
@@ -96,6 +104,12 @@ export default defineComponent({
         window.addEventListener("click", this.closeOnOutsideClick);
       }
     },
+  },
+  async mounted() {
+    if (this.settingsStore.settings == null) {
+      await this.settingsStore.fetch();
+    }
+    this.settings = this.settingsStore.settings;
   },
   beforeDestroy() {
     this.remove();
@@ -133,7 +147,7 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .nav-container {
   @apply relative px-8 mx-auto;
   max-width: 57.5rem;
@@ -169,12 +183,21 @@ li {
 
   background: #000;
 }
+@screen md {
+  .nav-close {
+    right: 1rem;
+  }
+}
 @screen lg {
   .nav-container {
     @apply px-5;
   }
+
+  .nav-close {
+    right: 0;
+  }
 }
-// component transition
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;

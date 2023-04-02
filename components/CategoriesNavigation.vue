@@ -1,13 +1,8 @@
 <template>
-  <div class="flex flex-wrap justify-center md:mb-8">
+  <div v-if="settings" class="flex flex-wrap justify-center md:mb-8">
+    <nuxt-link class="category-link" to="/categories/"> Wszystko </nuxt-link>
     <nuxt-link
-      class="category-link"
-      to="/categories/"
-    >
-      Wszystko
-    </nuxt-link>
-    <nuxt-link
-      v-for="category in categories"
+      v-for="category in filtered"
       :key="category.uid"
       class="category-link"
       :to="`/category/${category.uid}`"
@@ -19,15 +14,48 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@nuxtjs/composition-api";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
+import { SettingsInterface } from "~/interfaces/SettingsInterface";
+import { useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "CategoriesNavigation",
   props: {
     categories: {
       type: Array as PropType<CategoryInterface[]>,
-      default: () => []
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      settings: null as null | SettingsInterface,
+      settingsStore: useSettingsStore(),
+    };
+  },
+  async fetch() {
+    if (this.settingsStore.settings == null) {
+      const response = await this.settingsStore.fetch();
+
+      if (response != null) {
+        this.settings = response;
+      }
     }
-  }
+  },
+  mounted() {
+    if (this.settingsStore.settings) {
+      this.settings = this.settingsStore.settings
+    }
+  },
+  computed: {
+    filtered() {
+      if (this.settings) {
+        if (this.settings.navigation.show_empty_categories === false) {
+          this.categories.filter((category) => category);
+        }
+      }
+
+      return this.categories;
+    },
+  },
 });
 </script>
 

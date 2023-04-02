@@ -22,7 +22,7 @@
       </nav>
       <section
         v-if="product != null"
-        class="flex font-serif flex-col md:flex-row"
+        class="flex font-serif flex-col md:flex-row mb-16"
       >
         <div class="max-w-[480px] w-full max-h-[520px] h-full">
           <div class="w-full h-full flex items-center justify-center">
@@ -49,11 +49,10 @@
             </carousel>
           </div>
         </div>
-        <div class="max-w-1/2 max-w-[526px] w-full md:ml-4 xl:ml-20 mb-4">
+        <div class="max-w-1/2 max-w-[526px] w-full md:ml-4 xl:ml-20">
           <h2 class="text-lg tracking-wide my-4 md:mt-0">
             {{ product.title }}
           </h2>
-          <!-- those should be computed properties -->
           <p
             v-if="product.price"
             class="font-serif font-normal text-[40px] leading-[40px] mb-4"

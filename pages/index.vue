@@ -4,14 +4,16 @@
         <div class="container pt-10 md:pt-20 md:h-full">
           <div class="mb-8 md:mb-30">
             <nuxt-picture
+              v-if="image != null"
               class="w-full hero-img"
-              src="/images/hero-bg@2x.jpg"
+              :src="image"
+              provider="strapi"
               preload
             />
           </div>
           <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
-            <p v-if="page" class="lg:-mx-1 md:text-lg hero-text">
-              {{ page.description }}
+            <p v-if="settings" class="lg:-mx-1 md:text-lg hero-text">
+              {{ settings.home_page.description }}
             </p>
             <div class="flex justify-center">
               <a
@@ -34,19 +36,17 @@
 
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
-import { get } from "lodash";
-
 import { mapState } from "pinia";
 import Categories from "~/components/Categories.vue";
 import NewProducts from "~/components/NewProducts.vue";
 import SectionInstagram from "~/components/SectionInstagram.vue";
 import SectionOnDemand from "~/components/SectionOnDemand.vue";
 import WithLoader from "~/components/WithLoader.vue";
-import { PageInterface } from "~/interfaces/PageInterface";
+import { SettingsInterface } from "~/interfaces/SettingsInterface";
 import {
   useProductsStore,
   useCategoriesStore,
-  usePagesStore,
+  useSettingsStore,
 } from "~/stores/main";
 
 export default defineComponent({
@@ -60,33 +60,34 @@ export default defineComponent({
   },
   data() {
     return {
-      page: null as null | PageInterface,
+      settings: null as null | SettingsInterface,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
-      pagesStore: usePagesStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
-    this.page = await this.pagesStore.fetchHomePage();
+    this.settings = this.settingsStore.settings;
     await this.categoriesStore.fetchCategories();
     await this.productsStore.fetchProducts();
+
+    if (this.settings == null) {
+      await this.settingsStore.fetch()
+      this.settings = this.settingsStore.settings;
+    }
   },
   fetchOnServer: false,
   computed: {
-    heroImage() {
-      return get(
-        this.page,
-        "image.data.attributes.url",
-        "/images/hero-bg@2x.jpg"
-      );
+    image() {
+      return this.settings?.home_page.coverImage.url;
     },
     ...mapState(useProductsStore, ["products"]),
     ...mapState(useCategoriesStore, ["categories"]),
-    ...mapState(usePagesStore, ["pages"]),
+    ...mapState(useSettingsStore, ["pages"]),
   },
 });
 </script>
-<style lang="scss">
+<style lang="postcss">
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -112,7 +113,7 @@ export default defineComponent({
   }
 }
 </style>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .hero-img {
   max-height: 528px;
 }

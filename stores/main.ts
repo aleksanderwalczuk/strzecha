@@ -1,20 +1,28 @@
 import { defineStore } from "pinia";
-import { CategoryInterface, ParentCategory } from "~/interfaces/CategoryInterface";
+import {
+  CategoryInterface,
+  ParentCategory,
+} from "~/interfaces/CategoryInterface";
 import { ProductInterface } from "~/interfaces/ProductInterface";
 import { PageInterface } from "~/interfaces/PageInterface";
 import { Paginated } from "~/interfaces/base";
+import { SettingsInterface } from "~/interfaces/SettingsInterface";
+import { StrapiResponseInterface } from "~/interfaces/StrapiResponseInterface";
 
-type ParentCategoryLinkObject = Record<ParentCategory["uid"], {
-  name: ParentCategory["name"]
-  data: CategoryInterface[]
-}>;
+type ParentCategoryLinkObject = Record<
+  ParentCategory["uid"],
+  {
+    name: ParentCategory["name"];
+    data: CategoryInterface[];
+  }
+>;
 
 export const useCategoriesStore = defineStore("Categories", {
   state: () => ({
     // all these properties will have their type inferred automatically
     categories: [] as CategoryInterface[],
     activeCategoryUid: null as string | null,
-    parentCategories: [] as ParentCategory[]
+    parentCategories: [] as ParentCategory[],
   }),
   getters: {
     inNavigation(): CategoryInterface[] {
@@ -22,7 +30,9 @@ export const useCategoriesStore = defineStore("Categories", {
       return this.categories.filter(({ onHomepage }) => onHomepage);
     },
     activeCategory(): CategoryInterface | null {
-      const category = this.categories.find(({ uid }) => uid === this.activeCategoryUid);
+      const category = this.categories.find(
+        ({ uid }) => uid === this.activeCategoryUid
+      );
 
       if (category != null) {
         return category;
@@ -31,7 +41,9 @@ export const useCategoriesStore = defineStore("Categories", {
       return null;
     },
     activeParentCategory: (state) => {
-      const activeCategory = state.categories.find(({ uid }) => uid === state.activeCategoryUid);
+      const activeCategory = state.categories.find(
+        ({ uid }) => uid === state.activeCategoryUid
+      );
 
       if (activeCategory == null) {
         return null;
@@ -39,21 +51,24 @@ export const useCategoriesStore = defineStore("Categories", {
       return activeCategory.parentCategory;
     },
     linksWithParentCategories(): ParentCategoryLinkObject {
-      const parentCategories = this.parentCategories
-        .reduce<ParentCategoryLinkObject>((acc, parentCategory) => ({
-        ...acc,
-        [parentCategory.uid]: {
-          name: parentCategory.name,
-          data: []
-        }
-      }), {});
+      const parentCategories =
+        this.parentCategories.reduce<ParentCategoryLinkObject>(
+          (acc, parentCategory) => ({
+            ...acc,
+            [parentCategory.uid]: {
+              name: parentCategory.name,
+              data: [],
+            },
+          }),
+          {}
+        );
 
       return this.categories.reduce((acc, category) => {
         const key = category.parentCategory.uid;
         acc[key].data.push(category);
         return acc;
       }, parentCategories);
-    }
+    },
   },
   actions: {
     async fetchCategories() {
@@ -71,7 +86,9 @@ export const useCategoriesStore = defineStore("Categories", {
     },
     async fetchParentCategories() {
       try {
-        this.parentCategories = await this.$nuxt.$strapi.find("parent-categories");
+        this.parentCategories = await this.$nuxt.$strapi.find(
+          "parent-categories"
+        );
       } catch (error) {
         // showTooltip(error)
         // let the form component display the error
@@ -82,8 +99,8 @@ export const useCategoriesStore = defineStore("Categories", {
 
     async getCategoryById(name: string) {
       await this.$nuxt.$strapi.find("categories", name);
-    }
-  }
+    },
+  },
 });
 
 export const useProductsStore = defineStore("Products", {
@@ -91,28 +108,33 @@ export const useProductsStore = defineStore("Products", {
     // all these properties will have their type inferred automatically
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     products: {
-      results: []
+      results: [],
     } as Paginated<ProductInterface[]>,
     active: null as ProductInterface | null,
-    categories: useCategoriesStore()
+    categories: useCategoriesStore(),
   }),
 
   getters: {
     activeProduct(): ProductInterface | null {
       return this.active;
-    }
+    },
   },
   actions: {
-    async fetchProducts(args? : {
-      page?: number,
-      category?: CategoryInterface["uid"]
+    async fetchProducts(args?: {
+      page?: number;
+      category?: CategoryInterface["uid"];
     }): Promise<Paginated<ProductInterface[]> | unknown> {
       try {
-        this.products = await this.$nuxt.$strapi.find<Paginated<ProductInterface[]>>(
-          "products", args != null ? {
-            ...(args.category != null ? {category: args.category} : {} ),
-            ...(args.page != null ? {page: args.page} : {} )
-          } : undefined
+        this.products = await this.$nuxt.$strapi.find<
+          Paginated<ProductInterface[]>
+        >(
+          "products",
+          args != null
+            ? {
+                ...(args.category != null ? { category: args.category } : {}),
+                ...(args.page != null ? { page: args.page } : {}),
+              }
+            : undefined
         );
       } catch (error) {
         // showTooltip(error)
@@ -133,24 +155,33 @@ export const useProductsStore = defineStore("Products", {
         this.active = req;
         this.categories.activeCategoryUid = this.active?.category.uid;
       }
-    }
-  }
+    },
+  },
 });
 
-export const usePagesStore = defineStore("Pages", {
+export const useSettingsStore = defineStore("Settings", {
   state: () => ({
     // all these properties will have their type inferred automatically
-    pages: []
+    pages: [],
+    settings: null as SettingsInterface | null,
   }),
   actions: {
-    async fetchHomePage(): Promise<PageInterface> {
-      try {
-        return this.$nuxt.$strapi.find<PageInterface>("home-page");
-      } catch (error) {
-        // showTooltip(error)
-        // let the form component display the error
-        throw error;
+    async fetch(): Promise<SettingsInterface | undefined> {
+      if (this.settings == null) {
+        try {
+          const response = await this.$nuxt.$strapi.find<
+            SettingsInterface
+          >("settings");
+
+          const result = response;
+
+          this.settings = result;
+        } catch (e) {
+          throw e;
+        }
+
+        return this.settings;
       }
-    }
-  }
+    },
+  },
 });

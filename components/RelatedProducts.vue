@@ -41,7 +41,6 @@ export default defineComponent({
           uid: this.product.category.uid,
           omit: this.product.uid
         }})
-        console.log(req)
         this.products = req;
     },
     components: { CategoryItem }

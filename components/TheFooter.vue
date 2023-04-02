@@ -1,79 +1,66 @@
 <template>
   <footer class="bg-black-500 text-white pt-14 pb-6">
     <div class="container">
-      <h2 class="mb-10">
-        <nuxt-link
-          to="/"
-          class="nav-site-title font-title font-normal uppercase"
-        >
-          {{ title }}
-        </nuxt-link>
-      </h2>
-      <div class="flex flex-row flex-wrap">
-        <div class="footer-item">
-          <h3 class="mb-4">
-            Porozmawiajmy
-          </h3>
-          <ul class="underline">
-            <li>
-              <a
-                href="tel:0048601663227"
-                rel="noopener noreferrer"
-              >+ 48 601 663 227
-              </a>
-            </li>
-            <li>
-              <a
-                href="mailto:strzecha@gmail.com"
-                target="blank"
-                rel="noopener"
-              >strzecha@gmail.com
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="footer-item">
-          <h3 class="mb-4">
-            Odwiedź nas
-          </h3>
-          <a
-            href="https://goo.gl/maps/nXQbGRmoVL8VThyH6"
-            rel="noopener"
-            target="blank"
-            class="block"
+      <div class="md:flex">
+        <h2 class="mb-10">
+          <nuxt-link
+            to="/"
+            class="nav-site-title font-title font-normal uppercase"
           >
-            <ul>
-              <li class="underline">Wzgórze Mickiewicza</li>
-              <li>Gdańsk</li>
+            {{ title }}
+          </nuxt-link>
+        </h2>
+        <div v-if="settings" class="flex-1 flex flex-row flex-wrap justify-end">
+          <div class="footer-item">
+            <h3 class="mb-4">Porozmawiajmy</h3>
+            <ul class="underline">
+              <li>
+                <a :href="`tel:${sanitizedPhone}`" rel="noopener noreferrer"
+                  >{{ settings.phone }}
+                </a>
+              </li>
+              <li>
+                <a
+                  :href="`mailto:${settings.contact.email}`"
+                  target="blank"
+                  rel="noopener"
+                  >{{ settings.contact.email }}
+                </a>
+              </li>
             </ul>
-          </a>
-        </div>
-        <div class="footer-item w-full md:w-auto">
-          <h3 class="mb-4">
-            Bądź na bieżąco
-          </h3>
-          <div class="flex">
-            <div class="flex font-title">
-              <a
-                href="https://www.facebook.com/strzechagdansk"
-                class="social-item"
-                target="blank"
-              >fb
-              </a>
-            </div>
-            <div class="flex font-title">
-              <a
-                href="https://www.instagram.com/strzechapl/"
-                class="social-item"
-                target="blank"
-              >ig
-              </a>
+          </div>
+          <div class="footer-item">
+            <h3 class="mb-4">Odwiedź nas</h3>
+            <a
+              href="https://goo.gl/maps/nXQbGRmoVL8VThyH6"
+              rel="noopener"
+              target="blank"
+              class="block"
+            >
+              <ul>
+                <li class="underline">{{ settings.contact.address_1 }}</li>
+                <li>{{ settings.contact.address_2 }}</li>
+              </ul>
+            </a>
+          </div>
+          <div class="footer-item w-full md:w-auto">
+            <h3 class="mb-4">Bądź na bieżąco</h3>
+            <div class="flex">
+              <div
+                v-for="social in settings.socials"
+                :key="social.name"
+                class="flex font-title"
+              >
+                <a :href="social.url" class="social-item" target="blank"
+                  >{{ social.label.toUpperCase() }}
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <p class="text-xs text-gray-550">
-        Strzecha 2021. All rights reserved.
+        Strzecha {{ updateYear }}. All rights reserved.
       </p>
     </div>
   </footer>
@@ -81,6 +68,8 @@
 
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
+import { SettingsInterface } from "~/interfaces/SettingsInterface";
+import { useSettingsStore } from "../stores/main";
 
 export default defineComponent({
   name: "PageFooter",
@@ -88,13 +77,59 @@ export default defineComponent({
     title: {
       type: String,
       required: false,
-      default: "Strzecha"
+      default: "Strzecha",
+    },
+  },
+  data() {
+    return {
+      settings: null as SettingsInterface | null,
+      settingsStore: useSettingsStore(),
+    };
+  },
+  async mounted() {
+    try {
+      const res = await this.settingsStore.fetch();
+
+      if (res) {
+        this.settings = res;
+      }
+    } catch (error) {
+      throw error;
     }
-  }
+  },
+  computed: {
+    sanitizedPhone() {
+      if (this.settings == null) {
+        return "";
+      }
+
+      let result = this.settings.contact.phone;
+      const [firstChar, ...rest] = result;
+
+      if (firstChar === "+") {
+        result = ["00", ...rest].join("");
+      }
+
+      return result
+        .split("")
+        .map((char) => Number.parseInt(char, 10))
+        .filter((num) => Number.isNaN(num) === false)
+        .join("");
+    },
+    updateYear() {
+      if (this.settings == null) {
+        return "";
+      }
+
+      const date = new Date(this.settings.updatedAt);
+
+      return date.getFullYear();
+    },
+  },
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .footer-item {
   @apply mb-14;
 }

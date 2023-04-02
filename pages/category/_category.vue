@@ -6,7 +6,7 @@
       <categories-navigation :categories="categories" />
       <template v-if="products.results">
         <section v-if="products.results.length > 0"
-          class="grid grid-cols-2 gap-2 mt-8 md:grid-cols-3 md:gap-3 font-serif"
+          class="grid grid-cols-2 gap-2 mt-8 md:grid-cols-3 md:gap-3 font-serif pb-16"
         >
           <category-item
             v-for="product in activeCategoryProducts"
@@ -58,10 +58,7 @@ export default defineComponent({
 
     activeCategoryProducts(): ProductInterface[] {
       return this.products.results.filter(
-        (product) => {
-          console.log(product)
-          return product.category.uid === this.activeId;
-        }
+        (product) =>  product.category.uid === this.activeId
       );
     }
   },
