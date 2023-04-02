@@ -113,7 +113,7 @@ export default defineComponent({
   }
 });
 </script>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 
 .container {
   @apply px-8;

@@ -56,7 +56,7 @@
               </div>
             </div>
             <div class="category-thumbnail">
-              <nuxt-img :src="image" />
+              <nuxt-img provider="strapi" :src="image" />
             </div>
           </div>
         </div>
