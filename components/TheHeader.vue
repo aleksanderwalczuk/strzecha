@@ -10,7 +10,10 @@
                   for="search"
                   class="cursor-pointer"
                 >
-                  <nuxt-img src="/icons/icon-search.svg" />
+                  <img
+                    src="/icons/icon-search.svg"
+                    alt=""
+                  />
                 </label>
                 <div class="absolute top-0 left-9">
                   <input
@@ -43,7 +46,10 @@
                   class="nav-link"
                   to="/blog/"
                 >
-                  <nuxt-img src="/icons/icon-lang.svg" />
+                  <img
+                    src="/icons/icon-lang.svg"
+                    alt=""
+                  />
                 </nuxt-link>
               </nav>
             </div>

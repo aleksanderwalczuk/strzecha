@@ -79,9 +79,10 @@
           class="flex text-lg mx-auto justify-center mt-10 items-center"
         >
           <span>Zobacz wszystkie</span>
-          <nuxt-img
+          <img
             src="/icons/icon-arrow.svg"
             class="ml-2"
+            alt=""
           />
         </a>
       </div> -->

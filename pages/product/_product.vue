@@ -134,7 +134,7 @@ import { get } from "lodash";
 import { mapState } from "pinia";
 import { ParentCategory } from "~/interfaces/CategoryInterface";
 import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
-import { useCategoriesStore, useProductsStore } from "~/stores/main";
+import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/stores/main";
 import RelatedProducts from "~/components/RelatedProducts.vue";
 import WithLoader from "~/components/WithLoader.vue";
 
@@ -149,12 +149,17 @@ export default defineComponent({
       activeId: null as string | null,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
     await this.productsStore.setActiveByUid(this.$route.params.product);
     await this.productsStore.fetchProducts();
     await this.categoriesStore.fetchCategories();
+
+    if (this.settingsStore.settings == null) {
+      await this.settingsStore.fetch();
+    }
   },
   computed: {
     ...mapState(useCategoriesStore, ["categories"]),
