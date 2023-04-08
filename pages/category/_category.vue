@@ -3,48 +3,54 @@
     <div
       class="min-h-screen container pt-8 md:pt-10"
     >
-      <with-results :loading="$fetchState.pending" :products="products" @update="updateProducts" />
+      <with-results
+        :loading="$fetchState.pending"
+        :products="products"
+        @update="updateProducts"
+      />
     </div>
   </with-loader>
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
 import { mapState } from "pinia";
-import CategoryItem from "~/components/CategoryItem.vue";
 import { ProductInterface } from "~/interfaces/ProductInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
-import Pagination from "~/components/Pagination.vue";
 import WithLoader from "~/components/WithLoader.vue";
 import WithResults from "~/components/WithResults.vue";
 
 export default defineComponent({
   name: "CategoryPage",
-  components: { CategoryItem, Pagination, WithLoader, WithResults },
+  components: {
+    WithLoader, WithResults,
+  },
   data() {
     return {
       activeId: null as string | null,
       productsStore: useProductsStore(),
-      categoriesStore: useCategoriesStore()
+      categoriesStore: useCategoriesStore(),
     };
   },
   async fetch() {
     await this.categoriesStore.getCategoryById(this.$route.params.category);
     const page = this.$route.query.p ? Number(this.$route.query.p) : undefined;
-    await this.productsStore.fetchProducts({ page, category: this.$route.params.category});
+    await this.productsStore.fetchProducts({
+      page,
+      category: this.$route.params.category,
+    });
   },
   computed: {
-
     ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useCategoriesStore, {
-      activeCategory: "activeCategory"
+      activeCategory: "activeCategory",
     }),
     ...mapState(useProductsStore, ["products"]),
 
     activeCategoryProducts(): ProductInterface[] {
       return this.products.results.filter(
-        (product) =>  product.category.uid === this.activeId
+        (product) => product.category.uid === this.activeId
       );
-    }
+    },
   },
   mounted() {
     if (this.$route.params.category != null) {
@@ -54,10 +60,15 @@ export default defineComponent({
   },
   methods: {
     async updateProducts() {
-      const page = this.$route.query.p ? Number(this.$route.query.p) : undefined;
-      await this.productsStore.fetchProducts({ page, category: this.$route.params.category });
-    }
-  }
+      const page = this.$route.query.p
+        ? Number(this.$route.query.p)
+        : undefined;
+      await this.productsStore.fetchProducts({
+        page,
+        category: this.$route.params.category,
+      });
+    },
+  },
 });
 </script>
 <style lang="postcss" scoped>

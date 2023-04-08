@@ -1,13 +1,15 @@
 <template>
-  <section class="pt-20 pb-16 lg:pb-56">
+  <section class="pt-20 pb-16 lg:pb-56 new-products">
     <div class="container">
-      <h2 class="h2">Polecane</h2>
+      <h2 class="h2">
+        Polecane
+      </h2>
       <div class="hidden md:flex">
         <client-only>
           <nuxt-link
-            :to="`/product/${product.uid}`"
             v-for="product in trimmed"
             :key="product.uid"
+            :to="`/product/${product.uid}`"
             class="product-item-link new-product-item flex-grow"
           >
             <figure class="new-product-item">
@@ -25,8 +27,10 @@
               </div>
               <figcaption>
                 <span class="flex mt-4 justify-center md:justify-start">
-                  <span>{{ truncate(product.title, { length: 30, separator: " "}) }}</span>
-                  <nuxt-img
+                  <span>{{
+                    truncate(product.title, { length: 30, separator: " " })
+                  }}</span>
+                  <img
                     src="/icons/icon-arrow.svg"
                     class="ml-2 hidden md:block"
                   />
@@ -43,7 +47,10 @@
             :pagination-padding="4"
             :pagination-color="'gray-450'"
           >
-            <slide v-for="product in trimmed" :key="product.uid">
+            <slide
+              v-for="product in trimmed"
+              :key="product.uid"
+            >
               <nuxt-link
                 :to="`/product/${product.uid}`"
                 class="product-item-link new-product-item"
@@ -59,11 +66,11 @@
                     />
                   </div>
                   <figcaption>
-                  <div
-                      class="flex mt-4 justify-center md:justify-start"
-                    >
-                      <span>{{ truncate(product.title, { length: 30, separator: " "}) }}</span>
-                      <nuxt-img
+                    <div class="flex mt-4 justify-center md:justify-start">
+                      <span>{{
+                        truncate(product.title, { length: 30, separator: " " })
+                      }}</span>
+                      <img
                         src="/icons/icon-arrow.svg"
                         class="ml-2 hidden md:block"
                       />
@@ -89,7 +96,7 @@ export default defineComponent({
   data() {
     return {
       store: useProductsStore(),
-      products: [] as ProductInterface[]
+      products: [] as ProductInterface[],
     };
   },
   async fetch() {
@@ -102,23 +109,22 @@ export default defineComponent({
   computed: {
     trimmed() {
       return this.products.slice(-3);
-    }
+    },
   },
-  mounted() {},
   methods: {
     truncate,
     isArrEven(arr: unknown[]): null | boolean {
       return arr.length % 2 ? Boolean(0) : Boolean(1);
-    }
-  }
+    },
+  },
 });
 </script>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .new-product-item .relative > .absolute {
   background: rgba(198, 198, 198, 0.5);
 }
 .new-product-item {
-  //@apply max-w-xs h-96;
+  /* @apply max-w-xs h-96; */
 }
 .product-item-link {
   @apply block;
@@ -126,21 +132,25 @@ export default defineComponent({
 .new-product-item:nth-child(even) {
   @apply mx-6;
 }
-//.new-product-item:first-child {
-//  @apply mr-6;
-//}
-//.new-product-item:last-child {
-//  @apply ml-6;
-//}
-//.new-product-item:nth-child(odd) {
-//  @apply mx-6;
-//}
-.VueCarousel-dot {
+/* .new-product-item:first-child { */
+/* @apply mr-6; */
+/* } */
+/* .new-product-item:last-child { */
+/* @apply ml-6; */
+/* } */
+/* .new-product-item:nth-child(odd) { */
+/* @apply mx-6; */
+/* } */
+</style>
+<style lang="postcss">
+
+.new-products .VueCarousel-dot {
   @apply focus:ring-0;
   height: 2px !important;
   border-radius: 0 !important;
 }
-.VueCarousel-dot-container {
+.new-products .VueCarousel-dot-container {
   margin-top: 0 !important;
 }
+
 </style>

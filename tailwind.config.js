@@ -6,7 +6,7 @@ module.exports = {
     "./layouts/**/*.vue",
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
-    "./nuxt.config.{js,ts}"
+    "./nuxt.config.{js,ts}",
   ],
 
   theme: {
@@ -15,7 +15,7 @@ module.exports = {
         default: "#111111",
         leading: {
           DEFAULT: "#111111",
-          hover: "#111111"
+          hover: "#111111",
         },
         gray: {
           25: "#F1F1F1",
@@ -30,20 +30,20 @@ module.exports = {
           550: "#818080",
           600: "#727272",
           650: "#767676",
-          700: "#5C5C5C"
+          700: "#5C5C5C",
         },
         black: {
           300: "#2C2022",
-          500: "#212020"
+          500: "#212020",
         },
         green: {
-          300: "#28E8A8"
+          300: "#28E8A8",
         },
         red: {
-          300: "#FF4DA2"
+          300: "#FF4DA2",
         },
         error: "#FF4DA2",
-        success: "#28E8A8"
+        success: "#28E8A8",
       },
       fontSize: {
         "6xl": ["4rem", { lineHeight: "1.143" }],
@@ -58,14 +58,14 @@ module.exports = {
         sm: "0.9375rem",
         xs: ["0.875rem", { lineHeight: "1.214" }],
         "2xs": ["0.75rem"],
-        "3xs": ["0.5rem", { lineHeight: "1.25" }]
+        "3xs": ["0.5rem", { lineHeight: "1.25" }],
       },
       borderRadius: {
         sm: "0.1875rem",
-        lg: "0.5625rem"
+        lg: "0.5625rem",
       },
       margin: {
-        30: "7.5rem"
+        30: "7.5rem",
       },
       typography: {
         DEFAULT: {
@@ -77,40 +77,40 @@ module.exports = {
               fontSize: "3rem",
               lineHeight: "1.143",
               letterSpacing: "-0.01em",
-              marginBottom: "5.5rem"
+              marginBottom: "5.5rem",
             },
             h2: {
               fontSize: "2rem",
               letterSpacing: "-0.01em",
-              lineHeight: "1.25"
+              lineHeight: "1.25",
             },
             p: {
               marginTop: "0",
               marginBottom: "1.5rem",
-              lineHeight: "1.5rem"
+              lineHeight: "1.5rem",
             },
             strong: {
-              fontWeight: "700"
+              fontWeight: "700",
             },
-            "> :first-child": false
-          }
-        }
-      }
+            "> :first-child": false,
+          },
+        },
+      },
     },
     transitionDuration: {
-      160: "160ms"
+      160: "160ms",
     },
     lineHeight: {
-      snug: "1.3"
+      snug: "1.3",
     },
     fontFamily: {
       sans: "Lato, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
       serif: "EB Garamond",
-      title: "'Open Sans', sans-serif"
-    }
+      title: "'Open Sans', sans-serif",
+    },
   },
   variants: {
-    extend: {}
+    extend: {},
   },
   plugins: [
     plugin(({ addBase }) => {
@@ -118,22 +118,22 @@ module.exports = {
         html: {
           color: "#111111",
           fontWeight: "400",
-          lineHeight: "1.625"
+          lineHeight: "1.625",
         },
         ".fade-enter-active, .fade-leave-active": {
-          transition: "opacity ease-in-out 140ms"
+          transition: "opacity ease-in-out 140ms",
         },
         ".fade-enter, .fade-leave-to": {
-          opacity: 0
+          opacity: 0,
         },
         "::placeholder": {
-          opacity: 1
+          opacity: 1,
         },
         "::selection": {
           backgroundColor: "#111111",
-          color: "white"
-        }
+          color: "white",
+        },
       });
-    })
-  ]
+    }),
+  ],
 };

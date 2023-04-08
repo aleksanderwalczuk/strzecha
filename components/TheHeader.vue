@@ -6,9 +6,14 @@
           <div class="flex justify-between items-center py-4 md:py-10">
             <div class="search-container relative z-20 w-3/12">
               <form class="relative">
-                <!-- there should be a checkbox to toggle the query search input -->
-                <label for="search" class="cursor-pointer">
-                  <nuxt-img src="/icons/icon-search.svg" />
+                <label
+                  for="search"
+                  class="cursor-pointer"
+                >
+                  <img
+                    src="/icons/icon-search.svg"
+                    alt=""
+                  />
                 </label>
                 <div class="absolute top-0 left-9">
                   <input
@@ -32,13 +37,27 @@
             </div>
             <div class="relative top-0 z-20 hidden md:block w-3/12">
               <nav class="flex gap-x-4 items-center justify-end">
-                <nuxt-link class="nav-link" to="/contact"> Kontakt </nuxt-link>
-                <nuxt-link class="nav-link" to="/blog/">
-                  <nuxt-img src="/icons/icon-lang.svg" />
-                </nuxt-link>
+                <a
+                  class="nav-link"
+                  :href="`mailto:${settingsStore.settings.contact.email}`"
+                >
+                  Kontakt
+                </a>
+                <a
+                  class="nav-link"
+                  :href="`mailto:${settingsStore.settings.contact.email}`"
+                >
+                  <img
+                    src="/icons/icon-lang.svg"
+                    alt=""
+                  />
+                </a>
               </nav>
             </div>
-            <nuxt-link to="/" class="nav-site-title font-title md:hidden">
+            <nuxt-link
+              to="/"
+              class="nav-site-title font-title md:hidden"
+            >
               <h2 class="nav-site-title font-light font-title uppercase">
                 Strzecha
               </h2>
@@ -53,7 +72,9 @@
             >
               Wszystkie produkty
             </button>
-            <button class="nav-btn hover:text-gray-650">Na zamówienie</button>
+            <button class="nav-btn hover:text-gray-650">
+              Na zamówienie
+            </button>
           </nav>
         </div>
       </div>
@@ -68,9 +89,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from "@nuxtjs/composition-api";
+import { defineComponent, ref } from "@nuxtjs/composition-api";
 import { debounce } from "lodash";
-import { useCategoriesStore, useProductsStore } from "~/stores/main";
+import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "PageHeader",
@@ -101,12 +122,12 @@ export default defineComponent({
     return {
       isNavOpen: false,
       categoriesStore: useCategoriesStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
     await this.categoriesStore.fetchCategories();
   },
-  methods: {},
   watch: {
     search: {
       async handler() {
@@ -115,12 +136,10 @@ export default defineComponent({
         }
 
         this.productsStore.query = this.search;
-
-        // await this.productsStore.searchProducts(this.search);
-
       },
     },
   },
+  methods: {},
 });
 </script>
 <style lang="postcss" scoped>

@@ -12,22 +12,32 @@
       :src="productThumbnail"
     />
     <div class="md:hidden">
-      <p class="text-center">{{ product.title }}</p>
-      <span class="block text-center">{{ product.price }}<span v-if="product.currency">{{ product.currency.symbol || 'zł' }}</span></span>
+      <p class="text-center">
+        {{ product.title }}
+      </p>
+      <span
+        class="block text-center"
+      >{{ product.price
+      }}<span v-if="product.currency">{{
+        product.currency.symbol || "zł"
+      }}</span></span>
     </div>
     <div
       class="product-overlay"
-      :class="inverted === false
-        ? 'product-overlay-animation'
-        : 'product-overlay-animation-inverted'
-      "
+      :class="{
+        'product-overlay-animation' : inverted === false,
+        'product-overlay-animation-inverted' : inverted === true,
+        'invisible': !overlay
+      }"
     >
       <h3 class="mb-4 text-[18px] text-center px-4">
         {{ product.title }}
       </h3>
       <p class="text-center">
         <span class="text-[32px] leading-[48px]">{{ product.price }}</span>
-        <span v-if="product.currency">{{ product.currency.symbol || 'zł' }}</span>
+        <span v-if="product.currency">{{
+          product.currency.symbol || "zł"
+        }}</span>
       </p>
     </div>
   </nuxt-link>
@@ -41,12 +51,17 @@ export default defineComponent({
   props: {
     product: {
       type: Object as PropType<ProductInterface>,
-      required: true
+      required: true,
     },
     inverted: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    overlay: {
+      type: Boolean,
+      default: true,
+    },
+
   },
   computed: {
     productThumbnail(): string {
@@ -54,8 +69,8 @@ export default defineComponent({
       const baseUrl = get(firstImage, "url", "");
       const mediumThumbnail = get(firstImage, "formats.medium.url", null);
       return mediumThumbnail || baseUrl;
-    }
-  }
+    },
+  },
 });
 </script>
 <style lang="postcss" scoped>

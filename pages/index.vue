@@ -1,36 +1,38 @@
 <template>
-    <with-loader :loading="$fetchState.pending">
-      <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
-        <div class="container pt-10 md:pt-20 md:h-full">
-          <div class="mb-8 md:mb-30">
-            <nuxt-picture
-              v-if="image != null"
-              class="w-full hero-img"
-              :src="image"
-              provider="strapi"
-              preload
-            />
-          </div>
-          <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
-            <p v-if="settings" class="lg:-mx-1 md:text-lg hero-text">
-              {{ settings.home_page.description }}
-            </p>
-            <div class="flex justify-center">
-              <a
-                href="#"
-                class="block px-8 md:px-9 py-2 md:pb-3 mx-auto border border-black-300 mt-12 md:mt-16"
-              >
-                Skontaktuj się z nami
-              </a>
-            </div>
+  <with-loader :loading="$fetchState.pending">
+    <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
+      <div class="container pt-10 md:pt-20 md:h-full">
+        <div class="mb-8 md:mb-30 mx-auto">
+          <nuxt-picture
+            v-if="image != null"
+            class="hero-img flex justify-center"
+            :src="image.url"
+            provider="strapi"
+            preload
+          />
+        </div>
+        <div class="md:flex md:flex-col md:w-9/12 mx-auto text-center">
+          <p
+            v-if="settings"
+            class="lg:-mx-1 md:text-lg hero-text"
+          >
+            {{ settings.home_page.description }}
+          </p>
+          <div class="flex justify-center">
+            <router-link
+              :to="{ name: 'categories'}"
+              class="block px-8 md:px-9 py-2 md:pb-3 mx-auto border border-black-300 mt-12 md:mt-16"
+            >
+              Zobacz ofertę
+            </router-link>
           </div>
         </div>
-      </section>
-      <NewProducts />
-      <Categories :categories="categories" />
-      <SectionOnDemand />
-      <SectionInstagram
-    />
+      </div>
+    </section>
+    <NewProducts />
+    <Categories :categories="categories" />
+    <SectionOnDemand />
+    <SectionInstagram />
   </with-loader>
 </template>
 
@@ -46,7 +48,7 @@ import { SettingsInterface } from "~/interfaces/SettingsInterface";
 import {
   useProductsStore,
   useCategoriesStore,
-  useSettingsStore,
+  useSettingsStore
 } from "~/stores/main";
 
 export default defineComponent({
@@ -72,14 +74,14 @@ export default defineComponent({
     await this.productsStore.fetchProducts();
 
     if (this.settings == null) {
-      await this.settingsStore.fetch()
+      await this.settingsStore.fetch();
       this.settings = this.settingsStore.settings;
     }
   },
   fetchOnServer: false,
   computed: {
     image() {
-      return this.settings?.home_page.coverImage.url;
+      return this.settings?.home_page.coverImage;
     },
     ...mapState(useProductsStore, ["products"]),
     ...mapState(useCategoriesStore, ["categories"]),

@@ -58,12 +58,18 @@
             class="font-serif font-normal text-[40px] leading-[40px] mb-4"
           >
             <span>{{ product.price }}</span>
-            <span v-if="product.currency" class="text-[18px] leading-[32px]">
+            <span
+              v-if="product.currency"
+              class="text-[18px] leading-[32px]"
+            >
               {{ product.currency.symbol }}
             </span>
           </p>
           <div class="flex flex-col lg:flex-row mb-10">
-            <a href="mailto:example@example.com" class="btn">
+            <a
+              href="mailto:example@example.com"
+              class="btn"
+            >
               <span class="mr-3">
                 <!-- eslint-disable -->
                 <svg
@@ -92,20 +98,33 @@
               </span>
               <span class="btn-label">Złóż ofertę</span>
             </a>
-            <div v-for="provider in product.providers" :key="provider.name">
-              <a :href="provider.url" class="btn btn-secondary" target="_blank">
+            <div
+              v-for="provider in product.providers"
+              :key="provider.name"
+            >
+              <a
+                :href="provider.url"
+                class="btn btn-secondary"
+                target="_blank"
+              >
                 <span class="btn-label">{{
                   provider.label || provider.name
                 }}</span>
               </a>
             </div>
           </div>
-          <p v-if="product.description" class="leading-[24px]">
+          <p
+            v-if="product.description"
+            class="leading-[24px]"
+          >
             {{ product.description }}
           </p>
         </div>
       </section>
-      <related-products v-if="product" :product="product" />
+      <related-products
+        v-if="product"
+        :product="product"
+      />
     </div>
   </with-loader>
 </template>
@@ -115,7 +134,7 @@ import { get } from "lodash";
 import { mapState } from "pinia";
 import { ParentCategory } from "~/interfaces/CategoryInterface";
 import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
-import { useCategoriesStore, useProductsStore } from "~/stores/main";
+import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/stores/main";
 import RelatedProducts from "~/components/RelatedProducts.vue";
 import WithLoader from "~/components/WithLoader.vue";
 
@@ -123,19 +142,24 @@ export default defineComponent({
   name: "ProductPage",
   components: {
     RelatedProducts,
-    WithLoader
+    WithLoader,
   },
   data() {
     return {
       activeId: null as string | null,
       categoriesStore: useCategoriesStore(),
       productsStore: useProductsStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
     await this.productsStore.setActiveByUid(this.$route.params.product);
     await this.productsStore.fetchProducts();
     await this.categoriesStore.fetchCategories();
+
+    if (this.settingsStore.settings == null) {
+      await this.settingsStore.fetch();
+    }
   },
   computed: {
     ...mapState(useCategoriesStore, ["categories"]),
@@ -144,8 +168,8 @@ export default defineComponent({
 
     activeParentCategory(): ParentCategory | undefined | null {
       if (
-        this.activeCategory == null ||
-        this.categoriesStore.parentCategories == null
+        this.activeCategory == null
+        || this.categoriesStore.parentCategories == null
       ) {
         return null;
       }
