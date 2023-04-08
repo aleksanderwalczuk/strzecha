@@ -67,7 +67,7 @@
           </p>
           <div class="flex flex-col lg:flex-row mb-10">
             <a
-              href="mailto:example@example.com"
+              :href="`mailto:${email}`"
               class="btn"
             >
               <span class="mr-3">
@@ -180,6 +180,9 @@ export default defineComponent({
     },
     productImages(): StrapiImageInterface[] {
       return get(this.product, "images", []);
+    },
+    email() {
+      return get(this.settingsStore.settings, "contact.email", "");
     },
   },
 });
