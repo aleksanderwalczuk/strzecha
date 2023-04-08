@@ -1,8 +1,19 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
+    "declaration": true,
+    "pretty": true,
+    "noEmitOnError": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "newLine": "lf",
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "target": "ES2018",
     "module": "ESNext",
-    "moduleResolution": "Node",
     "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "esModuleInterop": true,
     "allowJs": true,
@@ -15,7 +26,14 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@nuxt/types", "@nuxtjs/axios", "@nuxt/image", "@nuxtjs/strapi", "@types/lodash", "@pinia/nuxt"]
+    "types": [
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "@nuxt/image",
+      "@nuxtjs/strapi",
+      "@types/lodash",
+      "@pinia/nuxt"
+    ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }

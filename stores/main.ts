@@ -1,13 +1,11 @@
 import { defineStore } from "pinia";
 import {
   CategoryInterface,
-  ParentCategory,
+  ParentCategory
 } from "~/interfaces/CategoryInterface";
 import { ProductInterface } from "~/interfaces/ProductInterface";
-import { PageInterface } from "~/interfaces/PageInterface";
 import { Paginated } from "~/interfaces/base";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
-import { StrapiResponseInterface } from "~/interfaces/StrapiResponseInterface";
 
 type ParentCategoryLinkObject = Record<
   ParentCategory["uid"],
@@ -51,17 +49,16 @@ export const useCategoriesStore = defineStore("Categories", {
       return activeCategory.parentCategory;
     },
     linksWithParentCategories(): ParentCategoryLinkObject {
-      const parentCategories =
-        this.parentCategories.reduce<ParentCategoryLinkObject>(
-          (acc, parentCategory) => ({
-            ...acc,
-            [parentCategory.uid]: {
-              name: parentCategory.name,
-              data: [],
-            },
-          }),
-          {}
-        );
+      const parentCategories = this.parentCategories.reduce<ParentCategoryLinkObject>(
+        (acc, parentCategory) => ({
+          ...acc,
+          [parentCategory.uid]: {
+            name: parentCategory.name,
+            data: [],
+          },
+        }),
+        {}
+      );
 
       return this.categories.reduce((acc, category) => {
         const key = category.parentCategory.uid;
@@ -131,9 +128,9 @@ export const useProductsStore = defineStore("Products", {
           "products",
           args != null
             ? {
-                ...(args.category != null ? { category: args.category } : {}),
-                ...(args.page != null ? { page: args.page } : {}),
-              }
+              ...(args.category != null ? { category: args.category } : {}),
+              ...(args.page != null ? { page: args.page } : {}),
+            }
             : undefined
         );
       } catch (error) {
@@ -166,22 +163,21 @@ export const useSettingsStore = defineStore("Settings", {
     settings: null as SettingsInterface | null,
   }),
   actions: {
+    // eslint-disable-next-line consistent-return
     async fetch(): Promise<SettingsInterface | undefined> {
       if (this.settings == null) {
-        try {
-          const response = await this.$nuxt.$strapi.find<
-            SettingsInterface
-          >("settings");
+        const response = await this.$nuxt.$strapi.find<SettingsInterface>(
+          "settings"
+        );
 
-          const result = response;
+        const result = response;
 
-          this.settings = result;
-        } catch (e) {
-          throw e;
-        }
+        this.settings = result;
 
         return this.settings;
       }
+
+      return undefined;
     },
   },
 });

@@ -1,6 +1,6 @@
 import { StrapiImageInterface } from "../StrapiImageInterface";
 
-export interface HomePageInterface{
+export interface HomePageInterface {
   description: string;
   coverImage: StrapiImageInterface;
 }

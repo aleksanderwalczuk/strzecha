@@ -10,13 +10,20 @@
             {{ title }}
           </nuxt-link>
         </h2>
-        <div v-if="settings" class="flex-1 flex flex-row flex-wrap justify-end">
+        <div
+          v-if="settings"
+          class="flex-1 flex flex-row flex-wrap justify-end"
+        >
           <div class="footer-item">
-            <h3 class="mb-4">Porozmawiajmy</h3>
+            <h3 class="mb-4">
+              Porozmawiajmy
+            </h3>
             <ul class="underline">
               <li>
-                <a :href="`tel:${sanitizedPhone}`" rel="noopener noreferrer"
-                  >{{ settings.phone }}
+                <a
+                  :href="`tel:${sanitizedPhone}`"
+                  rel="noopener noreferrer"
+                >{{ settings.phone }}
                 </a>
               </li>
               <li>
@@ -24,13 +31,15 @@
                   :href="`mailto:${settings.contact.email}`"
                   target="blank"
                   rel="noopener"
-                  >{{ settings.contact.email }}
+                >{{ settings.contact.email }}
                 </a>
               </li>
             </ul>
           </div>
           <div class="footer-item">
-            <h3 class="mb-4">Odwiedź nas</h3>
+            <h3 class="mb-4">
+              Odwiedź nas
+            </h3>
             <a
               href="https://goo.gl/maps/nXQbGRmoVL8VThyH6"
               rel="noopener"
@@ -44,15 +53,20 @@
             </a>
           </div>
           <div class="footer-item w-full md:w-auto">
-            <h3 class="mb-4">Bądź na bieżąco</h3>
+            <h3 class="mb-4">
+              Bądź na bieżąco
+            </h3>
             <div class="flex">
               <div
                 v-for="social in settings.socials"
                 :key="social.name"
                 class="flex font-title"
               >
-                <a :href="social.url" class="social-item" target="blank"
-                  >{{ social.label.toUpperCase() }}
+                <a
+                  :href="social.url"
+                  class="social-item"
+                  target="blank"
+                >{{ social.label.toUpperCase() }}
                 </a>
               </div>
             </div>
@@ -86,17 +100,6 @@ export default defineComponent({
       settingsStore: useSettingsStore(),
     };
   },
-  async mounted() {
-    try {
-      const res = await this.settingsStore.fetch();
-
-      if (res) {
-        this.settings = res;
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
   computed: {
     sanitizedPhone() {
       if (this.settings == null) {
@@ -125,6 +128,13 @@ export default defineComponent({
 
       return date.getFullYear();
     },
+  },
+  async mounted() {
+    const res = await this.settingsStore.fetch();
+
+    if (res) {
+      this.settings = res;
+    }
   },
 });
 </script>

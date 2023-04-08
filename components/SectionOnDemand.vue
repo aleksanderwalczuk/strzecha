@@ -13,7 +13,8 @@
             Na zamówienie
           </h2>
           <p class="mt-6 lg:mt-4 mb-9">
-            Oferujemy możliwość zamówienia unikatowych produktów na specjalne życzenie klienta.
+            Oferujemy możliwość zamówienia unikatowych produktów na specjalne
+            życzenie klienta.
           </p>
           <div class="flex justify-center">
             <a
@@ -26,7 +27,7 @@
     </div>
   </section>
 </template>
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 div h2 {
   margin-bottom: 0;
 }

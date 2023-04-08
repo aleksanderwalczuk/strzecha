@@ -71,9 +71,9 @@ export default defineComponent({
   name: "HamburgerMenu",
   data() {
     return {
-      open: false
+      open: false,
     };
-  }
+  },
 });
 </script>
 

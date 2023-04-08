@@ -1,6 +1,14 @@
 <template>
-  <div v-if="settings" class="flex flex-wrap justify-center md:mb-8">
-    <nuxt-link class="category-link" to="/categories/"> Wszystko </nuxt-link>
+  <div
+    v-if="settings"
+    class="flex flex-wrap justify-center md:mb-8"
+  >
+    <nuxt-link
+      class="category-link"
+      to="/categories/"
+    >
+      Wszystko
+    </nuxt-link>
     <nuxt-link
       v-for="category in filtered"
       :key="category.uid"
@@ -40,11 +48,6 @@ export default defineComponent({
       }
     }
   },
-  mounted() {
-    if (this.settingsStore.settings) {
-      this.settings = this.settingsStore.settings
-    }
-  },
   computed: {
     filtered() {
       if (this.settings) {
@@ -55,6 +58,11 @@ export default defineComponent({
 
       return this.categories;
     },
+  },
+  mounted() {
+    if (this.settingsStore.settings) {
+      this.settings = this.settingsStore.settings;
+    }
   },
 });
 </script>
