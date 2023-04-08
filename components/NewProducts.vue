@@ -30,7 +30,7 @@
                   <span>{{
                     truncate(product.title, { length: 30, separator: " " })
                   }}</span>
-                  <nuxt-img
+                  <img
                     src="/icons/icon-arrow.svg"
                     class="ml-2 hidden md:block"
                   />
@@ -70,7 +70,7 @@
                       <span>{{
                         truncate(product.title, { length: 30, separator: " " })
                       }}</span>
-                      <nuxt-img
+                      <img
                         src="/icons/icon-arrow.svg"
                         class="ml-2 hidden md:block"
                       />
