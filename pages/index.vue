@@ -2,11 +2,11 @@
   <with-loader :loading="$fetchState.pending">
     <section class="hero-bg relative pb-14 md:pb-28 border-b border-grey-400">
       <div class="container pt-10 md:pt-20 md:h-full">
-        <div class="mb-8 md:mb-30">
+        <div class="mb-8 md:mb-30 mx-auto">
           <nuxt-picture
             v-if="image != null"
-            class="w-full hero-img"
-            :src="image"
+            class="hero-img flex justify-center"
+            :src="image.url"
             provider="strapi"
             preload
           />
@@ -19,12 +19,12 @@
             {{ settings.home_page.description }}
           </p>
           <div class="flex justify-center">
-            <a
-              href="#"
+            <router-link
+              :to="{ name: 'categories'}"
               class="block px-8 md:px-9 py-2 md:pb-3 mx-auto border border-black-300 mt-12 md:mt-16"
             >
-              Skontaktuj się z nami
-            </a>
+              Zobacz ofertę
+            </router-link>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default defineComponent({
   fetchOnServer: false,
   computed: {
     image() {
-      return this.settings?.home_page.coverImage.url;
+      return this.settings?.home_page.coverImage;
     },
     ...mapState(useProductsStore, ["products"]),
     ...mapState(useCategoriesStore, ["categories"]),
