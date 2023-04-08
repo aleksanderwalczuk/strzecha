@@ -36,21 +36,21 @@
             </div>
             <div class="relative top-0 z-20 hidden md:block w-3/12">
               <nav class="flex gap-x-4 items-center justify-end">
-                <nuxt-link
+                <a
                   class="nav-link"
-                  to="/contact"
+                  :href="`mailto:${settingsStore.settings.contact.email}`"
                 >
                   Kontakt
-                </nuxt-link>
-                <nuxt-link
+                </a>
+                <a
                   class="nav-link"
-                  to="/blog/"
+                  :href="`mailto:${settingsStore.settings.contact.email}`"
                 >
                   <img
                     src="/icons/icon-lang.svg"
                     alt=""
                   />
-                </nuxt-link>
+                </a>
               </nav>
             </div>
             <nuxt-link
@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
-import { useCategoriesStore } from "~/stores/main";
+import { useCategoriesStore, useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "PageHeader",
@@ -104,6 +104,7 @@ export default defineComponent({
     return {
       isNavOpen: false,
       categoriesStore: useCategoriesStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
