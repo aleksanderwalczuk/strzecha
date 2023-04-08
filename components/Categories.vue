@@ -38,7 +38,7 @@
               src="/icons/icon-arrow.svg"
               alt=""
               class="ml-2"
-            >
+            />
           </a>
         </div>
         <div class="md:w-1/2 md:min-h-[390px]">
@@ -100,17 +100,17 @@ export default defineComponent({
   props: {
     categories: {
       type: Array as PropType<CategoryInterface[]>,
-      default: () => [] as CategoryInterface[]
-    }
+      default: () => [] as CategoryInterface[],
+    },
   },
   data() {
     return {
       currentImage: {
         default: null,
-        x2: null
+        x2: null,
       },
       defaultHover: true,
-      hoveredCategoryName: null as CategoryInterface["name"] | null
+      hoveredCategoryName: null as CategoryInterface["name"] | null,
     };
   },
   computed: {
@@ -131,14 +131,14 @@ export default defineComponent({
         ({ name }) => name === this.activeCategoryName
       );
       return get(category, "image", null);
-    }
+    },
   },
 
   methods: {
     updateHoveredName(name: CategoryInterface["name"]) {
       this.hoveredCategoryName = name;
-    }
-  }
+    },
+  },
 });
 </script>
 <style lang="scss" scoped>

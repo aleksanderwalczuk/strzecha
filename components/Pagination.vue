@@ -8,17 +8,25 @@
         v-for="n in pagination.pageCount"
         :key="n"
       >
-        <template v-if="Number($route.query.p) === n || $route.query.p == null && n === 1">
-          <button class="underline p-4 underline-offset-4" disabled>
+        <template
+          v-if="
+            Number($route.query.p) === n || ($route.query.p == null && n === 1)
+          "
+        >
+          <button
+            class="underline p-4 underline-offset-4"
+            disabled
+          >
             {{ n }}
           </button>
         </template>
         <nuxt-link
           v-else
           class="p-4"
-          :to="{ path: $route.path, query: { p: n }}"
+          :to="{ path: $route.path, query: { p: n } }"
           @click.native="() => $emit('update')"
-        >{{ n }}
+        >
+          {{ n }}
         </nuxt-link>
       </li>
     </ul>
@@ -33,9 +41,9 @@ export default defineComponent({
   props: {
     pagination: {
       type: Object as PropType<Pagination>,
-      default: null
-    }
+      default: null,
+    },
   },
-  emits: ["update"]
+  emits: ["update"],
 });
 </script>

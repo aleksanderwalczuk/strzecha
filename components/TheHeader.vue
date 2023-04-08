@@ -1,9 +1,7 @@
 <template>
   <div>
     <header class="relative text-black h-[3.75rem] md:h-[10.5rem]">
-      <div
-        class="fixed min-w-full border-b z-10 bg-gray-50"
-      >
+      <div class="fixed min-w-full border-b z-10 bg-gray-50">
         <div class="container">
           <div class="flex justify-between items-center py-4 md:py-10">
             <div class="search-container relative z-20 w-3/12">
@@ -20,13 +18,11 @@
                     type="text"
                     name="search"
                     class="search-input md:block"
-                  >
+                  />
                 </div>
               </form>
             </div>
-            <div
-              class="floating-logo hidden md:block"
-            >
+            <div class="floating-logo hidden md:block">
               <nuxt-link
                 to="/"
                 class="nav-site-title font-title"
@@ -61,19 +57,15 @@
             </nuxt-link>
             <hamburger />
           </div>
-          <nav
-            class="hidden md:flex justify-center mb-[1.5rem]"
-          >
+          <nav class="hidden md:flex justify-center mb-[1.5rem]">
             <button
               class="nav-btn"
-              :class="isNavOpen ? 'nav-btn-active': 'hover:text-gray-650'"
+              :class="isNavOpen ? 'nav-btn-active' : 'hover:text-gray-650'"
               @click="isNavOpen = !isNavOpen"
             >
               Wszystkie produkty
             </button>
-            <button
-              class="nav-btn hover:text-gray-650"
-            >
+            <button class="nav-btn hover:text-gray-650">
               Na zamówienie
             </button>
           </nav>
@@ -99,22 +91,21 @@ export default defineComponent({
     title: {
       type: String,
       required: false,
-      default: "Strzecha"
-    }
+      default: "Strzecha",
+    },
   },
   data() {
     return {
       isNavOpen: false,
-      categoriesStore: useCategoriesStore()
+      categoriesStore: useCategoriesStore(),
     };
   },
   async fetch() {
     await this.categoriesStore.fetchCategories();
-  }
+  },
 });
 </script>
 <style lang="postcss" scoped>
-
 .container {
   @apply px-8;
 }

@@ -6,10 +6,16 @@
     >
       <nav class="nav-open-wrapper relative bg-gray-50 py-20">
         <div class="nav-container">
-          <button class="nav-close w-5 h-5" @click.self="close">
+          <button
+            class="nav-close w-5 h-5"
+            @click.self="close"
+          >
             <span class="sr-only"> Close </span>
           </button>
-          <div ref="navOpenedContainer" class="flex items-start">
+          <div
+            ref="navOpenedContainer"
+            class="flex items-start"
+          >
             <div class="flex flex-wrap justify-start w-1/2 lg:justify-between">
               <div
                 v-for="(category, key, index) in linksWithParentCategories"
@@ -24,16 +30,21 @@
                     v-for="{ createdAt, uid, name } in category.data"
                     :key="createdAt"
                   >
-                    <nuxt-link :to="`/category/${uid}`" @click.native="close">
+                    <nuxt-link
+                      :to="`/category/${uid}`"
+                      @click.native="close"
+                    >
                       {{ name }}
                     </nuxt-link>
                   </li>
                 </ul>
               </div>
               <div class="mr-auto">
-                <nuxt-link class="btn flex justify-start items-center lg:whitespace-nowrap" to="/categories/"
-                  ><span class="mr-2">Zobacz wszystkie</span
-                  ><svg
+                <nuxt-link
+                  class="btn flex justify-start items-center lg:whitespace-nowrap"
+                  to="/categories/"
+                >
+                  <span class="mr-2">Zobacz wszystkie</span><svg
                     width="33"
                     height="14"
                     viewBox="0 0 33 14"
@@ -56,7 +67,10 @@
               </div>
             </div>
             <div class="category-thumbnail">
-              <nuxt-img provider="strapi" :src="image" />
+              <nuxt-img
+                provider="strapi"
+                :src="image"
+              />
             </div>
           </div>
         </div>
@@ -82,7 +96,7 @@ export default defineComponent({
     return {
       categoriesStore: useCategoriesStore(),
       settingsStore: useSettingsStore(),
-      settings: null as null | SettingsInterface
+      settings: null as null | SettingsInterface,
     };
   },
   computed: {
@@ -91,8 +105,11 @@ export default defineComponent({
     ...mapState(useCategoriesStore, ["parentCategories"]),
     ...mapState(useCategoriesStore, ["linksWithParentCategories"]),
     image() {
-      return this.settings?.navigation?.menu_image?.url ?? "/images/nav-cat-thumbnail-1.jpg"
-    }
+      return (
+        this.settings?.navigation?.menu_image?.url
+        ?? "/images/nav-cat-thumbnail-1.jpg"
+      );
+    },
   },
   watch: {
     isVisible(value) {
@@ -124,8 +141,8 @@ export default defineComponent({
       if (
         (this.$refs.navOpenedWrapper as HTMLElement).contains(
           e.target as Node
-        ) &&
-        (this.$refs.navOpenedContainer as HTMLElement).contains(
+        )
+        && (this.$refs.navOpenedContainer as HTMLElement).contains(
           e.target as Node
         )
       ) {

@@ -1,11 +1,10 @@
 <template>
   <with-loader :loading="$fetchState.pending">
-    <div
-      class="min-h-screen container pt-8 md:pt-10"
-    >
+    <div class="min-h-screen container pt-8 md:pt-10">
       <categories-navigation :categories="categories" />
       <template v-if="products.results">
-        <section v-if="products.results.length > 0"
+        <section
+          v-if="products.results.length > 0"
           class="grid grid-cols-2 gap-2 mt-8 md:grid-cols-3 md:gap-3 font-serif pb-16"
         >
           <category-item
@@ -38,7 +37,7 @@ export default defineComponent({
     return {
       activeId: null as string | null,
       productsStore: useProductsStore(),
-      categoriesStore: useCategoriesStore()
+      categoriesStore: useCategoriesStore(),
     };
   },
   async fetch() {
@@ -46,21 +45,23 @@ export default defineComponent({
     await this.categoriesStore.getCategoryById(this.$route.params.category);
     // eslint-disable-next-line no-unused-expressions
     const page = this.$route.query.p ? Number(this.$route.query.p) : undefined;
-    await this.productsStore.fetchProducts({ page, category: this.$route.params.category});
+    await this.productsStore.fetchProducts({
+      page,
+      category: this.$route.params.category,
+    });
   },
   computed: {
-
     ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useCategoriesStore, {
-      activeCategory: "activeCategory"
+      activeCategory: "activeCategory",
     }),
     ...mapState(useProductsStore, ["products"]),
 
     activeCategoryProducts(): ProductInterface[] {
       return this.products.results.filter(
-        (product) =>  product.category.uid === this.activeId
+        (product) => product.category.uid === this.activeId
       );
-    }
+    },
   },
   mounted() {
     if (this.$route.params.category != null) {
@@ -70,10 +71,15 @@ export default defineComponent({
   },
   methods: {
     async updateProducts() {
-      const page = this.$route.query.p ? Number(this.$route.query.p) : undefined;
-      await this.productsStore.fetchProducts({ page, category: this.$route.params.category });
-    }
-  }
+      const page = this.$route.query.p
+        ? Number(this.$route.query.p)
+        : undefined;
+      await this.productsStore.fetchProducts({
+        page,
+        category: this.$route.params.category,
+      });
+    },
+  },
 });
 </script>
 <style lang="postcss" scoped>
