@@ -1,21 +1,11 @@
 <template>
   <with-loader :loading="$fetchState.pending">
-    <div class="min-h-screen container pt-8 md:pt-10">
-      <categories-navigation :categories="categories" />
-      <template v-if="products.results">
-        <section
-          v-if="products.results.length > 0"
-          class="grid grid-cols-2 gap-2 mt-8 md:grid-cols-3 md:gap-3 font-serif pb-16"
-        >
-          <category-item
-            v-for="product in activeCategoryProducts"
-            :key="product.uid"
-            :product="product"
-          />
-        </section>
-      </template>
-      <Pagination
-        :pagination="products.pagination"
+    <div
+      class="min-h-screen container pt-8 md:pt-10"
+    >
+      <with-results
+        :loading="$fetchState.pending"
+        :products="products"
         @update="updateProducts"
       />
     </div>
@@ -24,15 +14,16 @@
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
 import { mapState } from "pinia";
-import CategoryItem from "~/components/CategoryItem.vue";
 import { ProductInterface } from "~/interfaces/ProductInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
-import Pagination from "~/components/Pagination.vue";
 import WithLoader from "~/components/WithLoader.vue";
+import WithResults from "~/components/WithResults.vue";
 
 export default defineComponent({
   name: "CategoryPage",
-  components: { CategoryItem, Pagination, WithLoader },
+  components: {
+    WithLoader, WithResults,
+  },
   data() {
     return {
       activeId: null as string | null,
@@ -41,9 +32,7 @@ export default defineComponent({
     };
   },
   async fetch() {
-    // eslint-disable-next-line no-unused-expressions
     await this.categoriesStore.getCategoryById(this.$route.params.category);
-    // eslint-disable-next-line no-unused-expressions
     const page = this.$route.query.p ? Number(this.$route.query.p) : undefined;
     await this.productsStore.fetchProducts({
       page,

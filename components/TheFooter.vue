@@ -82,6 +82,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
+import { get } from "lodash";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
 import { useSettingsStore } from "../stores/main";
 
@@ -102,11 +103,12 @@ export default defineComponent({
   },
   computed: {
     sanitizedPhone() {
-      if (this.settings == null) {
+      let result = get(this.settings, "contact.phone", "");
+
+      if (result === "") {
         return "";
       }
 
-      let result = this.settings.contact.phone;
       const [firstChar, ...rest] = result;
 
       if (firstChar === "+") {
