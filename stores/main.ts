@@ -4,10 +4,8 @@ import {
   ParentCategory,
 } from "~/interfaces/CategoryInterface";
 import { ProductInterface } from "~/interfaces/ProductInterface";
-import { PageInterface } from "~/interfaces/PageInterface";
 import { Paginated } from "~/interfaces/base";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
-import { StrapiResponseInterface } from "~/interfaces/StrapiResponseInterface";
 
 type ParentCategoryLinkObject = Record<
   ParentCategory["uid"],
@@ -26,7 +24,6 @@ export const useCategoriesStore = defineStore("Categories", {
   }),
   getters: {
     inNavigation(): CategoryInterface[] {
-      // eslint-disable-next-line camelcase
       return this.categories.filter(({ onHomepage }) => onHomepage);
     },
     activeCategory(): CategoryInterface | null {
@@ -105,13 +102,14 @@ export const useCategoriesStore = defineStore("Categories", {
 
 export const useProductsStore = defineStore("Products", {
   state: () => ({
-    // all these properties will have their type inferred automatically
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     products: {
       results: [],
     } as Paginated<ProductInterface[]>,
     active: null as ProductInterface | null,
     categories: useCategoriesStore(),
+    loading: false,
+    query: "",
+    searchedProducts: {} as Paginated<ProductInterface[]>,
   }),
 
   getters: {
@@ -156,6 +154,20 @@ export const useProductsStore = defineStore("Products", {
         this.categories.activeCategoryUid = this.active?.category.uid;
       }
     },
+
+    async searchProducts(query: string, page?: number) {
+      const req = (await this.$nuxt.$strapi.find("product/search", {
+        q: query,
+        ...(page != null ? { page } : {}),
+      })) as ProductInterface[];
+
+      this.searchedProducts = {
+        results: req,
+        // TODO: results should be paginated
+      };
+
+      this.loading = false;
+    },
   },
 });
 
@@ -169,9 +181,9 @@ export const useSettingsStore = defineStore("Settings", {
     async fetch(): Promise<SettingsInterface | undefined> {
       if (this.settings == null) {
         try {
-          const response = await this.$nuxt.$strapi.find<
-            SettingsInterface
-          >("settings");
+          const response = await this.$nuxt.$strapi.find<SettingsInterface>(
+            "settings"
+          );
 
           const result = response;
 

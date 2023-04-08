@@ -2,7 +2,7 @@
   <with-loader :loading="$fetchState.pending">
     <section class="py-10">
       <div class="container">
-        <categories-navigation
+        <!-- <categories-navigation
           v-if="categoriesStore.categories"
           :categories="sortedCategories"
         />
@@ -17,6 +17,10 @@
           v-if="productsStore.products.pagination"
           :pagination="productsStore.products.pagination"
           @update="updateProducts"
+        /> -->
+        <with-results
+          :loading="productsStore.loading"
+          :products="productsStore.products"
         />
       </div>
     </section>
@@ -29,10 +33,11 @@ import CategoryItem from "~/components/CategoryItem.vue";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 import WithLoader from "~/components/WithLoader.vue";
+import WithResults from "~/components/WithResults.vue";
 
 export default defineComponent({
   name: "CategoryPage",
-  components: { Pagination, CategoryItem, WithLoader },
+  components: { Pagination, CategoryItem, WithLoader, WithResults },
   data() {
     return {
       categoriesStore: useCategoriesStore(),

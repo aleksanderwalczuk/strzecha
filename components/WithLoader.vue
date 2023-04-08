@@ -27,7 +27,6 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import { initial } from "lodash";
 import { wait } from "../utils/wait";
 
 export default defineComponent({
@@ -109,9 +108,10 @@ export default defineComponent({
   opacity: 0;
 }
 
-  .loader-container {
-    min-height: calc(100vh - 62px);
-  }
+.loader-container {
+  min-height: calc(100vh - 62px);
+}
+
 @screen md {
   .loader-container {
     min-height: calc(100vh - 169px);
