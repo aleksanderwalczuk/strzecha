@@ -53,7 +53,7 @@ export default {
     },
   },
   strapi: {
-    url: `${process.env.CMS_URL}/api`,
+    url: `${process.env.CMS_URL}api`,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
