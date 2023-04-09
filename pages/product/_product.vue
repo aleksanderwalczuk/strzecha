@@ -39,11 +39,11 @@
                 <nuxt-img
                   v-if="image"
                   provider="strapi"
-                  fit="cover"
                   :src="image.url"
+                  fit="contain"
                   :width="image.width"
                   :height="image.height"
-                  class="max-h-[480px] mx-auto"
+                  class="max-h-[480px] mx-auto ratio object-contain"
                 />
               </slide>
             </carousel>
@@ -211,6 +211,10 @@ export default defineComponent({
 
 .btn-secondary {
   @apply bg-transparent border border-black-500 text-black-500;
+}
+
+.ratio {
+  aspect-ratio: 36/40;
 }
 
 @screen md {
