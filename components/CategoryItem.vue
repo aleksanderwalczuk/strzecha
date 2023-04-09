@@ -8,17 +8,20 @@
       v-if="productThumbnail"
       provider="strapi"
       fit="cover"
-      class="ratio w-full max-w-[400px] object-cover max-h-full md:h-full"
+      class="ratio w-full max-w-[400px] object-cover max-h-full md:h-full bg-[#f1f1f1]"
       :src="productThumbnail"
     />
-    <div class="md:hidden">
+    <div class="md:hidden flex flex-col-reverse">
       <p class="text-center">
         {{ product.title }}
       </p>
       <span
-        class="block text-center"
+        class="block text-left text-[24px] leading-[36px] mt-3 font-normal"
       >{{ product.price
-      }}<span v-if="product.currency">{{
+      }}<span
+        v-if="product.currency"
+        class="text-base leading-[24px]"
+      >{{
         product.currency.symbol || "zł"
       }}</span></span>
     </div>
