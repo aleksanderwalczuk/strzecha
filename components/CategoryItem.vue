@@ -12,7 +12,7 @@
       :src="productThumbnail"
     />
     <div class="md:hidden flex flex-col-reverse">
-      <p class="text-center">
+      <p class="text-left md:text-center">
         {{ product.title }}
       </p>
       <span
