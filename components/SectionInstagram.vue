@@ -11,7 +11,7 @@
         >
           <slide
             v-for="item in withThumbnails"
-            :key="item.uid"
+            :key="item.id"
             class="slide"
           >
             <div class="video mx-3">
@@ -35,16 +35,17 @@
 
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
+import { InstagramInterface } from "interfaces/InstagramInterface";
 
 export default defineComponent({
   name: "SectionInstagram",
   data() {
     return {
-      data: [],
+      data: [] as InstagramInterface["data"],
     };
   },
   async fetch() {
-    const { data } = await this.$strapi.find("ig");
+    const { data } = await this.$strapi.find<InstagramInterface>("ig");
     this.data = data;
   },
   computed: {
