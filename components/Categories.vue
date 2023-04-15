@@ -51,7 +51,7 @@
           />
         </div>
       </div>
-      <!-- <div class="lg:hidden">
+      <div class="lg:hidden">
         <carousel
           :per-page="1"
           :pagination-padding="4"
@@ -85,7 +85,7 @@
             alt=""
           />
         </a>
-      </div> -->
+      </div>
     </div>
   </section>
 </template>

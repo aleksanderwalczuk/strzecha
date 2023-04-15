@@ -29,7 +29,7 @@
       name="fade"
     >
       <div class="flex-1">
-        <categories-navigation :categories="categories" />
+        <categories-navigation :categories="castedCategories" />
         <section
           v-if="products.results.length > 0"
           class="grid grid-cols-1 gap-2 mt-8 md:grid-cols-3 md:gap-3 font-serif pb-16"
@@ -55,6 +55,7 @@ import { mapState } from "pinia";
 import { Paginated } from "~/interfaces/base";
 import { ProductInterface } from "~/interfaces/ProductInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
+import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import CategoriesNavigation from "./CategoriesNavigation.vue";
 import CategoryItem from "./CategoryItem.vue";
 import Pagination from "./Pagination.vue";
@@ -64,6 +65,7 @@ export default defineComponent({
   props: {
     products: {
       type: Object as PropType<Paginated<ProductInterface[]>>,
+      required: true,
     },
     loading: {
       type: Boolean,
@@ -75,14 +77,15 @@ export default defineComponent({
       productsStore: useProductsStore(),
     };
   },
-  watch: {
-    query(val) {
-      this.productsStore.searchProducts(val);
-    },
-  },
+
   computed: {
     ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useProductsStore, ["query"]),
+    castedCategories() {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return this.categories as CategoryInterface[];
+    },
     activeProducts(): ProductInterface[] {
       if (this.products == null) {
         return [];
@@ -99,6 +102,12 @@ export default defineComponent({
       }
 
       return this.products.results;
+    },
+  },
+
+  watch: {
+    query(val) {
+      this.productsStore.searchProducts(val);
     },
   },
 });

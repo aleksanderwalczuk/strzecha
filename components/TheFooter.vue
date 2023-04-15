@@ -23,7 +23,7 @@
                 <a
                   :href="`tel:${sanitizedPhone}`"
                   rel="noopener noreferrer"
-                >{{ settings.phone }}
+                >{{ settings.contact.phone }}
                 </a>
               </li>
               <li>

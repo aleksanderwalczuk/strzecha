@@ -2,22 +2,6 @@
   <with-loader :loading="$fetchState.pending">
     <section class="py-10">
       <div class="container">
-        <!-- <categories-navigation
-          v-if="categoriesStore.categories"
-          :categories="sortedCategories"
-        />
-        <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 mt-8 pb-12">
-          <category-item
-            v-for="product in productsStore.products.results"
-            :key="product.uid"
-            :product="product"
-          />
-        </div>
-        <Pagination
-          v-if="productsStore.products.pagination"
-          :pagination="productsStore.products.pagination"
-          @update="updateProducts"
-        /> -->
         <with-results
           :loading="productsStore.loading"
           :products="productsStore.products"
@@ -28,8 +12,6 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
-import Pagination from "~/components/Pagination.vue";
-import CategoryItem from "~/components/CategoryItem.vue";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import { useCategoriesStore, useProductsStore } from "~/stores/main";
 import WithLoader from "~/components/WithLoader.vue";
@@ -37,7 +19,7 @@ import WithResults from "~/components/WithResults.vue";
 
 export default defineComponent({
   name: "CategoryPage",
-  components: { Pagination, CategoryItem, WithLoader, WithResults },
+  components: { WithLoader, WithResults },
   data() {
     return {
       categoriesStore: useCategoriesStore(),

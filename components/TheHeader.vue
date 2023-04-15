@@ -34,7 +34,7 @@
                     :class="{
                       'hidden': !searchOpen
                     }"
-                    @input="($event) => setSearch($event.target.value)"
+                    @input="($event) => setSearch($event.target)"
                   />
                   <button
                     v-if="searchOpen"
@@ -138,8 +138,10 @@ export default defineComponent({
     const searchOpen = ref(false);
     const loading = ref(false);
 
-    const setSearch = debounce((keys: string) => {
-      search.value = keys;
+    const setSearch = debounce((eventTarget: EventTarget | null) => {
+      if (eventTarget != null) {
+        search.value = (eventTarget as HTMLInputElement).value;
+      }
     }, 250);
 
     return {

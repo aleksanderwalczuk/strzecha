@@ -17,7 +17,6 @@ type ParentCategoryLinkObject = Record<
 
 export const useCategoriesStore = defineStore("Categories", {
   state: () => ({
-    // all these properties will have their type inferred automatically
     categories: [] as CategoryInterface[],
     activeCategoryUid: null as string | null,
     parentCategories: [] as ParentCategory[],
@@ -172,12 +171,10 @@ export const useProductsStore = defineStore("Products", {
 
 export const useSettingsStore = defineStore("Settings", {
   state: () => ({
-    // all these properties will have their type inferred automatically
     pages: [],
     settings: null as SettingsInterface | null,
   }),
   actions: {
-    // eslint-disable-next-line consistent-return
     async fetch(): Promise<SettingsInterface | undefined> {
       if (this.settings == null) {
         const response = await this.$nuxt.$strapi.find<SettingsInterface>(
