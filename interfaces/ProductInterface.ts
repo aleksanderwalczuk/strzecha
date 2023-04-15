@@ -23,8 +23,8 @@ export interface ProductInterface {
   id: number;
   price: number;
   description: string;
-  images: StrapiImageInterface[];
+  images?: StrapiImageInterface[];
   category: CategoryInterface;
   currency: CurrencyInterface;
-  providers: Provider[];
+  providers?: Provider[];
 }

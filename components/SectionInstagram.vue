@@ -67,7 +67,7 @@ export default defineComponent({
 </style>
 <style lang="postcss">
 .ig-carousel .VueCarousel-inner {
-  @apply justify-around;
+  @apply justify-between;
 }
 .ig-carousel .VueCarousel-dot {
   @apply focus:ring-0 outline-none;

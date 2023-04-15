@@ -59,7 +59,7 @@ export const useCategoriesStore = defineStore("Categories", {
         {}
       );
 
-      return this.categories.reduce((acc, category) => {
+      return (Array.isArray(this.categories) ? this.categories : []).reduce((acc, category) => {
         const key = category.parentCategory.uid;
         acc[key].data.push(category);
         return acc;

@@ -3,6 +3,6 @@ export interface StrapiResponseData<T> {
   id: number;
 }
 export interface StrapiResponseInterface<T> {
-  data: Array<StrapiResponseData<T>> | StrapiResponseData<T>;
+  data: Array<StrapiResponseData<T>> | StrapiResponseData<T> | null;
   meta: unknown;
 }
