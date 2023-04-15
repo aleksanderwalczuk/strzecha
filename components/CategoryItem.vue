@@ -68,6 +68,9 @@ export default defineComponent({
   },
   computed: {
     productThumbnail(): string {
+      if (this.product == null || this.product.images == null) {
+        return "";
+      }
       const [firstImage] = this.product.images;
       const baseUrl = get(firstImage, "url", "");
       const mediumThumbnail = get(firstImage, "formats.medium.url", null);

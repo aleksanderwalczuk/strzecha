@@ -16,6 +16,7 @@
               <div class="relative">
                 <div class="absolute w-full h-full" />
                 <nuxt-img
+                  v-if="Array.isArray(product.images)"
                   :src="product.images[0].url"
                   provider="strapi"
                   fit="cover"
@@ -59,9 +60,10 @@
                   <div class="relative">
                     <div class="absolute w-full h-full" />
                     <nuxt-img
+                      v-if="Array.isArray(product.images)"
                       :src="product.images[0].url"
                       provider="strapi"
-                      :alt="product.images[0].alt"
+                      :alt="product.images[0].alternativeText"
                       class="news-img object-cover h-full mix-blend-multiply"
                     />
                   </div>

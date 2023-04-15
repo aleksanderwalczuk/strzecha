@@ -18,7 +18,7 @@
           >
             <div class="flex flex-wrap justify-start w-1/2 lg:justify-between">
               <div
-                v-for="(category, key, index) in linksWithParentCategories"
+                v-for="(category, _, index) in linksWithParentCategories"
                 :key="'nav-category-' + index"
                 class="w-5/12"
               >

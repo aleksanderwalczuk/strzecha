@@ -45,7 +45,11 @@ export default defineComponent({
     };
   },
   async mounted() {
-    // this should query a route to category
+    if (this.product.uid == null) {
+      // TODO: show empty state
+      return;
+    }
+
     const req = await this.$strapi.$http.$get<ProductInterface[]>(
       "/product/related",
       {
