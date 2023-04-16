@@ -77,9 +77,15 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
+    "@nuxtjs/gtm",
     "@nuxtjs/axios",
     "@nuxtjs/strapi",
   ],
+  gtm: {
+    pageTracking: true,
+    debug: true,
+    id: process.env.GTM_ID,
+  },
   image: {
     strapi: {
       baseURL: process.env.CMS_URL,
@@ -91,7 +97,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: "/",
+    baseURL: "/:3001/api",
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -102,5 +108,8 @@ export default {
         autoprefixer: {},
       },
     },
+  },
+  env: {
+    CMS_URL: process.env.CMS_URL || "http://localhost:3001",
   },
 };
