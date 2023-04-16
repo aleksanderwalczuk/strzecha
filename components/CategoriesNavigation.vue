@@ -23,7 +23,7 @@
 import { defineComponent, PropType } from "@nuxtjs/composition-api";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
-import { useSettingsStore } from "~/pinia/main";
+import { useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "CategoriesNavigation",

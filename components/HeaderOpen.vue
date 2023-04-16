@@ -82,7 +82,7 @@
 import { defineComponent } from "@vue/composition-api";
 import { mapState } from "pinia";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
-import { useCategoriesStore, useSettingsStore } from "~/pinia/main";
+import { useCategoriesStore, useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "MainNavigation",

@@ -46,9 +46,10 @@ import SectionOnDemand from "~/components/SectionOnDemand.vue";
 import WithLoader from "~/components/WithLoader.vue";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
 import {
+  useProductsStore,
   useCategoriesStore,
   useSettingsStore
-} from "~/pinia/main";
+} from "~/stores/main";
 
 export default defineComponent({
   name: "IndexPage",
@@ -59,28 +60,30 @@ export default defineComponent({
     SectionInstagram,
     WithLoader,
   },
-
   data() {
     return {
       settings: null as null | SettingsInterface,
       categoriesStore: useCategoriesStore(),
+      productsStore: useProductsStore(),
       settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
     this.settings = this.settingsStore.settings;
     await this.categoriesStore.fetchCategories();
+    await this.productsStore.fetchProducts();
 
     if (this.settings == null) {
       await this.settingsStore.fetch();
       this.settings = this.settingsStore.settings;
     }
   },
-  fetchOnServer: true,
+  fetchOnServer: false,
   computed: {
     image() {
       return this.settings?.home_page.coverImage;
     },
+    ...mapState(useProductsStore, ["products"]),
     ...mapState(useCategoriesStore, ["categories"]),
     ...mapState(useSettingsStore, ["pages"]),
   },

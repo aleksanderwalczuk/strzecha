@@ -15,7 +15,7 @@
 import { defineComponent } from "@nuxtjs/composition-api";
 import { mapState } from "pinia";
 import { ProductInterface } from "~/interfaces/ProductInterface";
-import { useCategoriesStore, useProductsStore } from "~/pinia/main";
+import { useCategoriesStore, useProductsStore } from "~/stores/main";
 import WithLoader from "~/components/WithLoader.vue";
 import WithResults from "~/components/WithResults.vue";
 

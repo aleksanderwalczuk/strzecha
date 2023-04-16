@@ -67,9 +67,6 @@ export const useCategoriesStore = defineStore("Categories", {
   },
   actions: {
     async fetchCategories() {
-      if (process.client === false) {
-        return true;
-      }
       try {
         if (this.parentCategories.length === 0) {
           await this.fetchParentCategories();
@@ -83,9 +80,6 @@ export const useCategoriesStore = defineStore("Categories", {
       return true;
     },
     async fetchParentCategories() {
-      if (process.client === false) {
-        return true;
-      }
       try {
         this.parentCategories = await this.$nuxt.$strapi.find(
           "parent-categories"
@@ -99,9 +93,6 @@ export const useCategoriesStore = defineStore("Categories", {
     },
 
     async getCategoryById(name: string) {
-      if (process.client === false) {
-        return;
-      }
       await this.$nuxt.$strapi.find("categories", name);
     },
   },

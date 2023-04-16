@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent } from "@nuxtjs/composition-api";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
-import { useCategoriesStore, useProductsStore } from "~/pinia/main";
+import { useCategoriesStore, useProductsStore } from "~/stores/main";
 import WithLoader from "~/components/WithLoader.vue";
 import WithResults from "~/components/WithResults.vue";
 

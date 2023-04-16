@@ -84,7 +84,7 @@
 import { defineComponent } from "@nuxtjs/composition-api";
 import { get } from "lodash";
 import { SettingsInterface } from "~/interfaces/SettingsInterface";
-import { useSettingsStore } from "~/pinia/main";
+import { useSettingsStore } from "../stores/main";
 
 export default defineComponent({
   name: "PageFooter",

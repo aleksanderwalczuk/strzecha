@@ -121,7 +121,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "@nuxtjs/composition-api";
 import { debounce, get } from "lodash";
-import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/pinia/main";
+import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "PageHeader",

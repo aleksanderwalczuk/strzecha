@@ -91,7 +91,7 @@
 import { defineComponent } from "@nuxtjs/composition-api";
 import { truncate } from "lodash";
 import { ProductInterface } from "~/interfaces/ProductInterface";
-import { useProductsStore } from "~/pinia/main";
+import { useProductsStore } from "~/stores/main";
 
 export default defineComponent({
   name: "NewProducts",
