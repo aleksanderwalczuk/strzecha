@@ -54,7 +54,7 @@ import { defineComponent, PropType } from "@nuxtjs/composition-api";
 import { mapState } from "pinia";
 import { Paginated } from "~/interfaces/base";
 import { ProductInterface } from "~/interfaces/ProductInterface";
-import { useCategoriesStore, useProductsStore } from "~/stores/main";
+import { useCategoriesStore, useProductsStore } from "~/pinia/main";
 import { CategoryInterface } from "~/interfaces/CategoryInterface";
 import CategoriesNavigation from "./CategoriesNavigation.vue";
 import CategoryItem from "./CategoryItem.vue";

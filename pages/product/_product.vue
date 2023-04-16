@@ -137,7 +137,7 @@ import { get } from "lodash";
 import { mapState } from "pinia";
 import { ParentCategory } from "~/interfaces/CategoryInterface";
 import { StrapiImageInterface } from "~/interfaces/StrapiImageInterface";
-import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/stores/main";
+import { useCategoriesStore, useProductsStore, useSettingsStore } from "~/pinia/main";
 import RelatedProducts from "~/components/RelatedProducts.vue";
 import WithLoader from "~/components/WithLoader.vue";
 
