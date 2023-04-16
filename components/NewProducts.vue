@@ -23,7 +23,7 @@
                   height="400"
                   width="360"
                   :alt="product.images[0].alternativeText"
-                  class="object-cover mix-blend-multiply mx-auto h-[369px]"
+                  class="object-cover mix-blend-multiply mx-auto h-[369px] ratio"
                 />
               </div>
               <figcaption>
@@ -133,6 +133,10 @@ export default defineComponent({
 }
 .new-product-item:nth-child(even) {
   @apply mx-6;
+}
+
+.ratio {
+  aspect-ratio: 36/40;
 }
 /* .new-product-item:first-child { */
 /* @apply mr-6; */

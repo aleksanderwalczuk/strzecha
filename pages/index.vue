@@ -90,11 +90,6 @@ export default defineComponent({
 });
 </script>
 <style lang="postcss">
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
-}
 .container {
   @apply px-8 mx-auto;
   max-width: 100%;

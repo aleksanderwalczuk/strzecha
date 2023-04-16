@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
       ref="navOpenedWrapper"
-      class="hidden nav-open fixed w-full z-30 md:block"
+      class="hidden nav-open fixed w-full z-30 md:block nav-position"
     >
       <nav class="nav-open-wrapper relative bg-gray-50 py-20">
         <div class="nav-container">
@@ -138,13 +138,17 @@ export default defineComponent({
         return;
       }
 
+      if (this.isVisible === false) {
+        return;
+      }
+
       if (
         (this.$refs.navOpenedWrapper as HTMLElement).contains(
           e.target as Node
         )
         && (this.$refs.navOpenedContainer as HTMLElement).contains(
           e.target as Node
-        )
+        ) === false
       ) {
         this.close();
       }
@@ -203,6 +207,11 @@ li {
 @screen md {
   .nav-close {
     right: 1rem;
+  }
+
+  .nav-position {
+    top: 0;
+    transform: translateY(calc(10.5rem - 1px));
   }
 }
 @screen lg {
