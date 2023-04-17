@@ -83,7 +83,6 @@ export default {
   ],
   gtm: {
     pageTracking: true,
-    debug: true,
     id: process.env.GTM_ID,
   },
   image: {
