@@ -60,18 +60,18 @@ export default defineComponent({
     SectionInstagram,
     WithLoader,
   },
+
   data() {
     return {
       settings: null as null | SettingsInterface,
       categoriesStore: useCategoriesStore(),
-      productsStore: useProductsStore(),
       settingsStore: useSettingsStore(),
     };
   },
   async fetch() {
     this.settings = this.settingsStore.settings;
     await this.categoriesStore.fetchCategories();
-    await this.productsStore.fetchProducts();
+    // await this.$store.dispatch("categories/fetch");
 
     if (this.settings == null) {
       await this.settingsStore.fetch();
