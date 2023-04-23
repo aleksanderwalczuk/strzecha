@@ -80,6 +80,7 @@ export default {
     "@nuxtjs/gtm",
     "@nuxtjs/axios",
     "@nuxtjs/strapi",
+    "@nuxtjs/sentry",
   ],
   gtm: {
     pageTracking: true,
@@ -89,6 +90,9 @@ export default {
     strapi: {
       baseURL: process.env.CMS_URL,
     },
+  },
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
   },
   strapi: {
     url: `${process.env.CMS_URL}api`,

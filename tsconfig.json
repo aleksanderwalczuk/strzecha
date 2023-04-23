@@ -30,6 +30,7 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@nuxt/image",
+      "@nuxtjs/sentry",
       "@nuxtjs/strapi",
       "@types/lodash",
       "@pinia/nuxt"
