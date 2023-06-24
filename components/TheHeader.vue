@@ -102,9 +102,13 @@
             >
               Wszystkie produkty
             </button>
-            <button class="nav-btn hover:text-gray-650">
+            <nuxt-link
+              to="/on-demand"
+              class="nav-btn hover:text-gray-650"
+            >
               Na zamówienie
-            </button>
+              </button>
+            </nuxt-link>
           </nav>
         </div>
       </div>
