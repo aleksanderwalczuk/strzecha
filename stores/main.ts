@@ -26,7 +26,7 @@ export const useCategoriesStore = defineStore("Categories", {
       return this.categories.filter(({ onHomepage }) => onHomepage);
     },
     activeCategory(): CategoryInterface | null {
-      const category = this.categories.find(
+      const category = (this.categories || []).find(
         ({ uid }) => uid === this.activeCategoryUid
       );
 

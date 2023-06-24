@@ -10,6 +10,7 @@
       <carousel
         :per-page="2"
         :per-page-custom="[[768, 3], [1024, 4]]"
+        class="related-carousel -mx-2"
       >
         <slide
           v-for="item in products"
@@ -65,12 +66,12 @@ export default defineComponent({
 </script>
 <style lang="postcss" scoped>
 .slide {
-  @apply w-full max-w-xs;
+  @apply w-full max-w-xs px-2 md:px-2;
 }
 </style>
 <style lang="postcss">
 .related-carousel .VueCarousel-inner {
-  @apply justify-around;
+  /* @apply justify-around; */
 }
 .related-carousel .VueCarousel-dot {
   @apply focus:ring-0 outline-none;

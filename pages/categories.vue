@@ -5,6 +5,7 @@
         <with-results
           :loading="productsStore.loading"
           :products="productsStore.products"
+          @update="updateProducts"
         />
       </div>
     </section>

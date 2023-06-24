@@ -12,10 +12,7 @@
             class="mr-2 transform rotate-180"
           />
         </button>
-        <span
-          v-if="activeParentCategory != null"
-          class="capitalize"
-        >
+        <span v-if="activeParentCategory != null">
           {{ activeParentCategory.name }}
         </span>
         &nbsp;/&nbsp;

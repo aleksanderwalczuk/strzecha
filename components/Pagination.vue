@@ -1,7 +1,7 @@
 <template>
-  <div v-if="pagination">
+  <div class="results-pagination" v-if="pagination != null">
     <ul
-      v-if="pagination.page == 1 && pagination.pageCount > pagination.total"
+      v-if="pagination.pageCount > 1"
       class="flex justify-center items-center"
     >
       <li

@@ -22,7 +22,7 @@
                 :key="'nav-category-' + index"
                 class="w-5/12"
               >
-                <h3 class="text-gray-250 mb-8 capitalize">
+                <h3 class="text-gray-250 mb-8">
                   {{ category.name }}
                 </h3>
                 <ul>
@@ -38,35 +38,38 @@
                     </nuxt-link>
                   </li>
                 </ul>
-              </div>
-              <div class="mr-auto">
-                <nuxt-link
-                  class="btn flex justify-start items-center lg:whitespace-nowrap"
-                  to="/categories/"
-                >
-                  <span class="mr-2">Zobacz wszystkie</span><svg
-                    width="33"
-                    height="14"
-                    viewBox="0 0 33 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                <div v-if="index === parentCategories.length - 1">
+                  <nuxt-link
+                    class="btn flex justify-start items-center lg:whitespace-nowrap"
+                    to="/categories/"
                   >
-                    <path
-                      d="M1 7L16 7L31 7"
-                      stroke="#2C2022"
-                      stroke-linecap="square"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M27 1.5L32 7L27 12.5"
-                      stroke="#2C2022"
-                      stroke-linecap="square"
-                    />
-                  </svg>
-                </nuxt-link>
+                    <span class="mr-2">Zobacz wszystkie</span><svg
+                      width="33"
+                      height="14"
+                      viewBox="0 0 33 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M1 7L16 7L31 7"
+                        stroke="#2C2022"
+                        stroke-linecap="square"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M27 1.5L32 7L27 12.5"
+                        stroke="#2C2022"
+                        stroke-linecap="square"
+                      />
+                    </svg>
+                  </nuxt-link>
+                </div>
               </div>
             </div>
-            <div class="category-thumbnail">
+            <div
+              v-if="image"
+              class="category-thumbnail"
+            >
               <nuxt-img
                 provider="strapi"
                 :src="image"
@@ -107,7 +110,6 @@ export default defineComponent({
     image() {
       return (
         this.settings?.navigation?.menu_image?.url
-        ?? "/images/nav-cat-thumbnail-1.jpg"
       );
     },
   },
